@@ -1,5 +1,7 @@
 # SHHCSRP — SimPy + Gymnasium routing & scheduling demo
 
+[Interactive Simulator and Project Reports](https://ianyangchina.github.io/A-home-health-care-routing-simulator-based-on-SimPy-for-Reinforcement-Learning/)
+
 A **new, event-driven** implementation of the stochastic home-health-care scheduling and routing problem, grounded in the data and concepts of:
 
 > Zhang et al., *Home health care routing and scheduling in densely populated communities considering complex human behaviours*, Computers & Industrial Engineering 182 (2023), 109332. https://doi.org/10.1016/j.cie.2023.109332
@@ -187,4 +189,4 @@ A basic baseline correctness test checks that completed jobs never repeat, nurse
 
 ## Authors / attribution
 
-This demonstration reuses source dataset files and references original code from Xintong Yang's [SHHCSRP](https://github.com/IanYangChina/SHHCSRP). New SimPy/Gymnasium/ACO framework written for the Locus Robotics application demonstration. The `legacy/` directory contains unmodified historical source scripts and is not imported by the new simulator.
+This demonstration reuses source dataset files and references original code from Xintong Yang's [SHHCSRP](https://github.com/IanYangChina/SHHCSRP).
