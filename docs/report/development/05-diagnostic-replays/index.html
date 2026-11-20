@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Transcript summary and links to the input runs">
+<title>Round 5 · Diagnose the learned schedules · Home care dispatch</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<header class="hero">
+<div class="wrap">
+<nav aria-label="Report navigation"><a href="../index.html">Development timeline</a><a href="../../index.html">Current benchmark</a></nav>
+<h1>Round 5 · Diagnose the learned schedules</h1>
+<p>Transcript summary and links to the input runs</p>
+</div>
+</header>
+<main class="wrap detail">
+<p class="timing">Compute timing unavailable for the diagnostic replays.</p>
+<p class="caption">The original tuned reports preserve the input episodes. The conversation preserves the replay measurements above. Separate intervention traces are unavailable.</p>
+<div class="card">
+<section><h2>PI input</h2><p class="timing"><time datetime="2026-11-20T14:19:13+00:00">14:19:13 UTC</time></p><p>ny asked how the two learned policies differed from Random and ACO, why training rewards changed, and what the reward incentivized.</p></section>
+<section><h2>Agent work</h2><p>Separated voluntary deferrals from forced ones, examined wait and deadline choices, reconciled the observed reward to four terms, and replayed paired interventions with weights frozen.</p></section>
+<section><h2>Computation</h2><p>Replayed 192 saved episodes across Random, ACO, DQN, and PPO. Matching held-out seeds controlled the comparisons of no voluntary deferral, shorter waits, and changed action sampling.</p></section>
+<section><h2>Findings</h2><p>DQN deferred on 62% and 49% of eligible decisions on A and B. On D, mean forecast waiting above the shortest feasible choice was 14.91 minutes for DQN, 21.23 for PPO, 10.22 for Random, and 0.17 for ACO. When an alternative was available, overriding decisions that would wait more than 15 minutes improved reward on all paired seeds for both agents on all four layouts.</p><div class="scroll"><table class="results" aria-label="Results recorded in the conversation"><thead><tr><th scope="col">Instance D policy</th><th scope="col">Original visits</th><th scope="col">Visits with a shorter-wait override</th></tr></thead><tbody><tr><th scope="row">DQN</th><td>168.08</td><td>213.42</td></tr><tr><th scope="row">PPO</th><td>142.67</td><td>201.67</td></tr></tbody></table></div></section>
+<section><h2>PI feedback</h2><p class="timing"><time datetime="2026-11-20T14:40:47+00:00">14:40:47 UTC</time></p><p class="feedback">ny interpreted the schedules as evidence of a possible exploration problem and a possible reward-design problem, and asked to test guided exploration and monitor all four reward terms.</p></section>
+<section><h2>Delegation and model configuration</h2>
+<p>Codex used <code>gpt-6.2-sol</code> with <strong>high</strong> reasoning effort. Delegated roles inherited the same configuration. Local Codex turn-context records identify the parent model and reasoning effort. Local tool-call records give the launch times and show that all 16 full-context delegates inherited this configuration without overrides. The parent coordinated training and evaluation.</p>
+<div class="scroll"><table class="ledger" aria-label="Delegated work"><thead><tr><th scope="col">Subagent</th><th scope="col">Launch (UTC)</th><th scope="col">Delegated work</th></tr></thead><tbody><tr><th scope="row">reward_audit</th><td>14:19:49</td><td>Reconciled episode rewards and checked their timing and relative scale.</td></tr><tr><th scope="row">solution_patterns</th><td>14:19:55</td><td>Compared deferral, waiting, deadlines, and repeated omissions across the learned and fixed policies.</td></tr></tbody></table></div></section>
+<section><h2>Reports and evidence</h2><ul class="links"><li><a href="../04-tuned-loss-profiles/benchmark.html">Tuned source runs</a></li><li><a href="manifest.json">Provenance and local artifact paths</a></li></ul></section>
+</div>
+</main>
+<footer><div class="wrap">Home care routing and scheduling research simulation</div></footer>
+</body>
+</html>

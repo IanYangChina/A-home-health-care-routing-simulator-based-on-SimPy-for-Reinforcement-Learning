@@ -1,0 +1,4 @@
+instance,time,jobs_total,jobs_completed,jobs_unserved,jobs_pending,completion_rate,nurses,travel_minutes,waiting_minutes,service_minutes,truncated,seeded_service_cv,policy,seed,decisions,total_reward
+A,433.577,60,59,1,0,0.9833,7,178.712,1086.223,1395.533,False,0.15,random,17,101,522.3275
+A,433.958,60,57,3,0,0.95,7,115.644,1179.41,1348.344,False,0.15,greedy,17,100,483.5602
+A,428.932,60,60,0,0,1.0,7,188.313,1040.012,1444.421,False,0.15,aco,17,72,542.35

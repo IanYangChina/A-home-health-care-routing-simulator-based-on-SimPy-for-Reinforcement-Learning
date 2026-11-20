@@ -1,0 +1,852 @@
+{
+  "round": 7,
+  "title": "Waiting costs and longer returns",
+  "pi": "ny",
+  "provenance": "PI direction and measured experiment report",
+  "timing": "20 Nov 2026 · family runner logs 15:43:11–15:55:28 UTC",
+  "timing_basis": "Family-runner start and end timestamps in UTC.",
+  "pi_input_events": [
+    {
+      "time": "2026-11-20T15:36:47+00:00",
+      "summary": "Highlighted the low waiting penalty on C and D and asked about multi-step or Monte Carlo returns."
+    },
+    {
+      "time": "2026-11-20T15:40:58+00:00",
+      "summary": "Approved proceeding with the matched tests."
+    }
+  ],
+  "pi_input": "ny highlighted similar travel times but large numbers of unserved visits and much longer waits, particularly in C and D. ny asked about multi-step or Monte Carlo rewards and approved the proposed tests.",
+  "pi_quote": "“the reward function weighting is not punishing the waiting time harshly enough”",
+  "pi_feedback": "ny identified excessive waiting as a problem in the previous results. PI feedback on the measurements from this round is pending.",
+  "model_family": "Codex, GPT-6-based agent",
+  "exact_parent_variant": "gpt-6.2-sol",
+  "parent_reasoning_effort": "high",
+  "model_provenance": "Local Codex continuation turn-context records identify model and effort. Both full-context delegates inherited this configuration without overrides.",
+  "delegation": [
+    {
+      "subagent": "nstep",
+      "launch_utc": "2026-11-20T15:41:08+00:00",
+      "role": "Masked DQN replay",
+      "work": "Implemented multi-step dictionary-observation replay for masked DQN, terminal prefix handling, and regression checks.",
+      "configuration": "Inherited parent configuration",
+      "exact_model_variant": "gpt-6.2-sol",
+      "reasoning_effort": "high"
+    },
+    {
+      "subagent": "report7",
+      "launch_utc": "2026-11-20T15:41:16+00:00",
+      "role": "Round report and archive",
+      "work": "Adapted the training report for arm-specific reward weights and a common held-out score, checked browser behavior, and recorded the results and provenance.",
+      "configuration": "Inherited parent configuration",
+      "exact_model_variant": "gpt-6.2-sol",
+      "reasoning_effort": "high"
+    }
+  ],
+  "agent_work": "Compared stronger waiting penalties and longer return horizons as separate changes. DQN used 16- and 32-decision replay targets with the tuned discount. PPO used λ=1 with its tuned discount and a separate undiscounted λ=1 arm. Every PPO arm used 512-decision rollouts. A rollout ending mid-shift still bootstrapped. All arms treated the modeled shift end as terminal for learning.",
+  "computation": "Ran 60 fits across C and D at 12,288 steps each, with 3 training seeds and 12 held-out seeds per learned arm. Collected 4,233 complete training episodes and 720 learned-policy evaluations. Reused 48 saved Random and ACO baseline evaluations. The route pages use training seed 11.",
+  "findings": [
+    "On C, DQN 32-step had the highest reference reward among the learned arms at 534.94. Random scored 187.97 and ACO scored 851.16.",
+    "C DQN. Of the two stronger penalties, 0.30 points per minute yielded the lower mean waiting. Compared with control, it moved waiting from 1,210.15 to 1,263.43 nurse-minutes and completed visits from 73.22 to 71.25. The better of the two longer-return arms, DQN 32-step, moved reference reward from −21.32 to 534.94 and completed visits from 73.22 to 102.08.",
+    "C PPO. Of the two stronger penalties, 0.30 points per minute yielded the lower mean waiting. Compared with control, it moved waiting from 1,245.35 to 1,219.80 nurse-minutes and completed visits from 71.58 to 72.53. The better of the two longer-return arms, PPO λ=1, moved reference reward from −52.23 to −75.48 and completed visits from 71.58 to 70.36.",
+    "On D, DQN 16-step had the highest reference reward among the learned arms at 725.46. Random scored 844.28 and ACO scored 2,456.45.",
+    "D DQN. Of the two stronger penalties, 0.15 points per minute yielded the lower mean waiting. Compared with control, it moved waiting from 2,701.65 to 2,660.41 nurse-minutes and completed visits from 159.50 to 160.97. The better of the two longer-return arms, DQN 16-step, moved reference reward from 296.78 to 725.46 and completed visits from 159.50 to 181.97.",
+    "D PPO. Of the two stronger penalties, 0.30 points per minute yielded the lower mean waiting. Compared with control, it moved waiting from 3,027.45 to 3,000.29 nurse-minutes and completed visits from 141.14 to 134.53. The better of the two longer-return arms, PPO λ=1, moved reference reward from −48.94 to 25.80 and completed visits from 141.14 to 145.14.",
+    "A replay of held-out shifts from the predeclared seed-11 checkpoints found that D PPO with a 0.30 waiting penalty deferred on 47.3% of decisions with at least one feasible visit. D PPO control and λ=1, and D DQN 16- and 32-step, used no voluntary deferrals in these replays.",
+    "On D, PPO λ=1 and γ=1 had a mean reference reward of −790.30. The seed-13 checkpoint scored −2,372.96."
+  ],
+  "training_seeds": [
+    11,
+    12,
+    13
+  ],
+  "test_seeds": [
+    101,
+    102,
+    103,
+    104,
+    105,
+    106,
+    107,
+    108,
+    109,
+    110,
+    111,
+    112
+  ],
+  "steps_per_fit": 12288,
+  "family_runs": [
+    {
+      "instance": "C",
+      "family": "dqn",
+      "device": "cpu",
+      "elapsed_seconds": 681.0,
+      "started_at": "2026-11-20T15:43:11+00:00",
+      "ended_at": "2026-11-20T15:54:32+00:00"
+    },
+    {
+      "instance": "C",
+      "family": "ppo",
+      "device": "cpu",
+      "elapsed_seconds": 596.0,
+      "started_at": "2026-11-20T15:43:11+00:00",
+      "ended_at": "2026-11-20T15:53:07+00:00"
+    },
+    {
+      "instance": "D",
+      "family": "dqn",
+      "device": "cuda",
+      "elapsed_seconds": 728.0,
+      "started_at": "2026-11-20T15:43:11+00:00",
+      "ended_at": "2026-11-20T15:55:19+00:00"
+    },
+    {
+      "instance": "D",
+      "family": "ppo",
+      "device": "cpu",
+      "elapsed_seconds": 737.0,
+      "started_at": "2026-11-20T15:43:11+00:00",
+      "ended_at": "2026-11-20T15:55:28+00:00"
+    }
+  ],
+  "settings": {
+    "C": {
+      "dqn_control": {
+        "params": {
+          "width": 256,
+          "batch_size": 32,
+          "learning_rate": 0.00010390303253555893,
+          "gamma": 0.9738812087586737,
+          "target_update_interval": 256,
+          "exploration_fraction": 0.5522568766282865
+        },
+        "return_steps": 1,
+        "weights": {
+          "completed": 10.0,
+          "unserved": -8.0,
+          "travel_minutes": -0.03,
+          "waiting_minutes": -0.05
+        }
+      },
+      "dqn_wait15": {
+        "params": {
+          "width": 256,
+          "batch_size": 32,
+          "learning_rate": 0.00010390303253555893,
+          "gamma": 0.9738812087586737,
+          "target_update_interval": 256,
+          "exploration_fraction": 0.5522568766282865
+        },
+        "return_steps": 1,
+        "weights": {
+          "completed": 10.0,
+          "unserved": -8.0,
+          "travel_minutes": -0.03,
+          "waiting_minutes": -0.15
+        }
+      },
+      "dqn_wait30": {
+        "params": {
+          "width": 256,
+          "batch_size": 32,
+          "learning_rate": 0.00010390303253555893,
+          "gamma": 0.9738812087586737,
+          "target_update_interval": 256,
+          "exploration_fraction": 0.5522568766282865
+        },
+        "return_steps": 1,
+        "weights": {
+          "completed": 10.0,
+          "unserved": -8.0,
+          "travel_minutes": -0.03,
+          "waiting_minutes": -0.3
+        }
+      },
+      "dqn_n16": {
+        "params": {
+          "width": 256,
+          "batch_size": 32,
+          "learning_rate": 0.00010390303253555893,
+          "gamma": 0.9738812087586737,
+          "target_update_interval": 256,
+          "exploration_fraction": 0.5522568766282865
+        },
+        "return_steps": 16,
+        "weights": {
+          "completed": 10.0,
+          "unserved": -8.0,
+          "travel_minutes": -0.03,
+          "waiting_minutes": -0.05
+        }
+      },
+      "dqn_n32": {
+        "params": {
+          "width": 256,
+          "batch_size": 32,
+          "learning_rate": 0.00010390303253555893,
+          "gamma": 0.9738812087586737,
+          "target_update_interval": 256,
+          "exploration_fraction": 0.5522568766282865
+        },
+        "return_steps": 32,
+        "weights": {
+          "completed": 10.0,
+          "unserved": -8.0,
+          "travel_minutes": -0.03,
+          "waiting_minutes": -0.05
+        }
+      },
+      "ppo_control": {
+        "params": {
+          "width": 256,
+          "batch_size": 128,
+          "learning_rate": 0.0006307994363277335,
+          "gamma": 0.9963040961971754,
+          "n_steps": 512,
+          "ent_coef": 0.001012660298595628,
+          "gae_lambda": 0.95
+        },
+        "return_steps": 1,
+        "weights": {
+          "completed": 10.0,
+          "unserved": -8.0,
+          "travel_minutes": -0.03,
+          "waiting_minutes": -0.05
+        }
+      },
+      "ppo_wait15": {
+        "params": {
+          "width": 256,
+          "batch_size": 128,
+          "learning_rate": 0.0006307994363277335,
+          "gamma": 0.9963040961971754,
+          "n_steps": 512,
+          "ent_coef": 0.001012660298595628,
+          "gae_lambda": 0.95
+        },
+        "return_steps": 1,
+        "weights": {
+          "completed": 10.0,
+          "unserved": -8.0,
+          "travel_minutes": -0.03,
+          "waiting_minutes": -0.15
+        }
+      },
+      "ppo_wait30": {
+        "params": {
+          "width": 256,
+          "batch_size": 128,
+          "learning_rate": 0.0006307994363277335,
+          "gamma": 0.9963040961971754,
+          "n_steps": 512,
+          "ent_coef": 0.001012660298595628,
+          "gae_lambda": 0.95
+        },
+        "return_steps": 1,
+        "weights": {
+          "completed": 10.0,
+          "unserved": -8.0,
+          "travel_minutes": -0.03,
+          "waiting_minutes": -0.3
+        }
+      },
+      "ppo_lambda1": {
+        "params": {
+          "width": 256,
+          "batch_size": 128,
+          "learning_rate": 0.0006307994363277335,
+          "gamma": 0.9963040961971754,
+          "n_steps": 512,
+          "ent_coef": 0.001012660298595628,
+          "gae_lambda": 1.0
+        },
+        "return_steps": 1,
+        "weights": {
+          "completed": 10.0,
+          "unserved": -8.0,
+          "travel_minutes": -0.03,
+          "waiting_minutes": -0.05
+        }
+      },
+      "ppo_lambda1_gamma1": {
+        "params": {
+          "width": 256,
+          "batch_size": 128,
+          "learning_rate": 0.0006307994363277335,
+          "gamma": 1.0,
+          "n_steps": 512,
+          "ent_coef": 0.001012660298595628,
+          "gae_lambda": 1.0
+        },
+        "return_steps": 1,
+        "weights": {
+          "completed": 10.0,
+          "unserved": -8.0,
+          "travel_minutes": -0.03,
+          "waiting_minutes": -0.05
+        }
+      }
+    },
+    "D": {
+      "dqn_control": {
+        "params": {
+          "width": 128,
+          "batch_size": 64,
+          "learning_rate": 0.0004210558685684524,
+          "gamma": 0.9685004368499164,
+          "target_update_interval": 512,
+          "exploration_fraction": 0.42256009398888783
+        },
+        "return_steps": 1,
+        "weights": {
+          "completed": 10.0,
+          "unserved": -8.0,
+          "travel_minutes": -0.03,
+          "waiting_minutes": -0.05
+        }
+      },
+      "dqn_wait15": {
+        "params": {
+          "width": 128,
+          "batch_size": 64,
+          "learning_rate": 0.0004210558685684524,
+          "gamma": 0.9685004368499164,
+          "target_update_interval": 512,
+          "exploration_fraction": 0.42256009398888783
+        },
+        "return_steps": 1,
+        "weights": {
+          "completed": 10.0,
+          "unserved": -8.0,
+          "travel_minutes": -0.03,
+          "waiting_minutes": -0.15
+        }
+      },
+      "dqn_wait30": {
+        "params": {
+          "width": 128,
+          "batch_size": 64,
+          "learning_rate": 0.0004210558685684524,
+          "gamma": 0.9685004368499164,
+          "target_update_interval": 512,
+          "exploration_fraction": 0.42256009398888783
+        },
+        "return_steps": 1,
+        "weights": {
+          "completed": 10.0,
+          "unserved": -8.0,
+          "travel_minutes": -0.03,
+          "waiting_minutes": -0.3
+        }
+      },
+      "dqn_n16": {
+        "params": {
+          "width": 128,
+          "batch_size": 64,
+          "learning_rate": 0.0004210558685684524,
+          "gamma": 0.9685004368499164,
+          "target_update_interval": 512,
+          "exploration_fraction": 0.42256009398888783
+        },
+        "return_steps": 16,
+        "weights": {
+          "completed": 10.0,
+          "unserved": -8.0,
+          "travel_minutes": -0.03,
+          "waiting_minutes": -0.05
+        }
+      },
+      "dqn_n32": {
+        "params": {
+          "width": 128,
+          "batch_size": 64,
+          "learning_rate": 0.0004210558685684524,
+          "gamma": 0.9685004368499164,
+          "target_update_interval": 512,
+          "exploration_fraction": 0.42256009398888783
+        },
+        "return_steps": 32,
+        "weights": {
+          "completed": 10.0,
+          "unserved": -8.0,
+          "travel_minutes": -0.03,
+          "waiting_minutes": -0.05
+        }
+      },
+      "ppo_control": {
+        "params": {
+          "width": 128,
+          "batch_size": 64,
+          "learning_rate": 0.0006745264519554243,
+          "gamma": 0.9963065204453232,
+          "n_steps": 512,
+          "ent_coef": 0.008322416787045903,
+          "gae_lambda": 0.95
+        },
+        "return_steps": 1,
+        "weights": {
+          "completed": 10.0,
+          "unserved": -8.0,
+          "travel_minutes": -0.03,
+          "waiting_minutes": -0.05
+        }
+      },
+      "ppo_wait15": {
+        "params": {
+          "width": 128,
+          "batch_size": 64,
+          "learning_rate": 0.0006745264519554243,
+          "gamma": 0.9963065204453232,
+          "n_steps": 512,
+          "ent_coef": 0.008322416787045903,
+          "gae_lambda": 0.95
+        },
+        "return_steps": 1,
+        "weights": {
+          "completed": 10.0,
+          "unserved": -8.0,
+          "travel_minutes": -0.03,
+          "waiting_minutes": -0.15
+        }
+      },
+      "ppo_wait30": {
+        "params": {
+          "width": 128,
+          "batch_size": 64,
+          "learning_rate": 0.0006745264519554243,
+          "gamma": 0.9963065204453232,
+          "n_steps": 512,
+          "ent_coef": 0.008322416787045903,
+          "gae_lambda": 0.95
+        },
+        "return_steps": 1,
+        "weights": {
+          "completed": 10.0,
+          "unserved": -8.0,
+          "travel_minutes": -0.03,
+          "waiting_minutes": -0.3
+        }
+      },
+      "ppo_lambda1": {
+        "params": {
+          "width": 128,
+          "batch_size": 64,
+          "learning_rate": 0.0006745264519554243,
+          "gamma": 0.9963065204453232,
+          "n_steps": 512,
+          "ent_coef": 0.008322416787045903,
+          "gae_lambda": 1.0
+        },
+        "return_steps": 1,
+        "weights": {
+          "completed": 10.0,
+          "unserved": -8.0,
+          "travel_minutes": -0.03,
+          "waiting_minutes": -0.05
+        }
+      },
+      "ppo_lambda1_gamma1": {
+        "params": {
+          "width": 128,
+          "batch_size": 64,
+          "learning_rate": 0.0006745264519554243,
+          "gamma": 1.0,
+          "n_steps": 512,
+          "ent_coef": 0.008322416787045903,
+          "gae_lambda": 1.0
+        },
+        "return_steps": 1,
+        "weights": {
+          "completed": 10.0,
+          "unserved": -8.0,
+          "travel_minutes": -0.03,
+          "waiting_minutes": -0.05
+        }
+      }
+    }
+  },
+  "held_out": [
+    {
+      "instance": "C",
+      "method": "random",
+      "label": "Random",
+      "family": "baseline",
+      "evaluations": 12,
+      "waiting_weight": -0.05,
+      "jobs_completed": 84,
+      "jobs_unserved": 75,
+      "travel_minutes": 253.2877,
+      "waiting_minutes": 888.6347,
+      "total_reward": 187.9697,
+      "raw_variant_reward": 187.9697
+    },
+    {
+      "instance": "C",
+      "method": "aco",
+      "label": "Ant colony",
+      "family": "baseline",
+      "evaluations": 12,
+      "waiting_weight": -0.05,
+      "jobs_completed": 118.6667,
+      "jobs_unserved": 40.3333,
+      "travel_minutes": 243.6445,
+      "waiting_minutes": 110.5643,
+      "total_reward": 851.1624,
+      "raw_variant_reward": 851.1624
+    },
+    {
+      "instance": "C",
+      "method": "dqn_control",
+      "label": "DQN control",
+      "family": "dqn",
+      "evaluations": 36,
+      "waiting_weight": -0.05,
+      "jobs_completed": 73.2222,
+      "jobs_unserved": 85.7778,
+      "travel_minutes": 227.1446,
+      "waiting_minutes": 1210.1472,
+      "total_reward": -21.3217,
+      "raw_variant_reward": -21.3217
+    },
+    {
+      "instance": "C",
+      "method": "dqn_wait15",
+      "label": "DQN wait 0.15",
+      "family": "dqn",
+      "evaluations": 36,
+      "waiting_weight": -0.15,
+      "jobs_completed": 69.3333,
+      "jobs_unserved": 89.6667,
+      "travel_minutes": 215.8753,
+      "waiting_minutes": 1319.876,
+      "total_reward": -96.4701,
+      "raw_variant_reward": -228.4577
+    },
+    {
+      "instance": "C",
+      "method": "dqn_wait30",
+      "label": "DQN wait 0.30",
+      "family": "dqn",
+      "evaluations": 36,
+      "waiting_weight": -0.3,
+      "jobs_completed": 71.25,
+      "jobs_unserved": 87.75,
+      "travel_minutes": 210.9755,
+      "waiting_minutes": 1263.4333,
+      "total_reward": -59.0009,
+      "raw_variant_reward": -374.8593
+    },
+    {
+      "instance": "C",
+      "method": "dqn_n16",
+      "label": "DQN 16-step",
+      "family": "dqn",
+      "evaluations": 36,
+      "waiting_weight": -0.05,
+      "jobs_completed": 96.5833,
+      "jobs_unserved": 62.4167,
+      "travel_minutes": 295.4209,
+      "waiting_minutes": 605.4977,
+      "total_reward": 427.3625,
+      "raw_variant_reward": 427.3625
+    },
+    {
+      "instance": "C",
+      "method": "dqn_n32",
+      "label": "DQN 32-step",
+      "family": "dqn",
+      "evaluations": 36,
+      "waiting_weight": -0.05,
+      "jobs_completed": 102.0833,
+      "jobs_unserved": 56.9167,
+      "travel_minutes": 308.2854,
+      "waiting_minutes": 426.3134,
+      "total_reward": 534.9358,
+      "raw_variant_reward": 534.9358
+    },
+    {
+      "instance": "C",
+      "method": "ppo_control",
+      "label": "PPO control",
+      "family": "ppo",
+      "evaluations": 36,
+      "waiting_weight": -0.05,
+      "jobs_completed": 71.5833,
+      "jobs_unserved": 87.4167,
+      "travel_minutes": 215.3414,
+      "waiting_minutes": 1245.3541,
+      "total_reward": -52.2279,
+      "raw_variant_reward": -52.2279
+    },
+    {
+      "instance": "C",
+      "method": "ppo_wait15",
+      "label": "PPO wait 0.15",
+      "family": "ppo",
+      "evaluations": 36,
+      "waiting_weight": -0.15,
+      "jobs_completed": 71.5833,
+      "jobs_unserved": 87.4167,
+      "travel_minutes": 213.5044,
+      "waiting_minutes": 1245.4609,
+      "total_reward": -52.1782,
+      "raw_variant_reward": -176.7243
+    },
+    {
+      "instance": "C",
+      "method": "ppo_wait30",
+      "label": "PPO wait 0.30",
+      "family": "ppo",
+      "evaluations": 36,
+      "waiting_weight": -0.3,
+      "jobs_completed": 72.5278,
+      "jobs_unserved": 86.4722,
+      "travel_minutes": 221.9307,
+      "waiting_minutes": 1219.797,
+      "total_reward": -34.1478,
+      "raw_variant_reward": -339.097
+    },
+    {
+      "instance": "C",
+      "method": "ppo_lambda1",
+      "label": "PPO λ=1",
+      "family": "ppo",
+      "evaluations": 36,
+      "waiting_weight": -0.05,
+      "jobs_completed": 70.3611,
+      "jobs_unserved": 88.6389,
+      "travel_minutes": 219.4009,
+      "waiting_minutes": 1267.9319,
+      "total_reward": -75.4786,
+      "raw_variant_reward": -75.4786
+    },
+    {
+      "instance": "C",
+      "method": "ppo_lambda1_gamma1",
+      "label": "PPO λ=1, γ=1",
+      "family": "ppo",
+      "evaluations": 36,
+      "waiting_weight": -0.05,
+      "jobs_completed": 70.0278,
+      "jobs_unserved": 88.9722,
+      "travel_minutes": 214.8054,
+      "waiting_minutes": 1283.1061,
+      "total_reward": -82.0995,
+      "raw_variant_reward": -82.0995
+    },
+    {
+      "instance": "D",
+      "method": "random",
+      "label": "Random",
+      "family": "baseline",
+      "evaluations": 12,
+      "waiting_weight": -0.05,
+      "jobs_completed": 187.8333,
+      "jobs_unserved": 115.1667,
+      "travel_minutes": 583.1181,
+      "waiting_minutes": 1904.6023,
+      "total_reward": 844.2763,
+      "raw_variant_reward": 844.2763
+    },
+    {
+      "instance": "D",
+      "method": "aco",
+      "label": "Ant colony",
+      "family": "baseline",
+      "evaluations": 12,
+      "waiting_weight": -0.05,
+      "jobs_completed": 272.4167,
+      "jobs_unserved": 30.5833,
+      "travel_minutes": 569.0036,
+      "waiting_minutes": 119.5903,
+      "total_reward": 2456.4504,
+      "raw_variant_reward": 2456.4504
+    },
+    {
+      "instance": "D",
+      "method": "dqn_control",
+      "label": "DQN control",
+      "family": "dqn",
+      "evaluations": 36,
+      "waiting_weight": -0.05,
+      "jobs_completed": 159.5,
+      "jobs_unserved": 143.5,
+      "travel_minutes": 504.6223,
+      "waiting_minutes": 2701.6464,
+      "total_reward": 296.779,
+      "raw_variant_reward": 296.779
+    },
+    {
+      "instance": "D",
+      "method": "dqn_wait15",
+      "label": "DQN wait 0.15",
+      "family": "dqn",
+      "evaluations": 36,
+      "waiting_weight": -0.15,
+      "jobs_completed": 160.9722,
+      "jobs_unserved": 142.0278,
+      "travel_minutes": 504.3352,
+      "waiting_minutes": 2660.4107,
+      "total_reward": 325.3494,
+      "raw_variant_reward": 59.3083
+    },
+    {
+      "instance": "D",
+      "method": "dqn_wait30",
+      "label": "DQN wait 0.30",
+      "family": "dqn",
+      "evaluations": 36,
+      "waiting_weight": -0.3,
+      "jobs_completed": 155.0278,
+      "jobs_unserved": 147.9722,
+      "travel_minutes": 493.1552,
+      "waiting_minutes": 2814.6729,
+      "total_reward": 210.9717,
+      "raw_variant_reward": -492.6965
+    },
+    {
+      "instance": "D",
+      "method": "dqn_n16",
+      "label": "DQN 16-step",
+      "family": "dqn",
+      "evaluations": 36,
+      "waiting_weight": -0.05,
+      "jobs_completed": 181.9722,
+      "jobs_unserved": 121.0278,
+      "travel_minutes": 571.6922,
+      "waiting_minutes": 2177.8596,
+      "total_reward": 725.4563,
+      "raw_variant_reward": 725.4563
+    },
+    {
+      "instance": "D",
+      "method": "dqn_n32",
+      "label": "DQN 32-step",
+      "family": "dqn",
+      "evaluations": 36,
+      "waiting_weight": -0.05,
+      "jobs_completed": 170.6111,
+      "jobs_unserved": 132.3889,
+      "travel_minutes": 530.4893,
+      "waiting_minutes": 2473.5192,
+      "total_reward": 507.4094,
+      "raw_variant_reward": 507.4094
+    },
+    {
+      "instance": "D",
+      "method": "ppo_control",
+      "label": "PPO control",
+      "family": "ppo",
+      "evaluations": 36,
+      "waiting_weight": -0.05,
+      "jobs_completed": 141.1389,
+      "jobs_unserved": 161.8611,
+      "travel_minutes": 468.9117,
+      "waiting_minutes": 3027.446,
+      "total_reward": -48.9397,
+      "raw_variant_reward": -48.9397
+    },
+    {
+      "instance": "D",
+      "method": "ppo_wait15",
+      "label": "PPO wait 0.15",
+      "family": "ppo",
+      "evaluations": 36,
+      "waiting_weight": -0.15,
+      "jobs_completed": 139.3056,
+      "jobs_unserved": 163.6944,
+      "travel_minutes": 468.5924,
+      "waiting_minutes": 3070.7237,
+      "total_reward": -84.094,
+      "raw_variant_reward": -391.1663
+    },
+    {
+      "instance": "D",
+      "method": "ppo_wait30",
+      "label": "PPO wait 0.30",
+      "family": "ppo",
+      "evaluations": 36,
+      "waiting_weight": -0.3,
+      "jobs_completed": 134.5278,
+      "jobs_unserved": 168.4722,
+      "travel_minutes": 446.2952,
+      "waiting_minutes": 3000.2904,
+      "total_reward": -165.9034,
+      "raw_variant_reward": -915.976
+    },
+    {
+      "instance": "D",
+      "method": "ppo_lambda1",
+      "label": "PPO λ=1",
+      "family": "ppo",
+      "evaluations": 36,
+      "waiting_weight": -0.05,
+      "jobs_completed": 145.1389,
+      "jobs_unserved": 157.8611,
+      "travel_minutes": 476.3586,
+      "waiting_minutes": 2968.1444,
+      "total_reward": 25.802,
+      "raw_variant_reward": 25.802
+    },
+    {
+      "instance": "D",
+      "method": "ppo_lambda1_gamma1",
+      "label": "PPO λ=1, γ=1",
+      "family": "ppo",
+      "evaluations": 36,
+      "waiting_weight": -0.05,
+      "jobs_completed": 96.8889,
+      "jobs_unserved": 206.1111,
+      "travel_minutes": 304.2861,
+      "waiting_minutes": 2023.4939,
+      "total_reward": -790.3033,
+      "raw_variant_reward": -790.3033
+    }
+  ],
+  "ppo_lambda1_percent_training_decisions_within_terminal_rollout": {
+    "C": {
+      "ppo_lambda1": 88.6936,
+      "ppo_lambda1_gamma1": 87.4295
+    },
+    "D": {
+      "ppo_lambda1": 68.6903,
+      "ppo_lambda1_gamma1": 70.7004
+    }
+  },
+  "reference_reward_weights": {
+    "completed": 10.0,
+    "unserved": -8.0,
+    "travel_minutes": -0.03,
+    "waiting_minutes": -0.05
+  },
+  "learned_evaluations": 720,
+  "fixed_evaluations": 48,
+  "training_fits": 60,
+  "training_episodes": 4233,
+  "reports": [
+    {
+      "title": "Waiting costs and longer returns report",
+      "path": "../../returns/index.html"
+    },
+    {
+      "title": "Instance C routes",
+      "path": "../../returns/c-routes.html"
+    },
+    {
+      "title": "Instance D routes",
+      "path": "../../returns/d-routes.html"
+    }
+  ],
+  "summary": "output/rounds/07-wait-and-returns/summary.json",
+  "verification": {
+    "tests_passed": 16,
+    "checkpoints": 60,
+    "replayed_seed_11_checkpoint_traces": 20,
+    "max_four_term_vs_monitor_discrepancy": 0.000163
+  },
+  "local_family_results": [
+    "output/rounds/07-wait-and-returns/c/dqn.json",
+    "output/rounds/07-wait-and-returns/c/ppo.json",
+    "output/rounds/07-wait-and-returns/d/dqn.json",
+    "output/rounds/07-wait-and-returns/d/ppo.json"
+  ]
+}

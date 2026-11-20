@@ -1,0 +1,76 @@
+{
+  "round": 5,
+  "title": "Diagnose the learned schedules",
+  "pi": "ny",
+  "provenance": "Transcript summary and links to the input runs",
+  "timing": "Compute timing unavailable for the diagnostic replays.",
+  "timing_basis": "Computation ordered by the retained conversation.",
+  "pi_timing_basis": "Timestamps from local Codex turn-context records.",
+  "pi_input_events": [
+    {
+      "time": "2026-11-20T14:19:13+00:00",
+      "summary": "Diagnose why Random beats the learned policies and identify the reward incentives."
+    }
+  ],
+  "pi_feedback_times": [
+    "2026-11-20T14:40:47+00:00"
+  ],
+  "pi_quote": null,
+  "model_provenance": "Local Codex turn-context records identify the parent model and reasoning effort. Local tool-call records give the launch times and show that all 16 full-context delegates inherited this configuration without overrides.",
+  "provenance_note": "Record ID and private workspace paths excluded from this report.",
+  "pi_input": "ny asked how the two learned policies differed from Random and ACO, why training rewards changed, and what the reward incentivized.",
+  "pi_feedback": "ny interpreted the schedules as evidence of a possible exploration problem and a possible reward-design problem, and asked to test guided exploration and monitor all four reward terms.",
+  "agent_work": "Separated voluntary deferrals from forced ones, examined wait and deadline choices, reconciled the observed reward to four terms, and replayed paired interventions with weights frozen.",
+  "computation": "Replayed 192 saved episodes across Random, ACO, DQN, and PPO. Matching held-out seeds controlled the comparisons of no voluntary deferral, shorter waits, and changed action sampling.",
+  "finding": "DQN deferred on 62% and 49% of eligible decisions on A and B. On D, mean forecast waiting above the shortest feasible choice was 14.91 minutes for DQN, 21.23 for PPO, 10.22 for Random, and 0.17 for ACO. When an alternative was available, overriding decisions that would wait more than 15 minutes improved reward on all paired seeds for both agents on all four layouts.",
+  "delegation": [
+    {
+      "subagent": "reward_audit",
+      "launch_utc": "2026-11-20T14:19:49+00:00",
+      "role": "Reward audit",
+      "work": "Reconciled episode rewards and checked their timing and relative scale.",
+      "configuration": "Inherited parent configuration",
+      "exact_model_variant": "gpt-6.2-sol",
+      "reasoning_effort": "high"
+    },
+    {
+      "subagent": "solution_patterns",
+      "launch_utc": "2026-11-20T14:19:55+00:00",
+      "role": "Policy behavior analysis",
+      "work": "Compared deferral, waiting, deadlines, and repeated omissions across the learned and fixed policies.",
+      "configuration": "Inherited parent configuration",
+      "exact_model_variant": "gpt-6.2-sol",
+      "reasoning_effort": "high"
+    }
+  ],
+  "model_family": "Codex, GPT-6-based agent",
+  "exact_parent_variant": "gpt-6.2-sol",
+  "parent_reasoning_effort": "high",
+  "reports": [
+    {
+      "title": "Tuned source runs",
+      "path": "../04-tuned-loss-profiles/benchmark.html"
+    }
+  ],
+  "measured": [],
+  "availability": "The original tuned reports preserve the input episodes. The conversation preserves the replay measurements above. Separate intervention traces are unavailable.",
+  "reported_comparison": {
+    "columns": [
+      "Instance D policy",
+      "Original visits",
+      "Visits with a shorter-wait override"
+    ],
+    "rows": [
+      [
+        "DQN",
+        "168.08",
+        "213.42"
+      ],
+      [
+        "PPO",
+        "142.67",
+        "201.67"
+      ]
+    ]
+  }
+}

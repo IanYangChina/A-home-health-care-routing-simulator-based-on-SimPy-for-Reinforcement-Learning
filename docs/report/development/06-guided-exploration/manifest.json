@@ -1,0 +1,415 @@
+{
+  "round": 6,
+  "title": "Guided exploration and reward decomposition",
+  "pi": "ny",
+  "provenance": "PI direction and experiment report",
+  "timing": "20 Nov 2026 · family runner logs 14:46:32–14:53:46 UTC",
+  "timing_basis": "Run-family started_at and ended_at records from the measured exploration JSON, UTC.",
+  "pi_timing_basis": "Timestamps from local Codex turn-context records.",
+  "pi_input_events": [
+    {
+      "time": "2026-11-20T14:40:47+00:00",
+      "summary": "Archive development rounds, test guided exploration, and plot all reward terms."
+    },
+    {
+      "time": "2026-11-20T14:41:50+00:00",
+      "summary": "Record each delegated task, the model variant, and reasoning effort."
+    }
+  ],
+  "pi_feedback_times": [
+    "2026-11-20T14:40:47+00:00"
+  ],
+  "pi_quote": "“I'd like you to monitor the changes of the four terms in the reward function over training as well as the weighted sum value”",
+  "model_provenance": "Local Codex turn-context records identify the parent model and reasoning effort. Local tool-call records give the launch times and show that all 16 full-context delegates inherited this configuration without overrides.",
+  "provenance_note": "Record ID and private workspace paths excluded from this report.",
+  "pi_input": "ny asked for exploration strategies using rules and sometimes ACO solutions, and asked to track four reward components and the weighted sum throughout training.",
+  "pi_feedback": "PI feedback on these measured results is pending. Before the run, ny proposed that exploration data and reward design may both contribute to excessive deferral and long waits. The reward-component curves provide evidence for that discussion.",
+  "agent_work": "Mixed short-wait or bounded ACO choices into DQN’s epsilon exploration. For PPO, used the same teachers to warm-start the policy by imitation, then collected ordinary on-policy rollouts. Logged completed and unserved visits, travel, waiting, and weighted reward during training with the original reward weights.",
+  "computation": "Ran 36 fits across A and D at 12,288 steps each. Used three training seeds and 12 held-out seeds per variant, yielding 432 learned-policy evaluations. Reused 48 matching Random and ACO baseline evaluations. The route pages show training seed 11, selected before evaluation.",
+  "finding": "On D, the ACO mix raised DQN held-out reward from 296.78 to 486.93. The short-wait warm start raised PPO from −104.58 to 58.71. On A, both DQN guides lowered held-out reward and both PPO warm starts yielded small gains. All learned variants scored below Random and ACO on both layouts. For the DQN ACO mix on D, weighted training reward fell from 1,895.35 to 534.31 as waiting rose from 693 to 2,447 nurse-minutes across the plotted windows.",
+  "delegation": [
+    {
+      "subagent": "development_history",
+      "launch_utc": "2026-11-20T14:41:24+00:00",
+      "role": "Development history and archival",
+      "work": "Assembled the PI timeline, evidence provenance, and per-round reports.",
+      "configuration": "Inherited parent configuration",
+      "exact_model_variant": "gpt-6.2-sol",
+      "reasoning_effort": "high"
+    },
+    {
+      "subagent": "guided_policies",
+      "launch_utc": "2026-11-20T14:41:33+00:00",
+      "role": "Guided exploration implementation",
+      "work": "Developed policy-specific guided data collection for the DQN and PPO comparisons.",
+      "configuration": "Inherited parent configuration",
+      "exact_model_variant": "gpt-6.2-sol",
+      "reasoning_effort": "high"
+    },
+    {
+      "subagent": "exploration_report",
+      "launch_utc": "2026-11-20T14:41:44+00:00",
+      "role": "Training experiment reporting",
+      "work": "Implemented the reward-component profiles and comparison page.",
+      "configuration": "Inherited parent configuration",
+      "exact_model_variant": "gpt-6.2-sol",
+      "reasoning_effort": "high"
+    }
+  ],
+  "model_family": "Codex, GPT-6-based agent",
+  "exact_parent_variant": "gpt-6.2-sol",
+  "parent_reasoning_effort": "high",
+  "reports": [
+    {
+      "title": "Guided exploration experiment report",
+      "path": "../../exploration/index.html"
+    },
+    {
+      "title": "Instance A routes",
+      "path": "../../exploration/a-routes.html"
+    },
+    {
+      "title": "Instance D routes",
+      "path": "../../exploration/d-routes.html"
+    }
+  ],
+  "measured": [],
+  "availability": "The experiment report retains reward profiles, loss profiles, and the held-out comparison. The route reports display the predeclared training seed. The manifest indexes the original local results, logs, and checkpoints.",
+  "guided_family_runs": [
+    {
+      "instance": "A",
+      "family": "dqn",
+      "device": "cpu",
+      "started_at": "2026-11-20T14:46:32+00:00",
+      "ended_at": "2026-11-20T14:51:55+00:00",
+      "elapsed_seconds": 323.0,
+      "steps_per_seed": 12288,
+      "training_seeds": [
+        11,
+        12,
+        13
+      ],
+      "test_seeds": [
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112
+      ],
+      "tuned_params": {
+        "width": 256,
+        "batch_size": 64,
+        "learning_rate": 0.0005772174031765054,
+        "gamma": 0.9967879229818138,
+        "target_update_interval": 512,
+        "exploration_fraction": 0.45865159316087856
+      },
+      "results": "output/rounds/06-guided-exploration/a/dqn.json",
+      "log": "output/rounds/06-guided-exploration/a/dqn.log",
+      "checkpoints": [
+        "output/rounds/06-guided-exploration/a/dqn_aco-11.zip",
+        "output/rounds/06-guided-exploration/a/dqn_aco-12.zip",
+        "output/rounds/06-guided-exploration/a/dqn_aco-13.zip",
+        "output/rounds/06-guided-exploration/a/dqn_short_wait-11.zip",
+        "output/rounds/06-guided-exploration/a/dqn_short_wait-12.zip",
+        "output/rounds/06-guided-exploration/a/dqn_short_wait-13.zip",
+        "output/rounds/06-guided-exploration/a/dqn_uniform-11.zip",
+        "output/rounds/06-guided-exploration/a/dqn_uniform-12.zip",
+        "output/rounds/06-guided-exploration/a/dqn_uniform-13.zip"
+      ]
+    },
+    {
+      "instance": "A",
+      "family": "ppo",
+      "device": "cpu",
+      "started_at": "2026-11-20T14:46:32+00:00",
+      "ended_at": "2026-11-20T14:52:51+00:00",
+      "elapsed_seconds": 379.0,
+      "steps_per_seed": 12288,
+      "training_seeds": [
+        11,
+        12,
+        13
+      ],
+      "test_seeds": [
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112
+      ],
+      "tuned_params": {
+        "width": 256,
+        "batch_size": 32,
+        "learning_rate": 0.00010390303253555893,
+        "gamma": 0.9738812087586737,
+        "n_steps": 128,
+        "ent_coef": 0.0014719596118573143
+      },
+      "results": "output/rounds/06-guided-exploration/a/ppo.json",
+      "log": "output/rounds/06-guided-exploration/a/ppo.log",
+      "checkpoints": [
+        "output/rounds/06-guided-exploration/a/ppo_aco-11.zip",
+        "output/rounds/06-guided-exploration/a/ppo_aco-12.zip",
+        "output/rounds/06-guided-exploration/a/ppo_aco-13.zip",
+        "output/rounds/06-guided-exploration/a/ppo_scratch-11.zip",
+        "output/rounds/06-guided-exploration/a/ppo_scratch-12.zip",
+        "output/rounds/06-guided-exploration/a/ppo_scratch-13.zip",
+        "output/rounds/06-guided-exploration/a/ppo_short_wait-11.zip",
+        "output/rounds/06-guided-exploration/a/ppo_short_wait-12.zip",
+        "output/rounds/06-guided-exploration/a/ppo_short_wait-13.zip"
+      ]
+    },
+    {
+      "instance": "D",
+      "family": "dqn",
+      "device": "cuda",
+      "started_at": "2026-11-20T14:46:32+00:00",
+      "ended_at": "2026-11-20T14:53:46+00:00",
+      "elapsed_seconds": 434.0,
+      "steps_per_seed": 12288,
+      "training_seeds": [
+        11,
+        12,
+        13
+      ],
+      "test_seeds": [
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112
+      ],
+      "tuned_params": {
+        "width": 128,
+        "batch_size": 64,
+        "learning_rate": 0.0004210558685684524,
+        "gamma": 0.9685004368499164,
+        "target_update_interval": 512,
+        "exploration_fraction": 0.42256009398888783
+      },
+      "results": "output/rounds/06-guided-exploration/d/dqn.json",
+      "log": "output/rounds/06-guided-exploration/d/dqn.log",
+      "checkpoints": [
+        "output/rounds/06-guided-exploration/d/dqn_aco-11.zip",
+        "output/rounds/06-guided-exploration/d/dqn_aco-12.zip",
+        "output/rounds/06-guided-exploration/d/dqn_aco-13.zip",
+        "output/rounds/06-guided-exploration/d/dqn_short_wait-11.zip",
+        "output/rounds/06-guided-exploration/d/dqn_short_wait-12.zip",
+        "output/rounds/06-guided-exploration/d/dqn_short_wait-13.zip",
+        "output/rounds/06-guided-exploration/d/dqn_uniform-11.zip",
+        "output/rounds/06-guided-exploration/d/dqn_uniform-12.zip",
+        "output/rounds/06-guided-exploration/d/dqn_uniform-13.zip"
+      ]
+    },
+    {
+      "instance": "D",
+      "family": "ppo",
+      "device": "cpu",
+      "started_at": "2026-11-20T14:46:32+00:00",
+      "ended_at": "2026-11-20T14:53:33+00:00",
+      "elapsed_seconds": 421.0,
+      "steps_per_seed": 12288,
+      "training_seeds": [
+        11,
+        12,
+        13
+      ],
+      "test_seeds": [
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112
+      ],
+      "tuned_params": {
+        "width": 128,
+        "batch_size": 64,
+        "learning_rate": 0.0006745264519554243,
+        "gamma": 0.9963065204453232,
+        "n_steps": 128,
+        "ent_coef": 0.008322416787045903
+      },
+      "results": "output/rounds/06-guided-exploration/d/ppo.json",
+      "log": "output/rounds/06-guided-exploration/d/ppo.log",
+      "checkpoints": [
+        "output/rounds/06-guided-exploration/d/ppo_aco-11.zip",
+        "output/rounds/06-guided-exploration/d/ppo_aco-12.zip",
+        "output/rounds/06-guided-exploration/d/ppo_aco-13.zip",
+        "output/rounds/06-guided-exploration/d/ppo_scratch-11.zip",
+        "output/rounds/06-guided-exploration/d/ppo_scratch-12.zip",
+        "output/rounds/06-guided-exploration/d/ppo_scratch-13.zip",
+        "output/rounds/06-guided-exploration/d/ppo_short_wait-11.zip",
+        "output/rounds/06-guided-exploration/d/ppo_short_wait-12.zip",
+        "output/rounds/06-guided-exploration/d/ppo_short_wait-13.zip"
+      ]
+    }
+  ],
+  "guided_held_out_means": [
+    {
+      "instance": "A",
+      "method": "Random",
+      "episodes": 12,
+      "completed": 56.92,
+      "waiting_minutes": 1091.94,
+      "reward": 484.41
+    },
+    {
+      "instance": "A",
+      "method": "Ant colony",
+      "episodes": 12,
+      "completed": 60,
+      "waiting_minutes": 998.3,
+      "reward": 544.33
+    },
+    {
+      "instance": "A",
+      "method": "DQN uniform",
+      "episodes": 36,
+      "completed": 55.72,
+      "waiting_minutes": 1031.84,
+      "reward": 466.05
+    },
+    {
+      "instance": "A",
+      "method": "DQN short-wait guide",
+      "episodes": 36,
+      "completed": 50.44,
+      "waiting_minutes": 780.48,
+      "reward": 384.14
+    },
+    {
+      "instance": "A",
+      "method": "DQN ACO mix",
+      "episodes": 36,
+      "completed": 46.61,
+      "waiting_minutes": 765.18,
+      "reward": 316.22
+    },
+    {
+      "instance": "A",
+      "method": "PPO from scratch",
+      "episodes": 36,
+      "completed": 54.17,
+      "waiting_minutes": 1171.36,
+      "reward": 431.15
+    },
+    {
+      "instance": "A",
+      "method": "PPO short-wait warm start",
+      "episodes": 36,
+      "completed": 54.67,
+      "waiting_minutes": 1180.89,
+      "reward": 439.72
+    },
+    {
+      "instance": "A",
+      "method": "PPO ACO warm start",
+      "episodes": 36,
+      "completed": 54.36,
+      "waiting_minutes": 1175.72,
+      "reward": 434.49
+    },
+    {
+      "instance": "D",
+      "method": "Random",
+      "episodes": 12,
+      "completed": 187.83,
+      "waiting_minutes": 1904.6,
+      "reward": 844.28
+    },
+    {
+      "instance": "D",
+      "method": "Ant colony",
+      "episodes": 12,
+      "completed": 272.42,
+      "waiting_minutes": 119.59,
+      "reward": 2456.45
+    },
+    {
+      "instance": "D",
+      "method": "DQN uniform",
+      "episodes": 36,
+      "completed": 159.5,
+      "waiting_minutes": 2701.65,
+      "reward": 296.78
+    },
+    {
+      "instance": "D",
+      "method": "DQN short-wait guide",
+      "episodes": 36,
+      "completed": 166.72,
+      "waiting_minutes": 2573.43,
+      "reward": 432.5
+    },
+    {
+      "instance": "D",
+      "method": "DQN ACO mix",
+      "episodes": 36,
+      "completed": 169.56,
+      "waiting_minutes": 2510.72,
+      "reward": 486.93
+    },
+    {
+      "instance": "D",
+      "method": "PPO from scratch",
+      "episodes": 36,
+      "completed": 137.97,
+      "waiting_minutes": 3006.22,
+      "reward": -104.58
+    },
+    {
+      "instance": "D",
+      "method": "PPO short-wait warm start",
+      "episodes": 36,
+      "completed": 146.69,
+      "waiting_minutes": 2876.81,
+      "reward": 58.71
+    },
+    {
+      "instance": "D",
+      "method": "PPO ACO warm start",
+      "episodes": 36,
+      "completed": 143.56,
+      "waiting_minutes": 3006.48,
+      "reward": -3.75
+    }
+  ],
+  "guided_summary": "output/rounds/06-guided-exploration/summary.json",
+  "pi_feedback_after_results": "Pending",
+  "verification": {
+    "tests_passed": 13,
+    "training_episodes": 2747,
+    "held_out_evaluations": 480,
+    "replayed_representative_checkpoints": 12,
+    "max_four_term_vs_monitor_discrepancy": 3.9e-05
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "instance": "A",
+  "time": 428.932,
+  "jobs_total": 60,
+  "jobs_completed": 60,
+  "jobs_unserved": 0,
+  "jobs_pending": 0,
+  "completion_rate": 1.0,
+  "nurses": 7,
+  "travel_minutes": 188.313,
+  "waiting_minutes": 1040.012,
+  "service_minutes": 1444.421,
+  "truncated": false,
+  "seeded_service_cv": 0.15,
+  "policy": "aco",
+  "seed": 17,
+  "decisions": 72,
+  "total_reward": 542.35
+}

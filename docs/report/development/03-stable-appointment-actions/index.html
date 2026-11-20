@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Saved interactive reports and raw outputs">
+<title>Round 3 · Stable appointment IDs and loss logging · Home care dispatch</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<header class="hero">
+<div class="wrap">
+<nav aria-label="Report navigation"><a href="../index.html">Development timeline</a><a href="../../index.html">Current benchmark</a></nav>
+<h1>Round 3 · Stable appointment IDs and loss logging</h1>
+<p>Saved interactive reports and raw outputs</p>
+</div>
+</header>
+<main class="wrap detail">
+<p class="timing">20 Nov 2026 · first logged Optuna study 13:35:50, last results file 13:48:32 UTC</p>
+<p class="caption">The linked detail reports retain routes, schedules, and loss histories. The manifest records the original local results, run logs, and checkpoint paths.</p>
+<div class="card">
+<section><h2>PI input</h2><p class="timing"><time datetime="2026-11-20T13:32:07+00:00">13:32:07 UTC</time> · <time datetime="2026-11-20T13:47:20+00:00">13:47:20 UTC</time></p><p>ny questioned whether a changing eligible-job rank would let the agent learn reliably and asked whether observations were normalized and losses converged.</p></section>
+<section><h2>Agent work</h2><p>Mapped action j to appointment j throughout a shift. DQN and PPO applied the eligibility mask. DQN also applied it to learning targets. Added training loss and rolling reward diagnostics.</p></section>
+<section><h2>Computation</h2><p>Reran A at 64 and 128 units and B, C, and D at 128 units. The five configurations produced 360 held-out episodes and ten replay-checked checkpoints.</p><div class="scroll"><table class="results" aria-label="Run timing"><thead><tr><th scope="col">Configuration</th><th scope="col">First logged Optuna study</th><th scope="col">Results file</th><th scope="col">Elapsed run time</th></tr></thead><tbody><tr><th scope="row">A · 64 × 64</th><td>13:35:50 UTC</td><td>13:39:22 UTC</td><td>211.92 s</td></tr><tr><th scope="row">A · 128 × 128</th><td>Time unavailable</td><td>13:41:27 UTC</td><td>120.92 s</td></tr><tr><th scope="row">B · 128 × 128</th><td>13:41:31 UTC</td><td>13:43:14 UTC</td><td>103.60 s</td></tr><tr><th scope="row">C · 128 × 128</th><td>13:43:18 UTC</td><td>13:45:19 UTC</td><td>120.29 s</td></tr><tr><th scope="row">D · 128 × 128</th><td>13:45:23 UTC</td><td>13:48:32 UTC</td><td>188.92 s</td></tr></tbody></table></div></section>
+<section><h2>Findings</h2><p>On A, wider DQN rose from 45.83 to 47.17 visits and wider PPO fell from 53.50 to 52.83. Observations already used fixed scaling and clipping. DQN median loss rose from the first to the last quarter in all five configurations. The curves gave no clear evidence of convergence.</p><p class="caption">Each cell shows mean visits completed / mean held-out reward.</p><div class="scroll"><table class="results" aria-label="Measured held-out results"><thead><tr><th scope="col">Configuration</th><th scope="col">Random</th><th scope="col">Ant colony</th><th scope="col">DQN</th><th scope="col">PPO</th></tr></thead><tbody><tr><th scope="row">A · 64 × 64</th><td>56.92 / 484.41</td><td>60.00 / 544.33</td><td>45.83 / 294.47</td><td>53.50 / 416.32</td></tr><tr><th scope="row">A · 128 × 128</th><td>56.92 / 484.41</td><td>60.00 / 544.33</td><td>47.17 / 316.12</td><td>52.83 / 403.83</td></tr><tr><th scope="row">B · 128 × 128</th><td>55.92 / 464.76</td><td>60.00 / 544.36</td><td>50.08 / 365.69</td><td>52.50 / 397.19</td></tr><tr><th scope="row">C · 128 × 128</th><td>84.00 / 187.97</td><td>118.67 / 851.16</td><td>66.33 / -138.50</td><td>73.08 / -22.08</td></tr><tr><th scope="row">D · 128 × 128</th><td>187.83 / 844.28</td><td>272.42 / 2,456.45</td><td>151.42 / 145.24</td><td>133.92 / -185.22</td></tr></tbody></table></div></section>
+<section><h2>PI feedback</h2><p class="timing"><time datetime="2026-11-20T13:50:39+00:00">13:50:39 UTC</time></p><p class="feedback">ny asked Optuna to search width, batch size, DQN target-update interval, and PPO rollout length. ny also asked for longer training and loss profiles that show the mean and standard deviation.</p></section>
+<section><h2>Delegation and model configuration</h2>
+<p>Codex used <code>gpt-6.2-sol</code> with <strong>high</strong> reasoning effort. Delegated roles inherited the same configuration. Local Codex turn-context records identify the parent model and reasoning effort. Local tool-call records give the launch times and show that all 16 full-context delegates inherited this configuration without overrides. The parent coordinated training and evaluation.</p>
+<div class="scroll"><table class="ledger" aria-label="Delegated work"><thead><tr><th scope="col">Subagent</th><th scope="col">Launch (UTC)</th><th scope="col">Delegated work</th></tr></thead><tbody><tr><th scope="row">reports</th><td>13:32:22</td><td>Added loss diagnostics and checked measured series against raw data in the browser.</td></tr><tr><th scope="row">audit</th><td>13:32:27</td><td>Checked observation scaling and established that the earlier ranks-based runs retained no loss histories.</td></tr><tr><th scope="row">masked_dqn</th><td>13:32:59</td><td>Added stable-ID eligibility handling for learning and inference, with tests.</td></tr></tbody></table></div></section>
+<section><h2>Reports and evidence</h2><ul class="links"><li><a href="benchmark.html">Archived benchmark overview</a></li><li><a href="../../a-64.html">A · 64 × 64 interactive detail</a></li><li><a href="../../a-128.html">A · 128 × 128 interactive detail</a></li><li><a href="../../b-128.html">B · 128 × 128 interactive detail</a></li><li><a href="../../c-128.html">C · 128 × 128 interactive detail</a></li><li><a href="../../d-128.html">D · 128 × 128 interactive detail</a></li><li><a href="manifest.json">Provenance and local artifact paths</a></li></ul></section>
+</div>
+</main>
+<footer><div class="wrap">Home care routing and scheduling research simulation</div></footer>
+</body>
+</html>

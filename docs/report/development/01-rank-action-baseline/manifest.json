@@ -1,0 +1,118 @@
+{
+  "round": 1,
+  "title": "First comparison on instance A",
+  "pi": "ny",
+  "provenance": "Summary from the retained conversation",
+  "timing": "Compute timing unavailable for the initial comparison.",
+  "timing_basis": "Computation ordered by the retained conversation.",
+  "pi_timing_basis": "Timestamps from local Codex turn-context records.",
+  "pi_input_events": [
+    {
+      "time": "2026-11-20T08:47:21+00:00",
+      "summary": "Read the repository."
+    },
+    {
+      "time": "2026-11-20T08:55:52+00:00",
+      "summary": "Set up Conda, train the RL agents, and prepare the HTML report for GitHub Pages."
+    }
+  ],
+  "pi_feedback_times": [
+    "2026-11-20T09:09:04+00:00"
+  ],
+  "pi_quote": null,
+  "model_provenance": "Local Codex turn-context records identify the parent model and reasoning effort. Local tool-call records give the launch times and show that all 16 full-context delegates inherited this configuration without overrides.",
+  "provenance_note": "Record ID and private workspace paths excluded from this report.",
+  "pi_input": "ny asked to review the repository, set up Conda and RL training, and prepare the interactive report for GitHub Pages.",
+  "pi_feedback": "“Try increasing the network size and also experiment on the other 3 instances.”",
+  "agent_work": "Set up the shhcsrp conda environment, compared the fixed policies with RL, and built the offline report and GitHub Pages workflow. The RL action represented a rank in the current eligible list.",
+  "computation": "Instance A contained 60 appointments. GPU training used four Optuna trials and 16,384 final steps per algorithm. The report averaged 12 held-out seeds.",
+  "finding": "DQN led RL validation. On the held-out seeds it averaged 54.50 visits and 438.08 reward. Random averaged 56.92 visits and 484.41 reward. Earliest deadline and ant colony completed all 60 visits on every seed.",
+  "delegation": [
+    {
+      "subagent": "report",
+      "launch_utc": "2026-11-20T08:56:13+00:00",
+      "role": "Report implementation",
+      "work": "Built the interactive report for policies, routes, schedules, appointments, and event traces.",
+      "configuration": "Inherited parent configuration",
+      "exact_model_variant": "gpt-6.2-sol",
+      "reasoning_effort": "high"
+    },
+    {
+      "subagent": "pages",
+      "launch_utc": "2026-11-20T08:56:18+00:00",
+      "role": "GitHub Pages setup",
+      "work": "Prepared and checked the static Pages publishing workflow.",
+      "configuration": "Inherited parent configuration",
+      "exact_model_variant": "gpt-6.2-sol",
+      "reasoning_effort": "high"
+    },
+    {
+      "subagent": "fair_eval",
+      "launch_utc": "2026-11-20T08:56:36+00:00",
+      "role": "Evaluation protocol",
+      "work": "Added the earliest-deadline baseline and optional paired per-appointment service disturbances. Streamlined dispatch validation, fixed Windows UTF-8 handling in a report test, and verified all eight simulator tests.",
+      "configuration": "Inherited parent configuration",
+      "exact_model_variant": "gpt-6.2-sol",
+      "reasoning_effort": "high"
+    }
+  ],
+  "model_family": "Codex, GPT-6-based agent",
+  "exact_parent_variant": "gpt-6.2-sol",
+  "parent_reasoning_effort": "high",
+  "reports": [],
+  "measured": [],
+  "availability": "The results above were recorded in the conversation. Per-seed traces, training losses, and checkpoints from this run are unavailable in the current workspace.",
+  "reported_comparison": {
+    "columns": [
+      "Policy",
+      "Visits completed",
+      "Mean reward",
+      "Travel minutes",
+      "Waiting minutes"
+    ],
+    "rows": [
+      [
+        "Random",
+        "56.92",
+        "484.41",
+        "183.2",
+        "1,091.9"
+      ],
+      [
+        "Greedy",
+        "57.17",
+        "487.46",
+        "115.7",
+        "1,161.4"
+      ],
+      [
+        "Earliest deadline",
+        "60.00",
+        "542.21",
+        "185.7",
+        "1,044.4"
+      ],
+      [
+        "Ant colony",
+        "60.00",
+        "544.33",
+        "192.0",
+        "998.3"
+      ],
+      [
+        "DQN",
+        "54.50",
+        "438.08",
+        "179.0",
+        "1,151.0"
+      ],
+      [
+        "PPO",
+        "54.42",
+        "437.91",
+        "169.4",
+        "1,130.1"
+      ]
+    ]
+  }
+}

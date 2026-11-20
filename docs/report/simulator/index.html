@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Assign nurses to home-care appointments in an interactive dispatch simulation.">
+  <title>Simulator · Home care dispatch</title>
+  <link rel="stylesheet" href="../site.css">
+  <link rel="stylesheet" href="simulator.css">
+  <script src="scenarios.js" defer></script>
+  <script src="engine.js" defer></script>
+  <script src="simulator.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to simulator</a>
+  <header class="project-hero"><div class="project-container">
+    <nav class="project-nav" aria-label="Project"><a href="../index.html">Latest results</a><a href="../setup/index.html">Algorithm setup</a><a href="../development/index.html">Development history</a><a href="index.html" aria-current="page">Simulator</a></nav>
+    <h1>Dispatch simulator</h1>
+    <p>Assign the current nurse to a visit or defer them. Other nurses travel, wait, and serve visits concurrently as simulated time advances.</p>
+  </div></header>
+  <main class="project-container" id="main">
+    <section class="project-section simulation-section" aria-label="Simulation controls">
+      <form id="session" class="sim-controls">
+        <label>Instance <select id="instance"><option value="A">A · 60 visits</option><option value="B">B · 60 visits</option><option value="C">C · 159 visits</option><option value="D">D · 303 visits</option></select></label>
+        <label>Service seed <input type="number" id="seed" value="101" min="0" max="4294967295" step="1" required></label>
+        <button type="submit" class="project-button">Start or reset shift</button>
+      </form>
+      <noscript><p>Enable JavaScript to make assignments. You can still browse the measured results.</p></noscript>
+      <dl id="totals" class="sim-totals" aria-label="Shift totals"></dl>
+    </section>
+    <section class="project-section simulation-section" aria-labelledby="dispatch-title">
+      <div class="sim-split">
+        <div>
+          <h2 id="dispatch-title" tabindex="-1">Choose a visit</h2>
+          <p id="decision-status" role="status"></p>
+        </div>
+        <div class="sim-actions">
+          <button type="button" id="defer" class="project-button">Defer current nurse</button>
+          <button type="button" id="skip" class="sim-secondary">Skip until a visit is eligible</button>
+        </div>
+      </div>
+      <div class="sim-controls sim-filters">
+        <label>Show <select id="visibility"><option value="eligible">Eligible visits</option><option value="pending">All pending visits</option><option value="all">All visits</option></select></label>
+        <label>Sort by <select id="sort"><option value="wait">Shortest wait</option><option value="deadline">Earliest closing</option><option value="travel">Shortest travel</option><option value="id">Visit ID</option></select></label>
+      </div>
+      <div class="project-scroll sim-table-wrap">
+        <table class="project-table sim-table" aria-label="Appointments and eligibility">
+          <thead><tr><th scope="col">Visit ID</th><th scope="col">Required skill</th><th scope="col">Time window</th><th scope="col">Travel</th><th scope="col">Wait</th><th scope="col">Service</th><th scope="col">Action or status</th></tr></thead>
+          <tbody id="jobs"></tbody>
+        </table>
+      </div>
+    </section>
+    <section class="project-section simulation-section" aria-labelledby="operations-title">
+      <h2 id="operations-title">Nurse workload and routes</h2>
+      <div class="sim-operations">
+        <div class="project-scroll sim-table-wrap">
+          <table class="project-table sim-table" aria-label="Nurse workload">
+            <thead><tr><th scope="col">Nurse</th><th scope="col">Skill</th><th scope="col">Status</th><th scope="col">Visit</th><th scope="col">Completed</th></tr></thead>
+            <tbody id="nurses"></tbody>
+          </table>
+        </div>
+        <div class="sim-map">
+          <canvas id="map" width="720" height="460" aria-label="Appointment locations and current nurse’s route. The tables show appointment and nurse details.">Appointment locations and current nurse’s route.</canvas>
+          <p id="map-note">Teal dots mark eligible visits. The purple line follows the current nurse. The square marks the depot.</p>
+        </div>
+      </div>
+      <details><summary>Recent simulation events</summary><div class="project-scroll sim-table-wrap"><table class="project-table sim-table" aria-label="Recent simulation events"><thead><tr><th scope="col">Time</th><th scope="col">Event</th><th scope="col">Nurse</th><th scope="col">Visit</th></tr></thead><tbody id="events"></tbody></table></div></details>
+    </section>
+    <section class="project-section simulation-section" aria-labelledby="rules-title">
+      <h2 id="rules-title">Simulation rules</h2>
+      <p>The simulator uses the benchmark’s appointments, nurses, skill constraints, and travel model. An assignment needs a feasible start, a wait of no more than 40 minutes, and a projected return by minute 480. The score awards 10 points per completed visit and charges 0.03 per travel minute and 0.15 per waiting minute. Each visit still unserved at shift end costs 8 points.</p>
+      <p>Runs are reproducible with the same seed and actions in this browser simulator. The JavaScript service-time generator differs from the Python generator used in the measured experiments.</p>
+    </section>
+  </main>
+</body>
+</html>

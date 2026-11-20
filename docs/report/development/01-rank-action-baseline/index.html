@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Summary from the retained conversation">
+<title>Round 1 · First comparison on instance A · Home care dispatch</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<header class="hero">
+<div class="wrap">
+<nav aria-label="Report navigation"><a href="../index.html">Development timeline</a><a href="../../index.html">Current benchmark</a></nav>
+<h1>Round 1 · First comparison on instance A</h1>
+<p>Summary from the retained conversation</p>
+</div>
+</header>
+<main class="wrap detail">
+<p class="timing">Compute timing unavailable for the initial comparison.</p>
+<p class="caption">The results above were recorded in the conversation. Per-seed traces, training losses, and checkpoints from this run are unavailable in the current workspace.</p>
+<div class="card">
+<section><h2>PI input</h2><p class="timing"><time datetime="2026-11-20T08:47:21+00:00">08:47:21 UTC</time> · <time datetime="2026-11-20T08:55:52+00:00">08:55:52 UTC</time></p><p>ny asked to review the repository, set up Conda and RL training, and prepare the interactive report for GitHub Pages.</p></section>
+<section><h2>Agent work</h2><p>Set up the shhcsrp conda environment, compared the fixed policies with RL, and built the offline report and GitHub Pages workflow. The RL action represented a rank in the current eligible list.</p></section>
+<section><h2>Computation</h2><p>Instance A contained 60 appointments. GPU training used four Optuna trials and 16,384 final steps per algorithm. The report averaged 12 held-out seeds.</p></section>
+<section><h2>Findings</h2><p>DQN led RL validation. On the held-out seeds it averaged 54.50 visits and 438.08 reward. Random averaged 56.92 visits and 484.41 reward. Earliest deadline and ant colony completed all 60 visits on every seed.</p><div class="scroll"><table class="results" aria-label="Results recorded in the conversation"><thead><tr><th scope="col">Policy</th><th scope="col">Visits completed</th><th scope="col">Mean reward</th><th scope="col">Travel minutes</th><th scope="col">Waiting minutes</th></tr></thead><tbody><tr><th scope="row">Random</th><td>56.92</td><td>484.41</td><td>183.2</td><td>1,091.9</td></tr><tr><th scope="row">Greedy</th><td>57.17</td><td>487.46</td><td>115.7</td><td>1,161.4</td></tr><tr><th scope="row">Earliest deadline</th><td>60.00</td><td>542.21</td><td>185.7</td><td>1,044.4</td></tr><tr><th scope="row">Ant colony</th><td>60.00</td><td>544.33</td><td>192.0</td><td>998.3</td></tr><tr><th scope="row">DQN</th><td>54.50</td><td>438.08</td><td>179.0</td><td>1,151.0</td></tr><tr><th scope="row">PPO</th><td>54.42</td><td>437.91</td><td>169.4</td><td>1,130.1</td></tr></tbody></table></div></section>
+<section><h2>PI feedback</h2><p class="timing"><time datetime="2026-11-20T09:09:04+00:00">09:09:04 UTC</time></p><p class="feedback">“Try increasing the network size and also experiment on the other 3 instances.”</p></section>
+<section><h2>Delegation and model configuration</h2>
+<p>Codex used <code>gpt-6.2-sol</code> with <strong>high</strong> reasoning effort. Delegated roles inherited the same configuration. Local Codex turn-context records identify the parent model and reasoning effort. Local tool-call records give the launch times and show that all 16 full-context delegates inherited this configuration without overrides. The parent coordinated training and evaluation.</p>
+<div class="scroll"><table class="ledger" aria-label="Delegated work"><thead><tr><th scope="col">Subagent</th><th scope="col">Launch (UTC)</th><th scope="col">Delegated work</th></tr></thead><tbody><tr><th scope="row">report</th><td>08:56:13</td><td>Built the interactive report for policies, routes, schedules, appointments, and event traces.</td></tr><tr><th scope="row">pages</th><td>08:56:18</td><td>Prepared and checked the static Pages publishing workflow.</td></tr><tr><th scope="row">fair_eval</th><td>08:56:36</td><td>Added the earliest-deadline baseline and optional paired per-appointment service disturbances. Streamlined dispatch validation, fixed Windows UTF-8 handling in a report test, and verified all eight simulator tests.</td></tr></tbody></table></div></section>
+<section><h2>Reports and evidence</h2><ul class="links"><li><a href="manifest.json">Provenance and local artifact paths</a></li></ul></section>
+</div>
+</main>
+<footer><div class="wrap">Home care routing and scheduling research simulation</div></footer>
+</body>
+</html>

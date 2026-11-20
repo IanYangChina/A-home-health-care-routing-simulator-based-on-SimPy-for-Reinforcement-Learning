@@ -1,0 +1,386 @@
+{
+  "round": 3,
+  "title": "Stable appointment IDs and loss logging",
+  "pi": "ny",
+  "provenance": "Saved interactive reports and raw outputs",
+  "timing": "20 Nov 2026 · first logged Optuna study 13:35:50, last results file 13:48:32 UTC",
+  "timing_basis": "First timestamped Optuna record per configuration when available and original benchmark.json file modification time. UTC from the development machine.",
+  "pi_timing_basis": "Timestamps from local Codex turn-context records.",
+  "pi_input_events": [
+    {
+      "time": "2026-11-20T13:32:07+00:00",
+      "summary": "Switch to stable appointment IDs, remove the continuous-action variant, and explain normalization and loss convergence."
+    },
+    {
+      "time": "2026-11-20T13:47:20+00:00",
+      "summary": "Explain the available Optuna settings."
+    }
+  ],
+  "pi_feedback_times": [
+    "2026-11-20T13:50:39+00:00"
+  ],
+  "pi_quote": null,
+  "model_provenance": "Local Codex turn-context records identify the parent model and reasoning effort. Local tool-call records give the launch times and show that all 16 full-context delegates inherited this configuration without overrides.",
+  "provenance_note": "Record ID and private workspace paths excluded from this report.",
+  "pi_input": "ny questioned whether a changing eligible-job rank would let the agent learn reliably and asked whether observations were normalized and losses converged.",
+  "pi_feedback": "ny asked Optuna to search width, batch size, DQN target-update interval, and PPO rollout length. ny also asked for longer training and loss profiles that show the mean and standard deviation.",
+  "agent_work": "Mapped action j to appointment j throughout a shift. DQN and PPO applied the eligibility mask. DQN also applied it to learning targets. Added training loss and rolling reward diagnostics.",
+  "computation": "Reran A at 64 and 128 units and B, C, and D at 128 units. The five configurations produced 360 held-out episodes and ten replay-checked checkpoints.",
+  "finding": "On A, wider DQN rose from 45.83 to 47.17 visits and wider PPO fell from 53.50 to 52.83. Observations already used fixed scaling and clipping. DQN median loss rose from the first to the last quarter in all five configurations. The curves gave no clear evidence of convergence.",
+  "delegation": [
+    {
+      "subagent": "reports",
+      "launch_utc": "2026-11-20T13:32:22+00:00",
+      "role": "Training report",
+      "work": "Added loss diagnostics and checked measured series against raw data in the browser.",
+      "configuration": "Inherited parent configuration",
+      "exact_model_variant": "gpt-6.2-sol",
+      "reasoning_effort": "high"
+    },
+    {
+      "subagent": "audit",
+      "launch_utc": "2026-11-20T13:32:27+00:00",
+      "role": "Prior-run audit",
+      "work": "Checked observation scaling and established that the earlier ranks-based runs retained no loss histories.",
+      "configuration": "Inherited parent configuration",
+      "exact_model_variant": "gpt-6.2-sol",
+      "reasoning_effort": "high"
+    },
+    {
+      "subagent": "masked_dqn",
+      "launch_utc": "2026-11-20T13:32:59+00:00",
+      "role": "Masked DQN implementation",
+      "work": "Added stable-ID eligibility handling for learning and inference, with tests.",
+      "configuration": "Inherited parent configuration",
+      "exact_model_variant": "gpt-6.2-sol",
+      "reasoning_effort": "high"
+    }
+  ],
+  "model_family": "Codex, GPT-6-based agent",
+  "exact_parent_variant": "gpt-6.2-sol",
+  "parent_reasoning_effort": "high",
+  "reports": [
+    {
+      "title": "Archived benchmark overview",
+      "path": "benchmark.html"
+    },
+    {
+      "title": "A · 64 × 64 interactive detail",
+      "path": "../../a-64.html"
+    },
+    {
+      "title": "A · 128 × 128 interactive detail",
+      "path": "../../a-128.html"
+    },
+    {
+      "title": "B · 128 × 128 interactive detail",
+      "path": "../../b-128.html"
+    },
+    {
+      "title": "C · 128 × 128 interactive detail",
+      "path": "../../c-128.html"
+    },
+    {
+      "title": "D · 128 × 128 interactive detail",
+      "path": "../../d-128.html"
+    }
+  ],
+  "measured": [
+    {
+      "label": "A · 64 × 64",
+      "public_report": "../../a-64.html",
+      "results": "output/benchmark/benchmark.json",
+      "episodes_csv": "output/benchmark/episodes.csv",
+      "log": "output/benchmark/run.log",
+      "checkpoints": [
+        "output/benchmark/dqn.zip",
+        "output/benchmark/ppo.zip"
+      ],
+      "first_optuna_log": "2026-11-20T13:35:50+00:00",
+      "results_file_time": "2026-11-20T13:39:22+00:00",
+      "runtime_seconds": 211.922,
+      "test_seeds": [
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112
+      ],
+      "validation_seeds": [
+        51,
+        52,
+        53,
+        54,
+        55
+      ],
+      "training_seed": 11,
+      "training_seeds": null,
+      "results_by_method": {
+        "random": {
+          "visits": 56.92,
+          "reward": 484.41,
+          "episodes": 12
+        },
+        "aco": {
+          "visits": 60,
+          "reward": 544.33,
+          "episodes": 12
+        },
+        "dqn": {
+          "visits": 45.83,
+          "reward": 294.47,
+          "episodes": 12
+        },
+        "ppo": {
+          "visits": 53.5,
+          "reward": 416.32,
+          "episodes": 12
+        }
+      }
+    },
+    {
+      "label": "A · 128 × 128",
+      "public_report": "../../a-128.html",
+      "results": "output/benchmark-a-128/benchmark.json",
+      "episodes_csv": "output/benchmark-a-128/episodes.csv",
+      "log": "output/benchmark-a-128/run.log",
+      "checkpoints": [
+        "output/benchmark-a-128/dqn.zip",
+        "output/benchmark-a-128/ppo.zip"
+      ],
+      "first_optuna_log": null,
+      "results_file_time": "2026-11-20T13:41:27+00:00",
+      "runtime_seconds": 120.916,
+      "test_seeds": [
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112
+      ],
+      "validation_seeds": [
+        51,
+        52,
+        53,
+        54,
+        55
+      ],
+      "training_seed": 11,
+      "training_seeds": null,
+      "results_by_method": {
+        "random": {
+          "visits": 56.92,
+          "reward": 484.41,
+          "episodes": 12
+        },
+        "aco": {
+          "visits": 60,
+          "reward": 544.33,
+          "episodes": 12
+        },
+        "dqn": {
+          "visits": 47.17,
+          "reward": 316.12,
+          "episodes": 12
+        },
+        "ppo": {
+          "visits": 52.83,
+          "reward": 403.83,
+          "episodes": 12
+        }
+      }
+    },
+    {
+      "label": "B · 128 × 128",
+      "public_report": "../../b-128.html",
+      "results": "output/benchmark-b-128/benchmark.json",
+      "episodes_csv": "output/benchmark-b-128/episodes.csv",
+      "log": "output/benchmark-b-128/run.log",
+      "checkpoints": [
+        "output/benchmark-b-128/dqn.zip",
+        "output/benchmark-b-128/ppo.zip"
+      ],
+      "first_optuna_log": "2026-11-20T13:41:31+00:00",
+      "results_file_time": "2026-11-20T13:43:14+00:00",
+      "runtime_seconds": 103.604,
+      "test_seeds": [
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112
+      ],
+      "validation_seeds": [
+        51,
+        52,
+        53,
+        54,
+        55
+      ],
+      "training_seed": 11,
+      "training_seeds": null,
+      "results_by_method": {
+        "random": {
+          "visits": 55.92,
+          "reward": 464.76,
+          "episodes": 12
+        },
+        "aco": {
+          "visits": 60,
+          "reward": 544.36,
+          "episodes": 12
+        },
+        "dqn": {
+          "visits": 50.08,
+          "reward": 365.69,
+          "episodes": 12
+        },
+        "ppo": {
+          "visits": 52.5,
+          "reward": 397.19,
+          "episodes": 12
+        }
+      }
+    },
+    {
+      "label": "C · 128 × 128",
+      "public_report": "../../c-128.html",
+      "results": "output/benchmark-c-128/benchmark.json",
+      "episodes_csv": "output/benchmark-c-128/episodes.csv",
+      "log": "output/benchmark-c-128/run.log",
+      "checkpoints": [
+        "output/benchmark-c-128/dqn.zip",
+        "output/benchmark-c-128/ppo.zip"
+      ],
+      "first_optuna_log": "2026-11-20T13:43:18+00:00",
+      "results_file_time": "2026-11-20T13:45:19+00:00",
+      "runtime_seconds": 120.288,
+      "test_seeds": [
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112
+      ],
+      "validation_seeds": [
+        51,
+        52,
+        53,
+        54,
+        55
+      ],
+      "training_seed": 11,
+      "training_seeds": null,
+      "results_by_method": {
+        "random": {
+          "visits": 84,
+          "reward": 187.97,
+          "episodes": 12
+        },
+        "aco": {
+          "visits": 118.67,
+          "reward": 851.16,
+          "episodes": 12
+        },
+        "dqn": {
+          "visits": 66.33,
+          "reward": -138.5,
+          "episodes": 12
+        },
+        "ppo": {
+          "visits": 73.08,
+          "reward": -22.08,
+          "episodes": 12
+        }
+      }
+    },
+    {
+      "label": "D · 128 × 128",
+      "public_report": "../../d-128.html",
+      "results": "output/benchmark-d-128/benchmark.json",
+      "episodes_csv": "output/benchmark-d-128/episodes.csv",
+      "log": "output/benchmark-d-128/run.log",
+      "checkpoints": [
+        "output/benchmark-d-128/dqn.zip",
+        "output/benchmark-d-128/ppo.zip"
+      ],
+      "first_optuna_log": "2026-11-20T13:45:23+00:00",
+      "results_file_time": "2026-11-20T13:48:32+00:00",
+      "runtime_seconds": 188.92,
+      "test_seeds": [
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112
+      ],
+      "validation_seeds": [
+        51,
+        52,
+        53,
+        54,
+        55
+      ],
+      "training_seed": 11,
+      "training_seeds": null,
+      "results_by_method": {
+        "random": {
+          "visits": 187.83,
+          "reward": 844.28,
+          "episodes": 12
+        },
+        "aco": {
+          "visits": 272.42,
+          "reward": 2456.45,
+          "episodes": 12
+        },
+        "dqn": {
+          "visits": 151.42,
+          "reward": 145.24,
+          "episodes": 12
+        },
+        "ppo": {
+          "visits": 133.92,
+          "reward": -185.22,
+          "episodes": 12
+        }
+      }
+    }
+  ],
+  "availability": "The linked detail reports retain routes, schedules, and loss histories. The manifest records the original local results, run logs, and checkpoint paths."
+}

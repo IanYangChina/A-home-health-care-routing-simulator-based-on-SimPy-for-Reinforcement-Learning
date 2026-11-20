@@ -1,0 +1,28 @@
+.simulation-section { margin-block: 2.25rem; }
+.sim-controls, .sim-actions { display: flex; align-items: end; gap: .7rem; flex-wrap: wrap; }
+.sim-controls label { display: grid; gap: .3rem; font-weight: 600; }
+.sim-controls input, .sim-controls select, .sim-secondary { background: white; color: #173536; border: 1px solid #90a5a5; border-radius: .4rem; padding: .55rem .7rem; font: inherit; }
+#seed { width: 9rem; }
+.sim-controls .project-button, .sim-actions .project-button { min-height: 2.75rem; }
+.sim-actions button, .sim-table button { cursor: pointer; }
+.sim-actions button:disabled { opacity: .6; cursor: default; }
+.sim-totals { display: grid; grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr)); gap: .7rem; margin: 1.2rem 0 0; }
+.sim-totals div { background: #f0f6f5; border-radius: .4rem; padding: .65rem .8rem; }
+.sim-totals dt { color: #375556; font-size: .875rem; }
+.sim-totals dd { color: #123e3b; font-size: 1.35rem; font-weight: 720; margin: .2rem 0 0; font-variant-numeric: tabular-nums; }
+.sim-split { display: flex; align-items: start; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+.sim-split h2 { margin-block: 0 .45rem; }
+.sim-split p { margin-block: 0 .7rem; }
+.sim-filters { margin-block: .8rem; }
+.sim-table-wrap { max-height: 23rem; overflow: auto; }
+.sim-table { min-width: 37rem; margin-top: 0; font-variant-numeric: tabular-nums; }
+.sim-table th { position: sticky; top: 0; background: #eaf2f0; z-index: 1; white-space: nowrap; }
+.sim-table button { background: #e1f4ef; color: #12413a; border: 1px solid #589587; border-radius: .35rem; padding: .3rem .6rem; font: inherit; font-weight: 650; }
+.sim-table tr.current { background: #f1eafa; }
+.sim-operations { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 1rem; margin-bottom: 1rem; }
+.sim-operations .sim-table { min-width: 27rem; }
+.sim-map canvas { width: 100%; height: auto; display: block; background: #f2f7f7; border: 1px solid #c6d8d6; border-radius: .4rem; }
+.sim-map p { font-size: .875rem; }
+.simulation-section details summary { cursor: pointer; font-weight: 650; }
+.simulation-section details table { margin-top: .55rem; }
+@media (max-width: 760px) { .sim-operations { grid-template-columns: 1fr; } }

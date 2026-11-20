@@ -1,0 +1,1219 @@
+{
+  "round": 8,
+  "title": "Guided exploration with longer returns",
+  "pi": "ny",
+  "provenance": "PI direction and measured experiment report",
+  "timing": "20 Nov 2026 · family runner logs 16:06:17–16:17:15 UTC",
+  "timing_basis": "Family-runner start and end timestamps in UTC",
+  "pi_input_events": [
+    {
+      "time": "2026-11-20T15:58:52+00:00",
+      "summary": "Asked whether Round 7 used the best exploration strategies."
+    },
+    {
+      "time": "2026-11-20T16:05:00+00:00",
+      "summary": "ny requested training both agents on all four instances with longer return estimates, a higher waiting penalty, short-wait guidance, and ACO guidance."
+    }
+  ],
+  "pi_input": "ny requested training both agents on all four instances with longer return estimates, a higher waiting penalty, short-wait guidance, and ACO guidance.",
+  "pi_feedback_on_round_7": "ny asked whether Round 7 had used the strongest guidance strategies. Round 7 had kept exploration fixed to compare the waiting costs and return horizons.",
+  "pi_feedback_after_results": "Pending",
+  "agent_work": "Kept waiting and return settings fixed within each layout and agent family and compared the exploration control with short-wait and ACO guidance. All arms charged 0.15 points per appointment waiting minute. Masked DQN used 32-decision targets on C and 16-decision targets on A, B, and D, based on Round 7 results for C and D. All PPO arms used 512-decision rollouts with λ=1 and the tuned discount. PPO bootstrapped at rollout boundaries within a shift. The simulator treated the modeled shift end as terminal in training. DQN mixed guidance into epsilon exploration. PPO used imitation warm starts in its guided arms, then collected on-policy rollouts.",
+  "exact_parent_variant": "gpt-6.2-sol",
+  "parent_reasoning_effort": "high",
+  "model_provenance": "Local Codex turn-context and tool-call records give the parent model, reasoning effort, and launch times. Both full-context delegates inherited this configuration without overrides.",
+  "delegation": [
+    {
+      "subagent": "report8",
+      "launch_utc": "2026-11-20T16:05:13+00:00",
+      "role": "Reporting and development archive",
+      "work": "Adapted the report and prepared the timeline template and offline browser test.",
+      "configuration": "Inherited parent configuration",
+      "exact_model_variant": "gpt-6.2-sol",
+      "reasoning_effort": "high"
+    },
+    {
+      "subagent": "protocol8",
+      "launch_utc": "2026-11-20T16:05:19+00:00",
+      "role": "Experiment protocol validation",
+      "work": "Audited the training protocol, tested the composed guide paths, and replayed selected checkpoints.",
+      "configuration": "Inherited parent configuration",
+      "exact_model_variant": "gpt-6.2-sol",
+      "reasoning_effort": "high"
+    }
+  ],
+  "computation": "Ran 72 fits across A–D, each for 12,288 steps, using three independent training seeds. Recorded 6,309 complete training episodes, evaluated 864 learned-policy shifts, and reused 96 matched Random and ACO shifts. The route explorers use predeclared training seed 11.",
+  "training_seeds": [
+    11,
+    12,
+    13
+  ],
+  "test_seeds": [
+    101,
+    102,
+    103,
+    104,
+    105,
+    106,
+    107,
+    108,
+    109,
+    110,
+    111,
+    112
+  ],
+  "demo_seeds": [
+    201,
+    202,
+    203,
+    204
+  ],
+  "family_runs": [
+    {
+      "instance": "A",
+      "family": "dqn",
+      "device": "cpu",
+      "elapsed_seconds": 476,
+      "started_at": "2026-11-20T16:06:18+00:00",
+      "ended_at": "2026-11-20T16:14:14+00:00"
+    },
+    {
+      "instance": "A",
+      "family": "ppo",
+      "device": "cpu",
+      "elapsed_seconds": 541,
+      "started_at": "2026-11-20T16:06:17+00:00",
+      "ended_at": "2026-11-20T16:15:18+00:00"
+    },
+    {
+      "instance": "B",
+      "family": "dqn",
+      "device": "cpu",
+      "elapsed_seconds": 386,
+      "started_at": "2026-11-20T16:06:18+00:00",
+      "ended_at": "2026-11-20T16:12:44+00:00"
+    },
+    {
+      "instance": "B",
+      "family": "ppo",
+      "device": "cpu",
+      "elapsed_seconds": 378,
+      "started_at": "2026-11-20T16:06:17+00:00",
+      "ended_at": "2026-11-20T16:12:35+00:00"
+    },
+    {
+      "instance": "C",
+      "family": "dqn",
+      "device": "cpu",
+      "elapsed_seconds": 579,
+      "started_at": "2026-11-20T16:06:18+00:00",
+      "ended_at": "2026-11-20T16:15:57+00:00"
+    },
+    {
+      "instance": "C",
+      "family": "ppo",
+      "device": "cpu",
+      "elapsed_seconds": 532,
+      "started_at": "2026-11-20T16:06:18+00:00",
+      "ended_at": "2026-11-20T16:15:10+00:00"
+    },
+    {
+      "instance": "D",
+      "family": "dqn",
+      "device": "cuda",
+      "elapsed_seconds": 657,
+      "started_at": "2026-11-20T16:06:18+00:00",
+      "ended_at": "2026-11-20T16:17:15+00:00"
+    },
+    {
+      "instance": "D",
+      "family": "ppo",
+      "device": "cpu",
+      "elapsed_seconds": 628,
+      "started_at": "2026-11-20T16:06:18+00:00",
+      "ended_at": "2026-11-20T16:16:46+00:00"
+    }
+  ],
+  "steps_per_fit": 12288,
+  "fits": 72,
+  "training_episodes": 6309,
+  "learned_evaluations": 864,
+  "fixed_evaluations": 96,
+  "comparison_protocol": "Held-out reference rewards apply the original 0.05 waiting cost to every schedule. The 0.15-cost column applies the higher waiting cost to every schedule, including the saved Random and ACO runs. The matched Round 8 controls isolate guidance under the combined settings. Comparisons with earlier rounds reflect changes to the training protocol.",
+  "results": [
+    {
+      "instance": "A",
+      "strategy": "Random",
+      "method": "random",
+      "evaluations": 12,
+      "jobs_completed": 56.916666666666664,
+      "jobs_unserved": 3.0833333333333335,
+      "travel_minutes": 183.15616666666668,
+      "waiting_minutes": 1091.9388333333334,
+      "total_reward": 484.40836666666667,
+      "raw_variant_reward": 375.2144833333333
+    },
+    {
+      "instance": "A",
+      "strategy": "Ant colony",
+      "method": "aco",
+      "evaluations": 12,
+      "jobs_completed": 60,
+      "jobs_unserved": 0,
+      "travel_minutes": 191.95091666666667,
+      "waiting_minutes": 998.2981666666667,
+      "total_reward": 544.326575,
+      "raw_variant_reward": 444.49675833333333
+    },
+    {
+      "instance": "A",
+      "strategy": "DQN uniform",
+      "method": "dqn_uniform",
+      "evaluations": 36,
+      "jobs_completed": 54.02777777777778,
+      "jobs_unserved": 5.972222222222222,
+      "travel_minutes": 169.57933333333332,
+      "waiting_minutes": 778.3741944444445,
+      "total_reward": 448.49391944444443,
+      "raw_variant_reward": 370.6565
+    },
+    {
+      "instance": "A",
+      "strategy": "DQN short-wait guide",
+      "method": "dqn_short_wait",
+      "evaluations": 36,
+      "jobs_completed": 48.22222222222222,
+      "jobs_unserved": 11.777777777777779,
+      "travel_minutes": 151.63630555555557,
+      "waiting_minutes": 496.7985277777778,
+      "total_reward": 358.61098055555556,
+      "raw_variant_reward": 308.93112777777776
+    },
+    {
+      "instance": "A",
+      "strategy": "DQN ACO mix",
+      "method": "dqn_aco",
+      "evaluations": 36,
+      "jobs_completed": 47.25,
+      "jobs_unserved": 12.75,
+      "travel_minutes": 151.80180555555555,
+      "waiting_minutes": 447.0877777777778,
+      "total_reward": 343.59155555555554,
+      "raw_variant_reward": 298.8827777777778
+    },
+    {
+      "instance": "A",
+      "strategy": "PPO from scratch",
+      "method": "ppo_scratch",
+      "evaluations": 36,
+      "jobs_completed": 48.72222222222222,
+      "jobs_unserved": 11.277777777777779,
+      "travel_minutes": 153.99233333333333,
+      "waiting_minutes": 1105.8347222222221,
+      "total_reward": 337.08849444444445,
+      "raw_variant_reward": 226.50502222222224
+    },
+    {
+      "instance": "A",
+      "strategy": "PPO short-wait warm start",
+      "method": "ppo_short_wait",
+      "evaluations": 36,
+      "jobs_completed": 55.583333333333336,
+      "jobs_unserved": 4.416666666666667,
+      "travel_minutes": 184.88930555555555,
+      "waiting_minutes": 1124.7088333333334,
+      "total_reward": 458.71788888888887,
+      "raw_variant_reward": 346.2470055555556
+    },
+    {
+      "instance": "A",
+      "strategy": "PPO ACO warm start",
+      "method": "ppo_aco",
+      "evaluations": 36,
+      "jobs_completed": 53.916666666666664,
+      "jobs_unserved": 6.083333333333333,
+      "travel_minutes": 174.4436388888889,
+      "waiting_minutes": 1136.2385833333333,
+      "total_reward": 428.45475555555555,
+      "raw_variant_reward": 314.83089722222223
+    },
+    {
+      "instance": "B",
+      "strategy": "Random",
+      "method": "random",
+      "evaluations": 12,
+      "jobs_completed": 55.916666666666664,
+      "jobs_unserved": 4.083333333333333,
+      "travel_minutes": 193.55475,
+      "waiting_minutes": 1118.7443333333333,
+      "total_reward": 464.7561333333333,
+      "raw_variant_reward": 352.8817
+    },
+    {
+      "instance": "B",
+      "strategy": "Ant colony",
+      "method": "aco",
+      "evaluations": 12,
+      "jobs_completed": 60,
+      "jobs_unserved": 0,
+      "travel_minutes": 202.88016666666667,
+      "waiting_minutes": 991.1114166666667,
+      "total_reward": 544.3580333333333,
+      "raw_variant_reward": 445.24689166666667
+    },
+    {
+      "instance": "B",
+      "strategy": "DQN uniform",
+      "method": "dqn_uniform",
+      "evaluations": 36,
+      "jobs_completed": 56.22222222222222,
+      "jobs_unserved": 3.7777777777777777,
+      "travel_minutes": 193.29827777777777,
+      "waiting_minutes": 1074.2931666666666,
+      "total_reward": 472.48639722222225,
+      "raw_variant_reward": 365.05708055555556
+    },
+    {
+      "instance": "B",
+      "strategy": "DQN short-wait guide",
+      "method": "dqn_short_wait",
+      "evaluations": 36,
+      "jobs_completed": 57.111111111111114,
+      "jobs_unserved": 2.888888888888889,
+      "travel_minutes": 192.2463611111111,
+      "waiting_minutes": 1045.582861111111,
+      "total_reward": 489.9534611111111,
+      "raw_variant_reward": 385.395175
+    },
+    {
+      "instance": "B",
+      "strategy": "DQN ACO mix",
+      "method": "dqn_aco",
+      "evaluations": 36,
+      "jobs_completed": 54.638888888888886,
+      "jobs_unserved": 5.361111111111111,
+      "travel_minutes": 183.17275,
+      "waiting_minutes": 1062.2218055555556,
+      "total_reward": 444.89372777777777,
+      "raw_variant_reward": 338.6715472222222
+    },
+    {
+      "instance": "B",
+      "strategy": "PPO from scratch",
+      "method": "ppo_scratch",
+      "evaluations": 36,
+      "jobs_completed": 53.80555555555556,
+      "jobs_unserved": 6.194444444444445,
+      "travel_minutes": 185.68366666666668,
+      "waiting_minutes": 1192.045138888889,
+      "total_reward": 423.32723888888887,
+      "raw_variant_reward": 304.122725
+    },
+    {
+      "instance": "B",
+      "strategy": "PPO short-wait warm start",
+      "method": "ppo_short_wait",
+      "evaluations": 36,
+      "jobs_completed": 53.916666666666664,
+      "jobs_unserved": 6.083333333333333,
+      "travel_minutes": 189.328,
+      "waiting_minutes": 1182.9013055555556,
+      "total_reward": 425.6750944444444,
+      "raw_variant_reward": 307.3849638888889
+    },
+    {
+      "instance": "B",
+      "strategy": "PPO ACO warm start",
+      "method": "ppo_aco",
+      "evaluations": 36,
+      "jobs_completed": 54.333333333333336,
+      "jobs_unserved": 5.666666666666667,
+      "travel_minutes": 186.15444444444444,
+      "waiting_minutes": 1165.9679444444444,
+      "total_reward": 434.11696944444446,
+      "raw_variant_reward": 317.520175
+    },
+    {
+      "instance": "C",
+      "strategy": "Random",
+      "method": "random",
+      "evaluations": 12,
+      "jobs_completed": 84,
+      "jobs_unserved": 75,
+      "travel_minutes": 253.28766666666667,
+      "waiting_minutes": 888.6347499999999,
+      "total_reward": 187.96965,
+      "raw_variant_reward": 99.10617500000001
+    },
+    {
+      "instance": "C",
+      "strategy": "Ant colony",
+      "method": "aco",
+      "evaluations": 12,
+      "jobs_completed": 118.66666666666667,
+      "jobs_unserved": 40.333333333333336,
+      "travel_minutes": 243.6445,
+      "waiting_minutes": 110.56433333333334,
+      "total_reward": 851.1624416666666,
+      "raw_variant_reward": 840.1060083333333
+    },
+    {
+      "instance": "C",
+      "strategy": "DQN uniform",
+      "method": "dqn_uniform",
+      "evaluations": 36,
+      "jobs_completed": 101.30555555555556,
+      "jobs_unserved": 57.69444444444444,
+      "travel_minutes": 299.83891666666665,
+      "waiting_minutes": 483.2805833333333,
+      "total_reward": 518.3407972222222,
+      "raw_variant_reward": 470.01273888888886
+    },
+    {
+      "instance": "C",
+      "strategy": "DQN short-wait guide",
+      "method": "dqn_short_wait",
+      "evaluations": 36,
+      "jobs_completed": 101.91666666666667,
+      "jobs_unserved": 57.083333333333336,
+      "travel_minutes": 300.9211111111111,
+      "waiting_minutes": 459.69177777777776,
+      "total_reward": 530.4877777777778,
+      "raw_variant_reward": 484.5186
+    },
+    {
+      "instance": "C",
+      "strategy": "DQN ACO mix",
+      "method": "dqn_aco",
+      "evaluations": 36,
+      "jobs_completed": 101.02777777777777,
+      "jobs_unserved": 57.97222222222222,
+      "travel_minutes": 300.14566666666667,
+      "waiting_minutes": 480.6990833333333,
+      "total_reward": 513.460675,
+      "raw_variant_reward": 465.39076666666665
+    },
+    {
+      "instance": "C",
+      "strategy": "PPO from scratch",
+      "method": "ppo_scratch",
+      "evaluations": 36,
+      "jobs_completed": 46.52777777777778,
+      "jobs_unserved": 112.47222222222223,
+      "travel_minutes": 135.06925,
+      "waiting_minutes": 852.3395555555555,
+      "total_reward": -481.1690666666667,
+      "raw_variant_reward": -566.4030222222223
+    },
+    {
+      "instance": "C",
+      "strategy": "PPO short-wait warm start",
+      "method": "ppo_short_wait",
+      "evaluations": 36,
+      "jobs_completed": 75.66666666666667,
+      "jobs_unserved": 83.33333333333333,
+      "travel_minutes": 224.27627777777778,
+      "waiting_minutes": 983.5235555555555,
+      "total_reward": 34.095533333333336,
+      "raw_variant_reward": -64.25682222222223
+    },
+    {
+      "instance": "C",
+      "strategy": "PPO ACO warm start",
+      "method": "ppo_aco",
+      "evaluations": 36,
+      "jobs_completed": 74.5,
+      "jobs_unserved": 84.5,
+      "travel_minutes": 194.96775,
+      "waiting_minutes": 1152.9919444444445,
+      "total_reward": 5.501366666666667,
+      "raw_variant_reward": -109.79782777777778
+    },
+    {
+      "instance": "D",
+      "strategy": "Random",
+      "method": "random",
+      "evaluations": 12,
+      "jobs_completed": 187.83333333333334,
+      "jobs_unserved": 115.16666666666667,
+      "travel_minutes": 583.1180833333333,
+      "waiting_minutes": 1904.6023333333333,
+      "total_reward": 844.27635,
+      "raw_variant_reward": 653.8161166666666
+    },
+    {
+      "instance": "D",
+      "strategy": "Ant colony",
+      "method": "aco",
+      "evaluations": 12,
+      "jobs_completed": 272.4166666666667,
+      "jobs_unserved": 30.583333333333332,
+      "travel_minutes": 569.0035833333334,
+      "waiting_minutes": 119.59033333333333,
+      "total_reward": 2456.450375,
+      "raw_variant_reward": 2444.491341666667
+    },
+    {
+      "instance": "D",
+      "strategy": "DQN uniform",
+      "method": "dqn_uniform",
+      "evaluations": 36,
+      "jobs_completed": 176.83333333333334,
+      "jobs_unserved": 126.16666666666667,
+      "travel_minutes": 547.9614722222223,
+      "waiting_minutes": 2314.007472222222,
+      "total_reward": 626.8607777777778,
+      "raw_variant_reward": 395.46003055555553
+    },
+    {
+      "instance": "D",
+      "strategy": "DQN short-wait guide",
+      "method": "dqn_short_wait",
+      "evaluations": 36,
+      "jobs_completed": 188,
+      "jobs_unserved": 115,
+      "travel_minutes": 577.3015,
+      "waiting_minutes": 2083.7306944444445,
+      "total_reward": 838.494425,
+      "raw_variant_reward": 630.1213555555555
+    },
+    {
+      "instance": "D",
+      "strategy": "DQN ACO mix",
+      "method": "dqn_aco",
+      "evaluations": 36,
+      "jobs_completed": 189.27777777777777,
+      "jobs_unserved": 113.72222222222223,
+      "travel_minutes": 580.2975555555555,
+      "waiting_minutes": 2014.6999166666667,
+      "total_reward": 864.8560888888888,
+      "raw_variant_reward": 663.3860972222222
+    },
+    {
+      "instance": "D",
+      "strategy": "PPO from scratch",
+      "method": "ppo_scratch",
+      "evaluations": 36,
+      "jobs_completed": 96.02777777777777,
+      "jobs_unserved": 206.97222222222223,
+      "travel_minutes": 322.26497222222224,
+      "waiting_minutes": 2054.803,
+      "total_reward": -807.9081055555556,
+      "raw_variant_reward": -1013.3884055555556
+    },
+    {
+      "instance": "D",
+      "strategy": "PPO short-wait warm start",
+      "method": "ppo_short_wait",
+      "evaluations": 36,
+      "jobs_completed": 209.27777777777777,
+      "jobs_unserved": 93.72222222222223,
+      "travel_minutes": 626.8349722222222,
+      "waiting_minutes": 1425.0246111111112,
+      "total_reward": 1252.9437333333333,
+      "raw_variant_reward": 1110.4412722222223
+    },
+    {
+      "instance": "D",
+      "strategy": "PPO ACO warm start",
+      "method": "ppo_aco",
+      "evaluations": 36,
+      "jobs_completed": 157.30555555555554,
+      "jobs_unserved": 145.69444444444446,
+      "travel_minutes": 442.0025,
+      "waiting_minutes": 2676.2493611111113,
+      "total_reward": 260.4274638888889,
+      "raw_variant_reward": -7.197472222222221
+    }
+  ],
+  "matched_guidance_deltas": [
+    {
+      "instance": "A",
+      "control": "DQN uniform",
+      "strategy": "DQN short-wait guide",
+      "reward_delta": -89.88293888888889,
+      "paired_reward_sd": 313.10275638411764,
+      "paired_reward_deltas": [
+        -101.77334166666668,
+        228.9956416666667,
+        -396.8711166666667
+      ],
+      "completed_delta": -5.805555555555557,
+      "waiting_delta": -281.5756666666667,
+      "seeds_improved": 1
+    },
+    {
+      "instance": "A",
+      "control": "DQN uniform",
+      "strategy": "DQN ACO mix",
+      "reward_delta": -104.90236388888893,
+      "paired_reward_sd": 373.6296294024505,
+      "paired_reward_deltas": [
+        -64.6546166666667,
+        246.9740166666666,
+        -497.0264916666667
+      ],
+      "completed_delta": -6.777777777777779,
+      "waiting_delta": -331.2864166666667,
+      "seeds_improved": 1
+    },
+    {
+      "instance": "A",
+      "control": "PPO from scratch",
+      "strategy": "PPO short-wait warm start",
+      "reward_delta": 121.62939444444443,
+      "paired_reward_sd": 134.5362824778135,
+      "paired_reward_deltas": [
+        272.808925,
+        77.00046666666668,
+        15.078791666666632
+      ],
+      "completed_delta": 6.861111111111114,
+      "waiting_delta": 18.874111111111233,
+      "seeds_improved": 3
+    },
+    {
+      "instance": "A",
+      "control": "PPO from scratch",
+      "strategy": "PPO ACO warm start",
+      "reward_delta": 91.36626111111111,
+      "paired_reward_sd": 177.08137232799933,
+      "paired_reward_deltas": [
+        266.8195416666667,
+        94.57873333333333,
+        -87.29949166666665
+      ],
+      "completed_delta": 5.194444444444443,
+      "waiting_delta": 30.403861111111155,
+      "seeds_improved": 2
+    },
+    {
+      "instance": "B",
+      "control": "DQN uniform",
+      "strategy": "DQN short-wait guide",
+      "reward_delta": 17.467063888888884,
+      "paired_reward_sd": 57.621911468869285,
+      "paired_reward_deltas": [
+        -6.158175000000028,
+        -24.58747500000004,
+        83.14684166666672
+      ],
+      "completed_delta": 0.8888888888888928,
+      "waiting_delta": -28.71030555555558,
+      "seeds_improved": 1
+    },
+    {
+      "instance": "B",
+      "control": "DQN uniform",
+      "strategy": "DQN ACO mix",
+      "reward_delta": -27.592669444444443,
+      "paired_reward_sd": 21.738226673818517,
+      "paired_reward_deltas": [
+        -11.908341666666672,
+        -52.406925,
+        -18.46274166666666
+      ],
+      "completed_delta": -1.5833333333333357,
+      "waiting_delta": -12.071361111110946,
+      "seeds_improved": 0
+    },
+    {
+      "instance": "B",
+      "control": "PPO from scratch",
+      "strategy": "PPO short-wait warm start",
+      "reward_delta": 2.3478555555555354,
+      "paired_reward_sd": 24.177397441758682,
+      "paired_reward_deltas": [
+        29.349316666666653,
+        -17.295950000000005,
+        -5.009800000000041
+      ],
+      "completed_delta": 0.11111111111110716,
+      "waiting_delta": -9.143833333333305,
+      "seeds_improved": 1
+    },
+    {
+      "instance": "B",
+      "control": "PPO from scratch",
+      "strategy": "PPO ACO warm start",
+      "reward_delta": 10.789730555555556,
+      "paired_reward_sd": 25.9414936056819,
+      "paired_reward_deltas": [
+        23.115425000000016,
+        -19.016700000000014,
+        28.270466666666664
+      ],
+      "completed_delta": 0.5277777777777786,
+      "waiting_delta": -26.077194444444558,
+      "seeds_improved": 2
+    },
+    {
+      "instance": "C",
+      "control": "DQN uniform",
+      "strategy": "DQN short-wait guide",
+      "reward_delta": 12.146980555555558,
+      "paired_reward_sd": 48.21531748989251,
+      "paired_reward_deltas": [
+        65.2115,
+        -28.974125000000015,
+        0.20356666666668843
+      ],
+      "completed_delta": 0.6111111111111143,
+      "waiting_delta": -23.588805555555552,
+      "seeds_improved": 2
+    },
+    {
+      "instance": "C",
+      "control": "DQN uniform",
+      "strategy": "DQN ACO mix",
+      "reward_delta": -4.880122222222212,
+      "paired_reward_sd": 16.873468773418324,
+      "paired_reward_deltas": [
+        -20.17165,
+        -7.69097499999998,
+        13.222258333333343
+      ],
+      "completed_delta": -0.2777777777777857,
+      "waiting_delta": -2.5815000000000055,
+      "seeds_improved": 1
+    },
+    {
+      "instance": "C",
+      "control": "PPO from scratch",
+      "strategy": "PPO short-wait warm start",
+      "reward_delta": 515.2646000000001,
+      "paired_reward_sd": 671.2019979310694,
+      "paired_reward_deltas": [
+        226.94163333333333,
+        1282.4545916666668,
+        36.397575
+      ],
+      "completed_delta": 29.138888888888893,
+      "waiting_delta": 131.18399999999997,
+      "seeds_improved": 3
+    },
+    {
+      "instance": "C",
+      "control": "PPO from scratch",
+      "strategy": "PPO ACO warm start",
+      "reward_delta": 486.67043333333334,
+      "paired_reward_sd": 675.9803883175449,
+      "paired_reward_deltas": [
+        102.90939166666666,
+        1267.1892833333334,
+        89.912625
+      ],
+      "completed_delta": 27.97222222222222,
+      "waiting_delta": 300.65238888888894,
+      "seeds_improved": 3
+    },
+    {
+      "instance": "D",
+      "control": "DQN uniform",
+      "strategy": "DQN short-wait guide",
+      "reward_delta": 211.63364722222218,
+      "paired_reward_sd": 80.81377667087988,
+      "paired_reward_deltas": [
+        289.3482416666666,
+        128.04160000000002,
+        217.51109999999994
+      ],
+      "completed_delta": 11.166666666666657,
+      "waiting_delta": -230.27677777777762,
+      "seeds_improved": 3
+    },
+    {
+      "instance": "D",
+      "control": "DQN uniform",
+      "strategy": "DQN ACO mix",
+      "reward_delta": 237.99531111111108,
+      "paired_reward_sd": 158.0814310218177,
+      "paired_reward_deltas": [
+        331.63076666666666,
+        55.47924166666667,
+        326.87592499999994
+      ],
+      "completed_delta": 12.444444444444429,
+      "waiting_delta": -299.3075555555554,
+      "seeds_improved": 3
+    },
+    {
+      "instance": "D",
+      "control": "PPO from scratch",
+      "strategy": "PPO short-wait warm start",
+      "reward_delta": 2060.851838888889,
+      "paired_reward_sd": 1198.847473256639,
+      "paired_reward_deltas": [
+        1592.3260500000001,
+        3423.2095666666664,
+        1167.0199
+      ],
+      "completed_delta": 113.25,
+      "waiting_delta": -629.7783888888887,
+      "seeds_improved": 3
+    },
+    {
+      "instance": "D",
+      "control": "PPO from scratch",
+      "strategy": "PPO ACO warm start",
+      "reward_delta": 1068.3355694444444,
+      "paired_reward_sd": 1307.2581179274157,
+      "paired_reward_deltas": [
+        264.32596666666666,
+        2576.730991666667,
+        363.94975
+      ],
+      "completed_delta": 61.27777777777777,
+      "waiting_delta": 621.4463611111114,
+      "seeds_improved": 3
+    }
+  ],
+  "training_configurations": {
+    "A": {
+      "dqn_uniform": {
+        "params": {
+          "width": 256,
+          "batch_size": 64,
+          "learning_rate": 0.0005772174031765054,
+          "gamma": 0.9967879229818138,
+          "target_update_interval": 512,
+          "exploration_fraction": 0.45865159316087856
+        },
+        "return_steps": 16,
+        "weights": {
+          "completed": 10.0,
+          "unserved": -8.0,
+          "travel_minutes": -0.03,
+          "waiting_minutes": -0.15
+        }
+      },
+      "dqn_short_wait": {
+        "params": {
+          "width": 256,
+          "batch_size": 64,
+          "learning_rate": 0.0005772174031765054,
+          "gamma": 0.9967879229818138,
+          "target_update_interval": 512,
+          "exploration_fraction": 0.45865159316087856
+        },
+        "return_steps": 16,
+        "weights": {
+          "completed": 10.0,
+          "unserved": -8.0,
+          "travel_minutes": -0.03,
+          "waiting_minutes": -0.15
+        }
+      },
+      "dqn_aco": {
+        "params": {
+          "width": 256,
+          "batch_size": 64,
+          "learning_rate": 0.0005772174031765054,
+          "gamma": 0.9967879229818138,
+          "target_update_interval": 512,
+          "exploration_fraction": 0.45865159316087856
+        },
+        "return_steps": 16,
+        "weights": {
+          "completed": 10.0,
+          "unserved": -8.0,
+          "travel_minutes": -0.03,
+          "waiting_minutes": -0.15
+        }
+      },
+      "ppo_scratch": {
+        "params": {
+          "width": 256,
+          "batch_size": 32,
+          "learning_rate": 0.00010390303253555893,
+          "gamma": 0.9738812087586737,
+          "n_steps": 512,
+          "ent_coef": 0.0014719596118573143,
+          "gae_lambda": 1.0
+        },
+        "return_steps": 1,
+        "weights": {
+          "completed": 10.0,
+          "unserved": -8.0,
+          "travel_minutes": -0.03,
+          "waiting_minutes": -0.15
+        }
+      },
+      "ppo_short_wait": {
+        "params": {
+          "width": 256,
+          "batch_size": 32,
+          "learning_rate": 0.00010390303253555893,
+          "gamma": 0.9738812087586737,
+          "n_steps": 512,
+          "ent_coef": 0.0014719596118573143,
+          "gae_lambda": 1.0
+        },
+        "return_steps": 1,
+        "weights": {
+          "completed": 10.0,
+          "unserved": -8.0,
+          "travel_minutes": -0.03,
+          "waiting_minutes": -0.15
+        }
+      },
+      "ppo_aco": {
+        "params": {
+          "width": 256,
+          "batch_size": 32,
+          "learning_rate": 0.00010390303253555893,
+          "gamma": 0.9738812087586737,
+          "n_steps": 512,
+          "ent_coef": 0.0014719596118573143,
+          "gae_lambda": 1.0
+        },
+        "return_steps": 1,
+        "weights": {
+          "completed": 10.0,
+          "unserved": -8.0,
+          "travel_minutes": -0.03,
+          "waiting_minutes": -0.15
+        }
+      }
+    },
+    "B": {
+      "dqn_uniform": {
+        "params": {
+          "width": 128,
+          "batch_size": 64,
+          "learning_rate": 0.0017496036736895622,
+          "gamma": 0.9509505037819506,
+          "target_update_interval": 512,
+          "exploration_fraction": 0.5968023436085735
+        },
+        "return_steps": 16,
+        "weights": {
+          "completed": 10.0,
+          "unserved": -8.0,
+          "travel_minutes": -0.03,
+          "waiting_minutes": -0.15
+        }
+      },
+      "dqn_short_wait": {
+        "params": {
+          "width": 128,
+          "batch_size": 64,
+          "learning_rate": 0.0017496036736895622,
+          "gamma": 0.9509505037819506,
+          "target_update_interval": 512,
+          "exploration_fraction": 0.5968023436085735
+        },
+        "return_steps": 16,
+        "weights": {
+          "completed": 10.0,
+          "unserved": -8.0,
+          "travel_minutes": -0.03,
+          "waiting_minutes": -0.15
+        }
+      },
+      "dqn_aco": {
+        "params": {
+          "width": 128,
+          "batch_size": 64,
+          "learning_rate": 0.0017496036736895622,
+          "gamma": 0.9509505037819506,
+          "target_update_interval": 512,
+          "exploration_fraction": 0.5968023436085735
+        },
+        "return_steps": 16,
+        "weights": {
+          "completed": 10.0,
+          "unserved": -8.0,
+          "travel_minutes": -0.03,
+          "waiting_minutes": -0.15
+        }
+      },
+      "ppo_scratch": {
+        "params": {
+          "width": 64,
+          "batch_size": 128,
+          "learning_rate": 0.0017684125271145328,
+          "gamma": 0.9523161586844298,
+          "n_steps": 512,
+          "ent_coef": 0.001317190539402947,
+          "gae_lambda": 1.0
+        },
+        "return_steps": 1,
+        "weights": {
+          "completed": 10.0,
+          "unserved": -8.0,
+          "travel_minutes": -0.03,
+          "waiting_minutes": -0.15
+        }
+      },
+      "ppo_short_wait": {
+        "params": {
+          "width": 64,
+          "batch_size": 128,
+          "learning_rate": 0.0017684125271145328,
+          "gamma": 0.9523161586844298,
+          "n_steps": 512,
+          "ent_coef": 0.001317190539402947,
+          "gae_lambda": 1.0
+        },
+        "return_steps": 1,
+        "weights": {
+          "completed": 10.0,
+          "unserved": -8.0,
+          "travel_minutes": -0.03,
+          "waiting_minutes": -0.15
+        }
+      },
+      "ppo_aco": {
+        "params": {
+          "width": 64,
+          "batch_size": 128,
+          "learning_rate": 0.0017684125271145328,
+          "gamma": 0.9523161586844298,
+          "n_steps": 512,
+          "ent_coef": 0.001317190539402947,
+          "gae_lambda": 1.0
+        },
+        "return_steps": 1,
+        "weights": {
+          "completed": 10.0,
+          "unserved": -8.0,
+          "travel_minutes": -0.03,
+          "waiting_minutes": -0.15
+        }
+      }
+    },
+    "C": {
+      "dqn_uniform": {
+        "params": {
+          "width": 256,
+          "batch_size": 32,
+          "learning_rate": 0.00010390303253555893,
+          "gamma": 0.9738812087586737,
+          "target_update_interval": 256,
+          "exploration_fraction": 0.5522568766282865
+        },
+        "return_steps": 32,
+        "weights": {
+          "completed": 10.0,
+          "unserved": -8.0,
+          "travel_minutes": -0.03,
+          "waiting_minutes": -0.15
+        }
+      },
+      "dqn_short_wait": {
+        "params": {
+          "width": 256,
+          "batch_size": 32,
+          "learning_rate": 0.00010390303253555893,
+          "gamma": 0.9738812087586737,
+          "target_update_interval": 256,
+          "exploration_fraction": 0.5522568766282865
+        },
+        "return_steps": 32,
+        "weights": {
+          "completed": 10.0,
+          "unserved": -8.0,
+          "travel_minutes": -0.03,
+          "waiting_minutes": -0.15
+        }
+      },
+      "dqn_aco": {
+        "params": {
+          "width": 256,
+          "batch_size": 32,
+          "learning_rate": 0.00010390303253555893,
+          "gamma": 0.9738812087586737,
+          "target_update_interval": 256,
+          "exploration_fraction": 0.5522568766282865
+        },
+        "return_steps": 32,
+        "weights": {
+          "completed": 10.0,
+          "unserved": -8.0,
+          "travel_minutes": -0.03,
+          "waiting_minutes": -0.15
+        }
+      },
+      "ppo_scratch": {
+        "params": {
+          "width": 256,
+          "batch_size": 128,
+          "learning_rate": 0.0006307994363277335,
+          "gamma": 0.9963040961971754,
+          "n_steps": 512,
+          "ent_coef": 0.001012660298595628,
+          "gae_lambda": 1.0
+        },
+        "return_steps": 1,
+        "weights": {
+          "completed": 10.0,
+          "unserved": -8.0,
+          "travel_minutes": -0.03,
+          "waiting_minutes": -0.15
+        }
+      },
+      "ppo_short_wait": {
+        "params": {
+          "width": 256,
+          "batch_size": 128,
+          "learning_rate": 0.0006307994363277335,
+          "gamma": 0.9963040961971754,
+          "n_steps": 512,
+          "ent_coef": 0.001012660298595628,
+          "gae_lambda": 1.0
+        },
+        "return_steps": 1,
+        "weights": {
+          "completed": 10.0,
+          "unserved": -8.0,
+          "travel_minutes": -0.03,
+          "waiting_minutes": -0.15
+        }
+      },
+      "ppo_aco": {
+        "params": {
+          "width": 256,
+          "batch_size": 128,
+          "learning_rate": 0.0006307994363277335,
+          "gamma": 0.9963040961971754,
+          "n_steps": 512,
+          "ent_coef": 0.001012660298595628,
+          "gae_lambda": 1.0
+        },
+        "return_steps": 1,
+        "weights": {
+          "completed": 10.0,
+          "unserved": -8.0,
+          "travel_minutes": -0.03,
+          "waiting_minutes": -0.15
+        }
+      }
+    },
+    "D": {
+      "dqn_uniform": {
+        "params": {
+          "width": 128,
+          "batch_size": 64,
+          "learning_rate": 0.0004210558685684524,
+          "gamma": 0.9685004368499164,
+          "target_update_interval": 512,
+          "exploration_fraction": 0.42256009398888783
+        },
+        "return_steps": 16,
+        "weights": {
+          "completed": 10.0,
+          "unserved": -8.0,
+          "travel_minutes": -0.03,
+          "waiting_minutes": -0.15
+        }
+      },
+      "dqn_short_wait": {
+        "params": {
+          "width": 128,
+          "batch_size": 64,
+          "learning_rate": 0.0004210558685684524,
+          "gamma": 0.9685004368499164,
+          "target_update_interval": 512,
+          "exploration_fraction": 0.42256009398888783
+        },
+        "return_steps": 16,
+        "weights": {
+          "completed": 10.0,
+          "unserved": -8.0,
+          "travel_minutes": -0.03,
+          "waiting_minutes": -0.15
+        }
+      },
+      "dqn_aco": {
+        "params": {
+          "width": 128,
+          "batch_size": 64,
+          "learning_rate": 0.0004210558685684524,
+          "gamma": 0.9685004368499164,
+          "target_update_interval": 512,
+          "exploration_fraction": 0.42256009398888783
+        },
+        "return_steps": 16,
+        "weights": {
+          "completed": 10.0,
+          "unserved": -8.0,
+          "travel_minutes": -0.03,
+          "waiting_minutes": -0.15
+        }
+      },
+      "ppo_scratch": {
+        "params": {
+          "width": 128,
+          "batch_size": 64,
+          "learning_rate": 0.0006745264519554243,
+          "gamma": 0.9963065204453232,
+          "n_steps": 512,
+          "ent_coef": 0.008322416787045903,
+          "gae_lambda": 1.0
+        },
+        "return_steps": 1,
+        "weights": {
+          "completed": 10.0,
+          "unserved": -8.0,
+          "travel_minutes": -0.03,
+          "waiting_minutes": -0.15
+        }
+      },
+      "ppo_short_wait": {
+        "params": {
+          "width": 128,
+          "batch_size": 64,
+          "learning_rate": 0.0006745264519554243,
+          "gamma": 0.9963065204453232,
+          "n_steps": 512,
+          "ent_coef": 0.008322416787045903,
+          "gae_lambda": 1.0
+        },
+        "return_steps": 1,
+        "weights": {
+          "completed": 10.0,
+          "unserved": -8.0,
+          "travel_minutes": -0.03,
+          "waiting_minutes": -0.15
+        }
+      },
+      "ppo_aco": {
+        "params": {
+          "width": 128,
+          "batch_size": 64,
+          "learning_rate": 0.0006745264519554243,
+          "gamma": 0.9963065204453232,
+          "n_steps": 512,
+          "ent_coef": 0.008322416787045903,
+          "gae_lambda": 1.0
+        },
+        "return_steps": 1,
+        "weights": {
+          "completed": 10.0,
+          "unserved": -8.0,
+          "travel_minutes": -0.03,
+          "waiting_minutes": -0.15
+        }
+      }
+    }
+  },
+  "raw_results": [
+    "output/rounds/08-guided-long-returns/a/dqn.json",
+    "output/rounds/08-guided-long-returns/a/ppo.json",
+    "output/rounds/08-guided-long-returns/b/dqn.json",
+    "output/rounds/08-guided-long-returns/b/ppo.json",
+    "output/rounds/08-guided-long-returns/c/dqn.json",
+    "output/rounds/08-guided-long-returns/c/ppo.json",
+    "output/rounds/08-guided-long-returns/d/dqn.json",
+    "output/rounds/08-guided-long-returns/d/ppo.json"
+  ],
+  "summary": "output/rounds/08-guided-long-returns/summary.json",
+  "finding": "On A, uniform DQN led at the 0.15 score. Both DQN guides reduced waiting and served fewer visits. Short-wait PPO led the learned A arms under the original 0.05 score. On B and C, short-wait DQN was the strongest learned arm on both scales. On D, short-wait PPO was the strongest learned arm, beating Random across all three training seeds. Standalone ACO led on every layout.",
+  "verification": {
+    "tests_passed": 19,
+    "training_episodes": 6309,
+    "held_out_evaluations": 960,
+    "exact_replay_checkpoints": 24
+  }
+}

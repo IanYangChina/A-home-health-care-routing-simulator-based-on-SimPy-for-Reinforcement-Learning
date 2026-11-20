@@ -1,0 +1,359 @@
+{
+  "round": 4,
+  "title": "Expanded Optuna search and longer training",
+  "pi": "ny",
+  "provenance": "Saved interactive reports and raw outputs",
+  "timing": "20 Nov 2026 · first logged Optuna study 13:57:03, last results file 14:11:15 UTC",
+  "timing_basis": "First timestamped Optuna record per configuration when available and original benchmark.json file modification time. UTC from the development machine.",
+  "pi_timing_basis": "Timestamps from local Codex turn-context records.",
+  "pi_input_events": [
+    {
+      "time": "2026-11-20T13:50:39+00:00",
+      "summary": "Search four more hyperparameters, train longer, and show loss means and standard deviations."
+    }
+  ],
+  "pi_feedback_times": [
+    "2026-11-20T14:19:13+00:00"
+  ],
+  "pi_quote": null,
+  "model_provenance": "Local Codex turn-context records identify the parent model and reasoning effort. Local tool-call records give the launch times and show that all 16 full-context delegates inherited this configuration without overrides.",
+  "provenance_note": "Record ID and private workspace paths excluded from this report.",
+  "pi_input": "ny requested configurable network width, batch size, target-update interval, and rollout length, plus longer training and loss profiles with mean and standard deviation.",
+  "pi_feedback": "“Even random outperforms them.” ny asked to diagnose the schedules, explain DQN’s declining training reward and PPO’s flatter profile, and identify the reward incentives.",
+  "agent_work": "Expanded Optuna search, timed CPU and GPU throughput, and plotted a mean and ±1 sample standard deviation across three independent training seeds in 512-step windows.",
+  "computation": "Eight 4,096-step trials per agent per layout. Each selected model trained for 24,576 steps per seed and completed 77–241 training episodes per run. DQN on D used CUDA; the other training ran on CPU. The held-out comparison includes 288 episodes.",
+  "finding": "The tuned agents trailed Random on held-out reward on all four instances. DQN led RL on C and D, PPO on A and B. On D, DQN completed 168.08 visits and PPO 142.67, compared with 187.83 for Random and 272.42 for ACO.",
+  "delegation": [
+    {
+      "subagent": "loss_report",
+      "launch_utc": "2026-11-20T13:51:02+00:00",
+      "role": "Loss profiles and report",
+      "work": "Added the mean and sample-SD displays and checked the curves and linked reports against measured data.",
+      "configuration": "Inherited parent configuration",
+      "exact_model_variant": "gpt-6.2-sol",
+      "reasoning_effort": "high"
+    },
+    {
+      "subagent": "tuning",
+      "launch_utc": "2026-11-20T13:51:08+00:00",
+      "role": "Tuning and settings",
+      "work": "Extended the search spaces and checked method-specific parameter handling.",
+      "configuration": "Inherited parent configuration",
+      "exact_model_variant": "gpt-6.2-sol",
+      "reasoning_effort": "high"
+    },
+    {
+      "subagent": "throughput",
+      "launch_utc": "2026-11-20T13:51:15+00:00",
+      "role": "Throughput pilot",
+      "work": "Timed CPU and CUDA for both agents to inform device placement.",
+      "configuration": "Inherited parent configuration",
+      "exact_model_variant": "gpt-6.2-sol",
+      "reasoning_effort": "high"
+    }
+  ],
+  "model_family": "Codex, GPT-6-based agent",
+  "exact_parent_variant": "gpt-6.2-sol",
+  "parent_reasoning_effort": "high",
+  "reports": [
+    {
+      "title": "Archived benchmark overview",
+      "path": "benchmark.html"
+    },
+    {
+      "title": "A interactive detail",
+      "path": "../../a.html"
+    },
+    {
+      "title": "B interactive detail",
+      "path": "../../b.html"
+    },
+    {
+      "title": "C interactive detail",
+      "path": "../../c.html"
+    },
+    {
+      "title": "D interactive detail",
+      "path": "../../d.html"
+    }
+  ],
+  "measured": [
+    {
+      "label": "A",
+      "public_report": "../../a.html",
+      "results": "output/tuned-a/benchmark.json",
+      "episodes_csv": "output/tuned-a/episodes.csv",
+      "log": "output/tuned-a/run.log",
+      "checkpoints": [
+        "output/tuned-a/dqn-11.zip",
+        "output/tuned-a/dqn-12.zip",
+        "output/tuned-a/dqn-13.zip",
+        "output/tuned-a/dqn.zip",
+        "output/tuned-a/ppo-11.zip",
+        "output/tuned-a/ppo-12.zip",
+        "output/tuned-a/ppo-13.zip",
+        "output/tuned-a/ppo.zip"
+      ],
+      "first_optuna_log": "2026-11-20T13:57:03+00:00",
+      "results_file_time": "2026-11-20T14:07:25+00:00",
+      "runtime_seconds": 621.982,
+      "test_seeds": [
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112
+      ],
+      "validation_seeds": [
+        51,
+        52,
+        53,
+        54,
+        55
+      ],
+      "training_seed": 11,
+      "training_seeds": [
+        11,
+        12,
+        13
+      ],
+      "results_by_method": {
+        "random": {
+          "visits": 56.92,
+          "reward": 484.41,
+          "episodes": 12
+        },
+        "aco": {
+          "visits": 60,
+          "reward": 544.33,
+          "episodes": 12
+        },
+        "dqn": {
+          "visits": 43.83,
+          "reward": 264.29,
+          "episodes": 12
+        },
+        "ppo": {
+          "visits": 55.67,
+          "reward": 459.31,
+          "episodes": 12
+        }
+      }
+    },
+    {
+      "label": "B",
+      "public_report": "../../b.html",
+      "results": "output/tuned-b/benchmark.json",
+      "episodes_csv": "output/tuned-b/episodes.csv",
+      "log": "output/tuned-b/run.log",
+      "checkpoints": [
+        "output/tuned-b/dqn-11.zip",
+        "output/tuned-b/dqn-12.zip",
+        "output/tuned-b/dqn-13.zip",
+        "output/tuned-b/dqn.zip",
+        "output/tuned-b/ppo-11.zip",
+        "output/tuned-b/ppo-12.zip",
+        "output/tuned-b/ppo-13.zip",
+        "output/tuned-b/ppo.zip"
+      ],
+      "first_optuna_log": "2026-11-20T13:57:03+00:00",
+      "results_file_time": "2026-11-20T14:05:20+00:00",
+      "runtime_seconds": 497.278,
+      "test_seeds": [
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112
+      ],
+      "validation_seeds": [
+        51,
+        52,
+        53,
+        54,
+        55
+      ],
+      "training_seed": 11,
+      "training_seeds": [
+        11,
+        12,
+        13
+      ],
+      "results_by_method": {
+        "random": {
+          "visits": 55.92,
+          "reward": 464.76,
+          "episodes": 12
+        },
+        "aco": {
+          "visits": 60,
+          "reward": 544.36,
+          "episodes": 12
+        },
+        "dqn": {
+          "visits": 52,
+          "reward": 399.8,
+          "episodes": 12
+        },
+        "ppo": {
+          "visits": 53.58,
+          "reward": 418.56,
+          "episodes": 12
+        }
+      }
+    },
+    {
+      "label": "C",
+      "public_report": "../../c.html",
+      "results": "output/tuned-c/benchmark.json",
+      "episodes_csv": "output/tuned-c/episodes.csv",
+      "log": "output/tuned-c/run.log",
+      "checkpoints": [
+        "output/tuned-c/dqn-11.zip",
+        "output/tuned-c/dqn-12.zip",
+        "output/tuned-c/dqn-13.zip",
+        "output/tuned-c/dqn.zip",
+        "output/tuned-c/ppo-11.zip",
+        "output/tuned-c/ppo-12.zip",
+        "output/tuned-c/ppo-13.zip",
+        "output/tuned-c/ppo.zip"
+      ],
+      "first_optuna_log": "2026-11-20T13:57:03+00:00",
+      "results_file_time": "2026-11-20T14:08:48+00:00",
+      "runtime_seconds": 704.877,
+      "test_seeds": [
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112
+      ],
+      "validation_seeds": [
+        51,
+        52,
+        53,
+        54,
+        55
+      ],
+      "training_seed": 11,
+      "training_seeds": [
+        11,
+        12,
+        13
+      ],
+      "results_by_method": {
+        "random": {
+          "visits": 84,
+          "reward": 187.97,
+          "episodes": 12
+        },
+        "aco": {
+          "visits": 118.67,
+          "reward": 851.16,
+          "episodes": 12
+        },
+        "dqn": {
+          "visits": 82.17,
+          "reward": 149.16,
+          "episodes": 12
+        },
+        "ppo": {
+          "visits": 72.67,
+          "reward": -31.6,
+          "episodes": 12
+        }
+      }
+    },
+    {
+      "label": "D",
+      "public_report": "../../d.html",
+      "results": "output/tuned-d/benchmark.json",
+      "episodes_csv": "output/tuned-d/episodes.csv",
+      "log": "output/tuned-d/run.log",
+      "checkpoints": [
+        "output/tuned-d/dqn-11.zip",
+        "output/tuned-d/dqn-12.zip",
+        "output/tuned-d/dqn-13.zip",
+        "output/tuned-d/dqn.zip",
+        "output/tuned-d/ppo-11.zip",
+        "output/tuned-d/ppo-12.zip",
+        "output/tuned-d/ppo-13.zip",
+        "output/tuned-d/ppo.zip"
+      ],
+      "first_optuna_log": "2026-11-20T13:57:03+00:00",
+      "results_file_time": "2026-11-20T14:11:15+00:00",
+      "runtime_seconds": 852.243,
+      "test_seeds": [
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112
+      ],
+      "validation_seeds": [
+        51,
+        52,
+        53,
+        54,
+        55
+      ],
+      "training_seed": 11,
+      "training_seeds": [
+        11,
+        12,
+        13
+      ],
+      "results_by_method": {
+        "random": {
+          "visits": 187.83,
+          "reward": 844.28,
+          "episodes": 12
+        },
+        "aco": {
+          "visits": 272.42,
+          "reward": 2456.45,
+          "episodes": 12
+        },
+        "dqn": {
+          "visits": 168.08,
+          "reward": 461.52,
+          "episodes": 12
+        },
+        "ppo": {
+          "visits": 142.67,
+          "reward": -19.61,
+          "episodes": 12
+        }
+      }
+    }
+  ],
+  "availability": "The archived suite and its linked detail reports retain the held-out comparison and measured loss curves. The manifest indexes the local run outputs."
+}
