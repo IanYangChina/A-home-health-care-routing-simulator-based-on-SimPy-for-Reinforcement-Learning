@@ -20,8 +20,7 @@
     "2026-11-20T13:50:39+00:00"
   ],
   "pi_quote": null,
-  "model_provenance": "Local Codex turn-context records identify the parent model and reasoning effort. Local tool-call records give the launch times and show that all 16 full-context delegates inherited this configuration without overrides.",
-  "provenance_note": "Record ID and private workspace paths excluded from this report.",
+  "model_provenance": "Local Codex turn-context records identify the parent model and reasoning effort. The listed delegates inherited this configuration without overrides.",
   "pi_input": "ny questioned whether a changing eligible-job rank would let the agent learn reliably and asked whether observations were normalized and losses converged.",
   "pi_feedback": "ny asked Optuna to search width, batch size, DQN target-update interval, and PPO rollout length. ny also asked for longer training and loss profiles that show the mean and standard deviation.",
   "agent_work": "Mapped action j to appointment j throughout a shift. DQN and PPO applied the eligibility mask. DQN also applied it to learning targets. Added training loss and rolling reward diagnostics.",
@@ -31,8 +30,8 @@
     {
       "subagent": "reports",
       "launch_utc": "2026-11-20T13:32:22+00:00",
-      "role": "Training report",
-      "work": "Added loss diagnostics and checked measured series against raw data in the browser.",
+      "role": "Loss diagnostics",
+      "work": "Checked training loss histories against the recorded runs.",
       "configuration": "Inherited parent configuration",
       "exact_model_variant": "gpt-6.2-sol",
       "reasoning_effort": "high"

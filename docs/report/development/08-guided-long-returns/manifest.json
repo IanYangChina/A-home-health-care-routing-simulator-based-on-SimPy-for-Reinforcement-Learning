@@ -21,17 +21,8 @@
   "agent_work": "Kept waiting and return settings fixed within each layout and agent family and compared the exploration control with short-wait and ACO guidance. All arms charged 0.15 points per appointment waiting minute. Masked DQN used 32-decision targets on C and 16-decision targets on A, B, and D, based on Round 7 results for C and D. All PPO arms used 512-decision rollouts with λ=1 and the tuned discount. PPO bootstrapped at rollout boundaries within a shift. The simulator treated the modeled shift end as terminal in training. DQN mixed guidance into epsilon exploration. PPO used imitation warm starts in its guided arms, then collected on-policy rollouts.",
   "exact_parent_variant": "gpt-6.2-sol",
   "parent_reasoning_effort": "high",
-  "model_provenance": "Local Codex turn-context and tool-call records give the parent model, reasoning effort, and launch times. Both full-context delegates inherited this configuration without overrides.",
+  "model_provenance": "Local Codex turn-context and tool-call records give the parent model, reasoning effort, and launch times. The listed delegates inherited this configuration without overrides.",
   "delegation": [
-    {
-      "subagent": "report8",
-      "launch_utc": "2026-11-20T16:05:13+00:00",
-      "role": "Reporting and development archive",
-      "work": "Adapted the report and prepared the timeline template and offline browser test.",
-      "configuration": "Inherited parent configuration",
-      "exact_model_variant": "gpt-6.2-sol",
-      "reasoning_effort": "high"
-    },
     {
       "subagent": "protocol8",
       "launch_utc": "2026-11-20T16:05:19+00:00",

@@ -21,23 +21,13 @@
     "2026-11-20T13:32:07+00:00"
   ],
   "pi_quote": null,
-  "model_provenance": "Local Codex turn-context records identify the parent model and reasoning effort. Local tool-call records give the launch times and show that all 16 full-context delegates inherited this configuration without overrides.",
-  "provenance_note": "Record ID and private workspace paths excluded from this report.",
+  "model_provenance": "Local Codex turn-context records identify the parent model and reasoning effort. The listed delegates inherited this configuration without overrides.",
   "pi_input": "ny asked to increase network size and run the other three instances.",
   "pi_feedback": "ny asked what the agents could observe and do. After seeing that an action represented a changing rank, ny raised the concern that this could impede learning and asked about observation normalization and loss convergence.",
   "agent_work": "Kept the initial hyperparameters and budget for the paired A comparison, doubled both hidden layers to 128 units, and made separate tuned runs on B, C, and D. Vectorised simulator checks for larger instances.",
   "computation": "A used 16,384 final steps per width and one matched training seed. B, C, and D each used three Optuna trials and 8,192 final steps per algorithm. Held-out means used 12 seeds per configuration.",
   "finding": "On A, DQN stayed at 54.50 mean visits as reward rose by 0.73. PPO rose from 54.42 to 54.83 visits and gained 6.46 mean reward, with six test seeds improving and six declining. Ant colony led the fixed policies on B, C, and D.",
   "delegation": [
-    {
-      "subagent": "multi_report",
-      "launch_utc": "2026-11-20T09:09:17+00:00",
-      "role": "Report update",
-      "work": "Added the cross-instance overview and verified the measured comparison and route links.",
-      "configuration": "Inherited parent configuration",
-      "exact_model_variant": "gpt-6.2-sol",
-      "reasoning_effort": "high"
-    },
     {
       "subagent": "sim_perf",
       "launch_utc": "2026-11-20T09:09:22+00:00",

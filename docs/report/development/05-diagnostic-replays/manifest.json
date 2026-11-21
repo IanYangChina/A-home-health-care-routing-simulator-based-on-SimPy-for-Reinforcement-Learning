@@ -16,8 +16,7 @@
     "2026-11-20T14:40:47+00:00"
   ],
   "pi_quote": null,
-  "model_provenance": "Local Codex turn-context records identify the parent model and reasoning effort. Local tool-call records give the launch times and show that all 16 full-context delegates inherited this configuration without overrides.",
-  "provenance_note": "Record ID and private workspace paths excluded from this report.",
+  "model_provenance": "Local Codex turn-context records identify the parent model and reasoning effort. The listed delegates inherited this configuration without overrides.",
   "pi_input": "ny asked how the two learned policies differed from Random and ACO, why training rewards changed, and what the reward incentivized.",
   "pi_feedback": "ny interpreted the schedules as evidence of a possible exploration problem and a possible reward-design problem, and asked to test guided exploration and monitor all four reward terms.",
   "agent_work": "Separated voluntary deferrals from forced ones, examined wait and deadline choices, reconciled the observed reward to four terms, and replayed paired interventions with weights frozen.",

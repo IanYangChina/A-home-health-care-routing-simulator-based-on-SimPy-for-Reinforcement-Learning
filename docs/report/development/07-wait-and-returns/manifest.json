@@ -17,11 +17,11 @@
   ],
   "pi_input": "ny highlighted similar travel times but large numbers of unserved visits and much longer waits, particularly in C and D. ny asked about multi-step or Monte Carlo rewards and approved the proposed tests.",
   "pi_quote": "“the reward function weighting is not punishing the waiting time harshly enough”",
-  "pi_feedback": "ny identified excessive waiting as a problem in the previous results. PI feedback on the measurements from this round is pending.",
+  "pi_feedback": "ny asked which exploration strategies the matched controls used, then requested combining guidance, longer returns, and a higher waiting penalty across all four layouts.",
   "model_family": "Codex, GPT-6-based agent",
   "exact_parent_variant": "gpt-6.2-sol",
   "parent_reasoning_effort": "high",
-  "model_provenance": "Local Codex continuation turn-context records identify model and effort. Both full-context delegates inherited this configuration without overrides.",
+  "model_provenance": "Local Codex continuation turn-context records identify model and effort. The listed delegates inherited this configuration without overrides.",
   "delegation": [
     {
       "subagent": "nstep",
@@ -35,8 +35,8 @@
     {
       "subagent": "report7",
       "launch_utc": "2026-11-20T15:41:16+00:00",
-      "role": "Round report and archive",
-      "work": "Adapted the training report for arm-specific reward weights and a common held-out score, checked browser behavior, and recorded the results and provenance.",
+      "role": "Held-out score comparison",
+      "work": "Verified held-out score comparisons across different waiting penalties using common reference weights.",
       "configuration": "Inherited parent configuration",
       "exact_model_variant": "gpt-6.2-sol",
       "reasoning_effort": "high"
@@ -848,5 +848,9 @@
     "output/rounds/07-wait-and-returns/c/ppo.json",
     "output/rounds/07-wait-and-returns/d/dqn.json",
     "output/rounds/07-wait-and-returns/d/ppo.json"
+  ],
+  "pi_feedback_times": [
+    "2026-11-20T15:58:52+00:00",
+    "2026-11-20T16:05:00+00:00"
   ]
 }

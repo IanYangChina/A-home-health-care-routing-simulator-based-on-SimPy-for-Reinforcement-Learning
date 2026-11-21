@@ -8,49 +8,26 @@
   "pi_timing_basis": "Timestamps from local Codex turn-context records.",
   "pi_input_events": [
     {
-      "time": "2026-11-20T08:47:21+00:00",
-      "summary": "Read the repository."
-    },
-    {
       "time": "2026-11-20T08:55:52+00:00",
-      "summary": "Set up Conda, train the RL agents, and prepare the HTML report for GitHub Pages."
+      "summary": "Train the RL agents and compare them with fixed dispatch policies."
     }
   ],
   "pi_feedback_times": [
     "2026-11-20T09:09:04+00:00"
   ],
   "pi_quote": null,
-  "model_provenance": "Local Codex turn-context records identify the parent model and reasoning effort. Local tool-call records give the launch times and show that all 16 full-context delegates inherited this configuration without overrides.",
-  "provenance_note": "Record ID and private workspace paths excluded from this report.",
-  "pi_input": "ny asked to review the repository, set up Conda and RL training, and prepare the interactive report for GitHub Pages.",
+  "model_provenance": "Local Codex turn-context records identify the parent model and reasoning effort. The listed delegates inherited this configuration without overrides.",
+  "pi_input": "ny asked to train reinforcement learning agents and compare them with fixed dispatch policies.",
   "pi_feedback": "“Try increasing the network size and also experiment on the other 3 instances.”",
-  "agent_work": "Set up the shhcsrp conda environment, compared the fixed policies with RL, and built the offline report and GitHub Pages workflow. The RL action represented a rank in the current eligible list.",
-  "computation": "Instance A contained 60 appointments. GPU training used four Optuna trials and 16,384 final steps per algorithm. The report averaged 12 held-out seeds.",
+  "agent_work": "Compared the fixed dispatch policies with the learned agents on instance A. Each RL action selected a rank in the current list of eligible appointments.",
+  "computation": "Instance A contained 60 appointments. GPU training used four Optuna trials and 16,384 final steps per algorithm. The comparison averaged 12 held-out seeds.",
   "finding": "DQN led RL validation. On the held-out seeds it averaged 54.50 visits and 438.08 reward. Random averaged 56.92 visits and 484.41 reward. Earliest deadline and ant colony completed all 60 visits on every seed.",
   "delegation": [
-    {
-      "subagent": "report",
-      "launch_utc": "2026-11-20T08:56:13+00:00",
-      "role": "Report implementation",
-      "work": "Built the interactive report for policies, routes, schedules, appointments, and event traces.",
-      "configuration": "Inherited parent configuration",
-      "exact_model_variant": "gpt-6.2-sol",
-      "reasoning_effort": "high"
-    },
-    {
-      "subagent": "pages",
-      "launch_utc": "2026-11-20T08:56:18+00:00",
-      "role": "GitHub Pages setup",
-      "work": "Prepared and checked the static Pages publishing workflow.",
-      "configuration": "Inherited parent configuration",
-      "exact_model_variant": "gpt-6.2-sol",
-      "reasoning_effort": "high"
-    },
     {
       "subagent": "fair_eval",
       "launch_utc": "2026-11-20T08:56:36+00:00",
       "role": "Evaluation protocol",
-      "work": "Added the earliest-deadline baseline and optional paired per-appointment service disturbances. Streamlined dispatch validation, fixed Windows UTF-8 handling in a report test, and verified all eight simulator tests.",
+      "work": "Added earliest-deadline dispatch, optional paired service-time disturbances per appointment, and streamlined dispatch validation.",
       "configuration": "Inherited parent configuration",
       "exact_model_variant": "gpt-6.2-sol",
       "reasoning_effort": "high"
