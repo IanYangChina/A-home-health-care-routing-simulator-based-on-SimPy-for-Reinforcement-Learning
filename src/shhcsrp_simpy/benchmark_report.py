@@ -101,7 +101,7 @@ footer{border-top:1px solid var(--line);color:var(--muted);padding-block:1.4rem;
 </div>
 <div class="panel"><div class="plot" id="comparison-chart" aria-label="Policy comparison chart"></div></div>
 <div class="panel scroll compact"><table aria-label="Policy comparison values">
-<thead><tr><th scope="col">Policy</th><th scope="col">Visits completed</th><th scope="col">Completion</th><th scope="col">Reward</th><th scope="col">Travel min</th><th scope="col">Wait min</th><th scope="col">Service min</th><th scope="col">Shift min</th><th scope="col">Decisions</th><th scope="col">Runtime s</th><th scope="col">Truncation</th></tr></thead>
+<thead><tr><th scope="col">Policy</th><th scope="col">Visits completed</th><th scope="col">Completion</th><th scope="col" id="comparison-score">Reward</th><th scope="col">Travel min</th><th scope="col">Wait min</th><th scope="col">Service min</th><th scope="col">Shift min</th><th scope="col">Decisions</th><th scope="col">Runtime s</th><th scope="col">Truncation</th></tr></thead>
 <tbody id="comparison-rows"></tbody></table></div>
 </section>
 <section id="episodes">
@@ -182,14 +182,18 @@ const byMethod = Object.fromEntries(methods.map(method => [method.id, method]));
 const seeds = [...new Set(runs.map(run => run.seed))];
 const nurseIds = scenario.nurse_skills.map((_, nurse) => nurse);
 const runIndex = new Map(runs.map(run => [run.method + "/" + run.seed, run]));
+const sharedWaiting = Number.isFinite(meta.baseline_waiting_weight) ? Math.abs(meta.baseline_waiting_weight).toFixed(2) : null;
+const scoreKey = sharedWaiting ? "raw_variant_reward" : "total_reward";
 const metrics = {
   jobs_completed: ["Visits completed", 1], completion_rate: ["Completion (%)", 1, 100],
-  jobs_unserved: ["Visits unserved", 1], total_reward: ["Reward", 1],
+  jobs_unserved: ["Visits unserved", 1], total_reward: [sharedWaiting ? "Reward at 0.05" : "Reward", 1],
   travel_minutes: ["Travel (nurse-minutes)", 1], waiting_minutes: ["Waiting (nurse-minutes)", 1],
   service_minutes: ["Service (nurse-minutes)", 1], time: ["Shift elapsed (minutes)", 1],
   decisions: ["Dispatch decisions", 1], wall_seconds: ["Runtime (seconds)", 3],
   truncated: ["Shift truncation (%)", 1, 100]
 };
+if (sharedWaiting) metrics.raw_variant_reward = [`Reward at ${sharedWaiting}`, 1];
+$("comparison-score").textContent = metrics[scoreKey][0];
 const palette = ["#08776c","#2852a0","#a6456b","#9e5b12","#7352a1","#227790","#415d3a","#ae4434","#446071","#885a33"];
 const activityColors = {Travel:"#50677d", Waiting:"#b56c18", Service:"#08776c", Return:"#3464a8"};
 const statuses = ["Completed", "Window missed", "Interrupted", "Unassigned"];
@@ -277,7 +281,7 @@ function comparison() {
     xaxis:{categoryorder:"array",categoryarray:labels,automargin:true},
     yaxis:{title:{text:metrics[key][0]},gridcolor:"#e5eeec",automargin:true,zeroline:true}
   },plotConfig);
-  const columns = ["jobs_completed","completion_rate","total_reward","travel_minutes","waiting_minutes","service_minutes","time","decisions","wall_seconds","truncated"];
+  const columns = ["jobs_completed","completion_rate",scoreKey,"travel_minutes","waiting_minutes","service_minutes","time","decisions","wall_seconds","truncated"];
   $("comparison-rows").replaceChildren(...comparisons.map(({method,sample}) => {
     const button=linkButton(methodLabel(method),() => {
       $("policy").value=method.id;
@@ -475,7 +479,7 @@ function refreshEpisode(preferredSeed) {
   episode=readEpisode(run);
   const selected=[
     ["Visits completed",run.metrics.jobs_completed+" / "+run.metrics.jobs_total],
-    ["Reward",fmt(run.metrics.total_reward)],["Elapsed shift",fmt(run.metrics.time)+" min"],
+    [metrics[scoreKey][0],fmt(run.metrics[scoreKey])],["Elapsed shift",fmt(run.metrics.time)+" min"],
     ["Travel",fmt(run.metrics.travel_minutes)+" min"],["Waiting",fmt(run.metrics.waiting_minutes)+" min"],
     ["Service",fmt(run.metrics.service_minutes)+" min"],["Shift ended",run.metrics.truncated?"At time limit":"Normally"]
   ];
@@ -499,7 +503,9 @@ function methodology() {
   const notes=[
     "Each action assigns an eligible appointment to the current idle nurse or defers the nurse. Nurses travel, wait, and serve patients concurrently.",
     "The dispatch mask checks nurse skill, the start window, waiting limits, and forecast return to depot. Actual service times are uncertain, so the shift can end mid-activity.",
-    "Reward adds 10 per completed visit and subtracts 8 per unresolved visit, 0.03 per travel minute, 0.05 per waiting minute, and 3 per invalid action. Nurse-minute totals count completed activity intervals.",
+    "Reward adds 10 per completed visit and subtracts 8 per unresolved visit, 0.03 per travel minute, " +
+      (sharedWaiting ? `${sharedWaiting} or 0.05` : "0.05") +
+      " per waiting minute, and 3 per invalid action. Nurse-minute totals count completed activity intervals.",
     meta.action_encoding,meta.observation_normalization,meta.service_randomness,meta.selection,
     "Training seeds "+trainingSeeds.join(", ")+". "+(meta.validation_seeds.length
       ? "Validation seeds "+meta.validation_seeds.join(", ")+". " : "")+"Held-out test seeds "+meta.test_seeds.join(", ")+".",

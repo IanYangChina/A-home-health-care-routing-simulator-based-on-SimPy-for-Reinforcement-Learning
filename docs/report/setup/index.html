@@ -12,7 +12,7 @@
   <div class="project-container">
     <nav class="project-nav" aria-label="Project"><a href="../index.html">Latest results</a><a href="index.html" aria-current="page">Algorithm setup</a><a href="../development/index.html">Development history</a><a href="../simulator/index.html">Simulator</a></nav>
     <h1>Algorithm setup</h1>
-    <p>How the dispatch simulator models a home care shift and how Round 8 compares learned policies with fixed scheduling rules.</p>
+    <p>How the dispatch simulator models a home care shift and how Round 10 compares learned policies with fixed scheduling rules.</p>
   </div>
 </header>
 
@@ -58,12 +58,13 @@
         <tbody>
           <tr><th scope="row">Appointments</th><td>Location, service-start window, demand level, current status, expected duration for this nurse, and patient ID.</td></tr>
           <tr><th scope="row">Current nurse</th><td>Location, skill, nurse index, current time, visits completed, and remaining shift time.</td></tr>
+          <tr><th scope="row">Nurse roster</th><td>One row per nurse in nurse-ID order. Last confirmed location, skill, ready queue position, deferred status, travel, waiting, service or depot-return phase, assigned job, visits completed, estimated time until free, and shift time left after release.</td></tr>
           <tr><th scope="row">Shift state</th><td>Elapsed time, fractions of visits completed and pending, and share of nurses currently active.</td></tr>
           <tr><th scope="row">Eligibility</th><td>One bit per appointment showing whether the current nurse can take it now.</td></tr>
         </tbody>
       </table>
     </div>
-    <p>Numeric observations use fixed scaling to the range [0, 1]. The <a href="../simulator/index.html">interactive simulator</a> exposes the same assignment and defer decisions for a shift you dispatch yourself.</p>
+    <p>Numeric observations use fixed scaling to the range [0, 1]. Busy nurse availability is forecast from travel, appointment opening, the duration model, and time already spent in service. A deferred nurse’s estimate depends on the next wake-up event. The <a href="../simulator/index.html">interactive simulator</a> exposes the same assignment and defer decisions for a shift you dispatch yourself.</p>
   </section>
 
   <section class="project-section" aria-labelledby="policy-title">
@@ -75,27 +76,33 @@
       </article>
       <article class="project-card">
         <h3>Masked DQN</h3>
-        <p>The agent learns an action value for each appointment ID and defer. Eligibility applies during exploration, greedy selection, and the learning target. The target combines rewards over 16 or 32 decisions before a masked value estimate of the remaining return. Targets stop at the end of the shift.</p>
+        <p>The agent learns an action value for each appointment ID and defer. Eligibility applies during exploration, greedy selection, and the learning target. The target combines rewards over 64, 128, or 256 decisions before a masked value estimate of the remaining return. Targets stop at the end of the shift.</p>
       </article>
       <article class="project-card">
         <h3>Maskable PPO</h3>
-        <p>PPO learns a probability distribution over the available actions. Round 8 uses 512-decision rollouts and λ = 1. A rollout ending mid-shift uses a value estimate for the remaining return. The modeled shift end is terminal for learning.</p>
+        <p>PPO learns a probability distribution over the available actions. Round 10 uses a fixed rollout of 512 decisions and γ = 0.9995. Three λ values vary how strongly future temporal-difference residuals contribute. A rollout ending mid-shift uses a value estimate for the remaining return. The modeled shift end is terminal for learning.</p>
       </article>
     </div>
     <p>The short-wait teacher ranks feasible appointments by forecast waiting time, closing time, then travel. The ACO teacher uses three ants with a three-visit lookahead. In DQN’s guided exploration, the short-wait arm mixes 75% teacher actions with 25% random legal actions. The ACO arm uses 20% ACO, 55% short-wait, and 25% random legal actions. These proportions apply to exploratory decisions with feasible appointments. PPO warm-starts by imitating short-wait or ACO demonstrations and then collects rollouts from its own policy.</p>
     <div class="project-scroll">
       <table class="project-table">
-        <caption>Round 8 training settings. Each network has two hidden layers of the given width. Discounts are rounded.</caption>
+        <caption>Round 10 training settings. Both architectures use two hidden layers of the given width. Each return setting is paired with both guides on each layout.</caption>
         <thead><tr><th scope="col">Instance</th><th scope="col">DQN width</th><th scope="col">DQN batch</th><th scope="col">DQN γ</th><th scope="col">DQN return steps</th><th scope="col">PPO width</th><th scope="col">PPO batch</th><th scope="col">PPO γ</th></tr></thead>
         <tbody>
-          <tr><th scope="row">A</th><td>256</td><td>64</td><td>0.99679</td><td>16</td><td>256</td><td>32</td><td>0.97388</td></tr>
-          <tr><th scope="row">B</th><td>128</td><td>64</td><td>0.95095</td><td>16</td><td>64</td><td>128</td><td>0.95232</td></tr>
-          <tr><th scope="row">C</th><td>256</td><td>32</td><td>0.97388</td><td>32</td><td>256</td><td>128</td><td>0.99630</td></tr>
-          <tr><th scope="row">D</th><td>128</td><td>64</td><td>0.96850</td><td>16</td><td>128</td><td>64</td><td>0.99631</td></tr>
+          <tr><th scope="row">A</th><td>256</td><td>64</td><td>0.99679</td><td>64, 128, 256</td><td>256</td><td>32</td><td>0.9995</td></tr>
+          <tr><th scope="row">B</th><td>128</td><td>64</td><td>0.95095</td><td>64, 128, 256</td><td>64</td><td>128</td><td>0.9995</td></tr>
+          <tr><th scope="row">C</th><td>256</td><td>32</td><td>0.97388</td><td>64, 128, 256</td><td>256</td><td>128</td><td>0.9995</td></tr>
+          <tr><th scope="row">D</th><td>128</td><td>64</td><td>0.96850</td><td>64, 128, 256</td><td>128</td><td>64</td><td>0.9995</td></tr>
         </tbody>
       </table>
     </div>
-    <p>The exploration control, short-wait guide, and ACO guide share the same model settings within each layout and algorithm. The <a href="../guided-returns/index.html#protocol">Round 8 training details</a> give the full settings and demonstration counts for each arm.</p>
+    <p>The MLP uses the flattened observation. The attention variant appends two 16-dimensional summaries to the same inputs. One attends to pending visits using eligibility, forecast waiting, and service-start slack. The other attends to the full nurse roster. Both use the current nurse and shift state as context.</p>
+    <div class="project-scroll"><table class="project-table">
+      <caption>PPO horizon calibration at γ = 0.9995</caption>
+      <thead><tr><th scope="col">Nominal horizon</th><th scope="col">DQN replay decisions</th><th scope="col">PPO λ</th></tr></thead>
+      <tbody><tr><th scope="row">64</th><td>64</td><td>0.984867</td></tr><tr><th scope="row">128</th><td>128</td><td>0.992684</td></tr><tr><th scope="row">256</th><td>256</td><td>0.996592</td></tr></tbody>
+    </table></div>
+    <p>The PPO horizon is the geometric weight sum <code>1 / (1 − γλ)</code> before rollout or shift boundaries. DQN uses up to the indicated number of recorded rewards, weighted by its per-layout discount. The <a href="../attention-returns/index.html#protocol">Round 10 training details</a> list the settings and demonstration counts for each arm.</p>
   </section>
 
   <section class="project-section" aria-labelledby="reward-title">
@@ -103,18 +110,18 @@
     <div class="project-scroll">
       <table class="project-table">
         <caption>Four reward components on the two reported scales</caption>
-        <thead><tr><th scope="col">Component</th><th scope="col">Unit</th><th scope="col">Original score</th><th scope="col">Round 8 training score</th></tr></thead>
+        <thead><tr><th scope="col">Component</th><th scope="col">Unit</th><th scope="col">Original score</th><th scope="col">Round 10 training score</th></tr></thead>
         <tbody>
           <tr><th scope="row">Visit completed</th><td>Per visit</td><td>+10</td><td>+10</td></tr>
           <tr><th scope="row">Visit unserved</th><td>Per visit at shift end</td><td>−8</td><td>−8</td></tr>
           <tr><th scope="row">Travel</th><td>Per nurse-minute</td><td>−0.03</td><td>−0.03</td></tr>
-          <tr><th scope="row">Appointment waiting</th><td>Per nurse-minute</td><td>−0.05</td><td>−0.15</td></tr>
+          <tr><th scope="row">Appointment waiting</th><td>Per nurse-minute</td><td>−0.05</td><td>−0.30</td></tr>
         </tbody>
       </table>
     </div>
     <p>Waiting is time spent after arrival before a visit can start. Deferring a nurse carries no direct penalty, so inspect visits and waiting together. The simulator also penalizes invalid dispatches and explicit missed-window events. The report scores every held-out schedule at both waiting costs so that comparisons use the same weights.</p>
-    <p>Round 8 used 12,288 decisions per fit with training seeds 11–13 and demonstration seeds 201–204. Each final checkpoint was evaluated greedily on held-out seeds 101–112, giving 864 learned-policy evaluations. The comparison reused 96 matching saved Random and ACO shifts. The benchmark pairs service-time disturbances by appointment and episode seed across policies. Route explorers display training seed 11. Plot bands show sample standard deviation across training seeds.</p>
-    <p>The benchmark uses Stable-Baselines3 and SB3-Contrib 2.6.0 with SimPy and Gymnasium. DQN on instance D used a GTX 1660 SUPER. All other Round 8 fits used the CPU.</p>
+    <p>Round 10 used 12,288 decisions per fit with training seeds 11–13 and demonstration seeds 201–204. It used 264 new fits and 24 matching Round 9 DQN fits at 64 decisions with the MLP. Each final checkpoint was evaluated greedily on held-out seeds 101–112, giving 3,456 learned-policy evaluations. The comparison reused 96 matching saved Random and ACO shifts. The benchmark pairs service-time disturbances by appointment and episode seed across policies. Route explorers display training seed 11. Plot bands show sample standard deviation across training seeds.</p>
+    <p>The benchmark uses Stable-Baselines3 and SB3-Contrib 2.6.0 with SimPy and Gymnasium. Both agents on instance D used a GTX 1660 SUPER. Instances A–C used the CPU.</p>
   </section>
 
   <section class="project-section" aria-labelledby="scope-title">

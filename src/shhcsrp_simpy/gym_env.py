@@ -24,7 +24,7 @@ class SHHCSRPGymEnv(gym.Env):
                  data_dir=None, job_limit: int | None = None,
                  duration_cv: float = .15, render_mode: str | None = None,
                  common_random_numbers: bool = False, wait_penalty: float = .05,
-                 terminal_shift: bool = False):
+                 terminal_shift: bool = False, nurse_roster: bool = False):
         super().__init__()
         self.scenario = scenario if scenario is not None else load_scenario(
             instance=instance, root=data_dir, job_limit=job_limit)
@@ -36,6 +36,7 @@ class SHHCSRPGymEnv(gym.Env):
         if not isfinite(self.wait_penalty) or self.wait_penalty < 0.:
             raise ValueError('wait_penalty must be finite and nonnegative')
         self.terminal_shift = terminal_shift
+        self.nurse_roster = nurse_roster
         self.n_jobs = len(self.scenario.jobs)
         max_elder_id = max(job.elder_id for job in self.scenario.jobs)
         horizon = self.scenario.horizon
@@ -46,11 +47,14 @@ class SHHCSRPGymEnv(gym.Env):
             for job in self.scenario.jobs
         ], dtype=np.float32)
         self.action_space = spaces.Discrete(self.n_jobs + 1)
-        self.observation_space = spaces.Dict({
+        observation = {
             'jobs': spaces.Box(0., 1., shape=(self.n_jobs, 9), dtype=np.float32),
             'worker': spaces.Box(0., 1., shape=(8,), dtype=np.float32),
             'global': spaces.Box(0., 1., shape=(4,), dtype=np.float32),
-        })
+        }
+        if nurse_roster:
+            observation['nurses'] = spaces.Box(0., 1., shape=(len(self.scenario.nurse_skills), 15), dtype=np.float32)
+        self.observation_space = spaces.Dict(observation)
         if render_mode not in (None, 'ansi'):
             raise ValueError("Only render_mode='ansi' supported; use export_html for plots")
         self.render_mode = render_mode
@@ -120,8 +124,45 @@ class SHHCSRPGymEnv(gym.Env):
         ], dtype=np.float32)
         # Bounds stay valid even if a user's custom scenario extends beyond
         # original x/y/z ranges or a stochastic event runs beyond its shift.
-        return {'jobs': np.clip(obs_jobs, 0., 1.), 'worker': np.clip(worker, 0., 1.),
-                'global': np.clip(globals_, 0., 1.)}
+        observation = {'jobs': np.clip(obs_jobs, 0., 1.), 'worker': np.clip(worker, 0., 1.),
+                       'global': np.clip(globals_, 0., 1.)}
+        if self.nurse_roster:
+            observation['nurses'] = self._observe_nurses(m)
+        return observation
+
+    def _observe_nurses(self, model: CareSimulation) -> np.ndarray:
+        """One stable row per nurse, with phase and estimated time to next availability."""
+        now, horizon = float(model.env.now), self.scenario.horizon
+        count = len(model.workers)
+        remaining = max(0., horizon - now)
+        queue = {nurse: rank for rank, nurse in enumerate(model.ready, 1)} if not model.done else {}
+        release = [model.minutes_until_free(worker) for worker in model.workers]
+        next_wake = None
+        if model.parked and not model.done:
+            if model.active:
+                next_wake = min(release[w.id] for w in model.workers if w.busy)
+            else:
+                opening = model._future_window_time()
+                if opening is not None:
+                    next_wake = opening - now
+        nurses = np.zeros((count, 15), dtype=np.float32)
+        for worker in model.workers:
+            nurse = worker.id
+            rank = queue.get(nurse, 0)
+            parked = nurse in model.parked and not model.done
+            assigned = worker.job_id is not None
+            travel = assigned and now < worker.arrival_at
+            waiting = assigned and worker.arrival_at <= now < worker.service_at
+            service = assigned and now >= worker.service_at
+            eta = next_wake if parked else release[nurse]
+            slack = max(0., remaining - eta) if eta is not None and not model.done else 0.
+            nurses[nurse] = (worker.position[0] / 250., worker.position[1] / 250.,
+                             worker.position[2] / 30., worker.skill / 3., rank > 0, parked,
+                             travel, waiting, service, worker.return_at is not None,
+                             (worker.job_id + 1) / self.n_jobs if assigned else 0.,
+                             min(remaining, eta) / horizon if eta is not None else 0.,
+                             slack / horizon, rank / count, worker.completed / self.n_jobs)
+        return np.clip(nurses, 0., 1.)
 
     def _info(self) -> dict:
         assert self.model is not None

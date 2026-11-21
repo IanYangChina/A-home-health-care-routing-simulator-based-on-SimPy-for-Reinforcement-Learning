@@ -1,4 +1,6 @@
 """Optional SB3 compatibility and stable action masking tests."""
+import json
+
 import pytest
 
 pytest.importorskip('sb3_contrib')
@@ -7,8 +9,12 @@ pytest.importorskip('optuna')
 import numpy as np
 import torch
 from stable_baselines3.common.env_checker import check_env
+from stable_baselines3.common.torch_layers import CombinedExtractor
 
+from shhcsrp_simpy.attention import DispatchAttention
+from shhcsrp_simpy.attention_returns import configurations as attention_configurations
 from shhcsrp_simpy.benchmark import StableDispatch, loss_profiles
+from shhcsrp_simpy import exploration
 from shhcsrp_simpy.exploration import RewardTerms, rolling_terms
 from shhcsrp_simpy.guided_returns import configurations
 from shhcsrp_simpy.gym_env import SHHCSRPGymEnv
@@ -109,6 +115,83 @@ def test_training_reward_profiles_preserve_signed_contributions():
     assert rows[768]['travel_weighted'] == pytest.approx(-.3)
     assert rows[768]['waiting_weighted'] == -1.
     assert rows[768]['reward'] == pytest.approx(rows[768]['realized_reward'])
+
+
+def test_attention_preserves_raw_features_and_handles_an_empty_job_pool():
+    env = StableDispatch(SHHCSRPGymEnv(instance='A', job_limit=12, nurse_roster=True))
+    obs, _ = env.reset(seed=1)
+    batch = {key: torch.tensor(value).unsqueeze(0) for key, value in obs.items()}
+    raw = CombinedExtractor(env.observation_space)
+    encoder = DispatchAttention(env.observation_space, width=8)
+    features = encoder(batch)
+    torch.testing.assert_close(features[:, :raw.features_dim], raw(batch))
+    features.sum().backward()
+    assert torch.count_nonzero(encoder.nurses.weight.grad)
+    assert torch.count_nonzero(encoder.jobs.weight.grad)
+
+    batch['jobs'][:, :, 6] = 2/3
+    features = encoder(batch)
+    assert torch.isfinite(features).all()
+    assert torch.count_nonzero(features[:, raw.features_dim:raw.features_dim + 8]) == 0
+    env.close()
+
+
+def test_attention_round_uses_matched_geometric_gae_horizons():
+    for family in ('dqn', 'ppo'):
+        variants, settings = attention_configurations('A', family, {'gamma': .98})
+        assert len(variants) == 12
+        for variant, _, guide, _ in variants:
+            config = settings[variant]
+            horizon = int(variant.split('_')[-2][1:])
+            assert guide in ('short_wait', 'aco')
+            assert config['nurse_roster'] and config['weights']['waiting_minutes'] == -.30
+            assert config['attention'] == variant.endswith('_attention')
+            if family == 'dqn':
+                assert config['return_steps'] == horizon and config['params']['gamma'] == .98
+            else:
+                params = config['params']
+                assert params['n_steps'] == 512 and params['gamma'] == .9995
+                assert 1/(1-params['gamma']*params['gae_lambda']) == pytest.approx(horizon)
+
+
+def test_finished_arms_survive_an_interrupted_family_run(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    source = tmp_path / 'output/tuned-a/benchmark.json'
+    source.parent.mkdir(parents=True)
+    source.write_text(json.dumps({'tuning': {'dqn': {'best_params': {}}}}), encoding='utf-8')
+    monkeypatch.setattr(exploration, 'TRAINING_SEEDS', (11,))
+    monkeypatch.setattr(exploration, 'TEST_SEEDS', (101,))
+    monkeypatch.setattr(exploration, 'load_scenario', lambda instance: None)
+    monkeypatch.setattr(exploration, 'evaluate', lambda *a, **kw: {'metrics': {'total_reward': 1.}})
+    arms = [('first', 'First', None, ''), ('second', 'Second', None, '')]
+
+    class SavedModel:
+        num_timesteps = 512
+
+        def save(self, path):
+            pass
+
+    calls = []
+
+    def train(*args, **kwargs):
+        calls.append(1)
+        if len(calls) == 2:
+            raise RuntimeError('Interrupted')
+        return SavedModel(), {512: {'train/loss': 2.}}, [], {}, None
+
+    monkeypatch.setattr(exploration, 'train_variant', train)
+    directory = tmp_path / 'fits'
+    with pytest.raises(RuntimeError, match='Interrupted'):
+        exploration.run_family('A', 'dqn', 512, 'cpu', directory,
+                               configure=lambda *args: (arms, {}), resume=True)
+    partial = directory / 'a/dqn.partial.json'
+    first = json.loads(partial.read_text(encoding='utf-8'))['experiments']['first']
+    exploration.run_family('A', 'dqn', 512, 'cpu', directory,
+                           configure=lambda *args: (arms, {}), resume=True)
+    result = json.loads((directory / 'a/dqn.json').read_text(encoding='utf-8'))
+    assert result['experiments']['first'] == first
+    assert set(result['experiments']) == {'first', 'second'}
+    assert len(calls) == 3 and not partial.exists()
 
 
 @pytest.mark.parametrize('instance,family,return_steps', [('A', 'dqn', 16), ('C', 'dqn', 32),

@@ -20,6 +20,12 @@ def render_exploration(payloads: list[dict], output: str | Path) -> Path:
     elif round_name == "guided-long-returns":
         title = "Guided exploration with longer returns"
         description = "Compare short-wait and ant-colony guidance with matched controls on all four home care instances."
+    elif round_name == "full-roster-returns":
+        title = "Full nurse roster and longer returns"
+        description = "Compare two DQN return lengths and two PPO discounts with short-wait and ACO guidance on A–D."
+    elif round_name == "attention-returns":
+        title = "Matched return horizons and attention"
+        description = "Compare three return horizons and two network architectures for DQN and PPO on A–D."
     else:
         title = "Guided exploration"
         description = "Compare exploration strategies and track which parts of the reward changed as DQN and PPO learned to dispatch nurses."
@@ -54,6 +60,7 @@ main section{margin:clamp(2rem,4.5vw,3.6rem) 0;scroll-margin-top:1rem}
 main .layout-picker{margin:1.3rem 0 0;background:var(--wash);padding:1rem;border-radius:.55rem;align-items:center}
 p{max-width:860px;color:var(--muted);margin:.55rem 0 1rem}
 .toolbar{margin:1rem 0}
+.toolbar [hidden]{display:none}
 .layout-picker p{margin:0}
 label{display:grid;gap:.25rem;font-size:.875rem;font-weight:680}
 .check{display:flex;gap:.45rem;align-items:center;min-height:2.55rem}
@@ -92,6 +99,8 @@ footer{padding:1rem 0 2rem;border-top:1px solid var(--line)}
 <div class="toolbar">
   <label>Metric<select id="profile-metric"></select></label>
   <label>Agent<select id="family"><option value="all">DQN and PPO</option><option value="dqn">DQN</option><option value="ppo">PPO</option></select></label>
+  <label id="horizon-filter" hidden>Nominal horizon<select id="horizon"><option value="64">64 decisions</option><option value="128">128 decisions</option><option value="256">256 decisions</option><option value="all">All horizons</option></select></label>
+  <label id="architecture-filter" hidden>Architecture<select id="architecture"><option value="all">Both architectures</option><option value="mlp">MLP</option><option value="attention">Attention</option></select></label>
   <label class="check"><input id="variation" type="checkbox" checked>Show seed variation</label>
 </div>
 <div class="panel"><div id="profiles" class="plot" aria-label="Training metric comparison"></div></div>
@@ -225,6 +234,14 @@ function updateProfiles(){
   const exp=selected(), family=$("family").value, key=$("profile-metric").value;
   const data=exp.methods.flatMap((method,i)=>{
     if(family!=="all"&&method.family!==family)return [];
+    if(exp.meta.round==="attention-returns"){
+      const setting=exp.meta.variant_settings?.[method.id];
+      if(!setting)return [];
+      const horizon=method.family==="dqn"?setting.return_steps:Math.round(1/(1-setting.params.gamma*setting.params.gae_lambda));
+      const architecture=setting.attention?"attention":"mlp";
+      if($("horizon").value!=="all"&&Number($("horizon").value)!==horizon)return [];
+      if($("architecture").value!=="all"&&$("architecture").value!==architecture)return [];
+    }
     const points=series(exp,method,key);
     return points.length?traces(points,method.label,colors[i%colors.length],method.id,$("variation").checked):[];
   });
@@ -272,8 +289,7 @@ function updateHeldOut(){
   const exp=selected(), seed=$("training-seed").value;
   const test=exp.meta.test_seeds??[];
   const common=usesReferenceReward(exp), reference=weights(exp);
-  const sharedWaitCost=exp.meta.round==="guided-long-returns"
-    ? Math.abs(Object.values(exp.meta.variant_weights??{})[0]?.waiting_minutes) : null;
+  const sharedWaitCost=numeric(exp.meta.baseline_waiting_weight)?Math.abs(exp.meta.baseline_waiting_weight):null;
   $("held-out-score").textContent=common?"Mean reference reward":"Mean reward";
   $("held-out-variant").hidden=!common;
   $("held-out-variant").textContent=numeric(sharedWaitCost)?`Mean reward at ${fmt(sharedWaitCost)} wait cost`:"Mean reward at training weights";
@@ -350,14 +366,17 @@ function updateSetup(){
 }
 function updateInstance(){
   const exp=selected(), methods=exp.methods.filter(method=>series(exp,method,"reward").length);
+  const attentionRound=exp.meta.round==="attention-returns";
+  $("horizon-filter").hidden=$("architecture-filter").hidden=!attentionRound;
   $("layout").textContent=`${fmt(exp.meta.jobs,0)} appointments and ${fmt(exp.meta.nurses,0)} nurses`;
   $("routes").hidden=!exp.meta.routes_href;
   if(exp.meta.routes_href)$("routes").href=exp.meta.routes_href;
   $("training-note").textContent=(exp.meta.rollout_window?`Reward profiles use the latest ${exp.meta.rollout_window} completed training episodes per seed at each recorded step. `:"")+"Bands show one sample standard deviation on either side of the mean across training seeds. Hover for the sample size.";
-  if(usesReferenceReward(exp))$("training-note").textContent+=exp.meta.round==="guided-long-returns"
-    ? " Weighted training metrics use the 0.15 waiting cost. The reference reward profile uses the original 0.05 cost."
+  if(usesReferenceReward(exp))$("training-note").textContent+=numeric(exp.meta.baseline_waiting_weight)
+    ? ` Weighted training metrics use the ${fmt(Math.abs(exp.meta.baseline_waiting_weight))} waiting cost. The reference reward profile uses the original 0.05 cost.`
     : " Weighted metrics use each strategy's training weights. Compare completed visits and raw waiting minutes directly across weight settings.";
-  options("profile-metric",metrics.filter(([key])=>exp.methods.some(method=>series(exp,method,key).length)).map(([key,label])=>[key,label]),usesReferenceReward(exp)?"reference_reward":"reward");
+  const defaultMetric=usesReferenceReward(exp)&&exp.meta.round!=="full-roster-returns"&&!attentionRound?"reference_reward":"reward";
+  options("profile-metric",metrics.filter(([key])=>exp.methods.some(method=>series(exp,method,key).length)).map(([key,label])=>[key,label]),defaultMetric);
   options("strategy",methods.map(method=>[method.id,method.label]));
   options("training-seed",[["","All training seeds"],...(exp.meta.training_seeds??[]).map(seed=>[seed,`Seed ${seed}`])]);
   updateProfiles();
@@ -367,7 +386,7 @@ function updateInstance(){
 }
 options("instance",experiments.map((exp,i)=>[i,`Instance ${exp.meta.instance}`]));
 $("instance").addEventListener("change",updateInstance);
-for(const id of ["profile-metric","family","variation"])$(id).addEventListener("change",updateProfiles);
+for(const id of ["profile-metric","family","horizon","architecture","variation"])$(id).addEventListener("change",updateProfiles);
 $("strategy").addEventListener("change",updateComposition);
 $("training-seed").addEventListener("change",updateHeldOut);
 updateInstance();

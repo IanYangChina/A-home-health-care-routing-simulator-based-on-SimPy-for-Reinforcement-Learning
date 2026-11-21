@@ -1,0 +1,1411 @@
+{
+  "round": 9,
+  "title": "Full nurse roster and longer returns",
+  "pi": "ny",
+  "pi_input": "ny requested the full roster to show every nurse in every phase, DQN return lengths of 32 and 64, two higher PPO discounts, short-wait and ACO guidance for both agents, and a stronger waiting penalty on all four layouts.",
+  "pi_input_date": "2026-11-21",
+  "prior_diagnostics": "../08-guided-long-returns/manifest.json",
+  "agent_work": "Added an optional normalized roster with one row per nurse. It includes their last confirmed location, skill, phase, assignment, ready-queue position, estimated minutes to availability, post-release shift time, and completed count. For an ongoing visit, the estimate conditions on service still being in progress and uses the duration model. It does not use the simulator’s hidden duration draw. Kept the 512-decision PPO rollout and λ = 1. Chose γ = 0.998 and 0.9995 and doubled the waiting cost from 0.15 to 0.30 points per nurse-minute. Carried forward the other tuned settings.",
+  "timing": "21 Nov 2026 · family runner logs 16:35:09–16:51:03 UTC",
+  "family_runs": [
+    {
+      "instance": "A",
+      "family": "dqn",
+      "device": "cpu",
+      "started_at": "2026-11-21T16:35:09+00:00",
+      "ended_at": "2026-11-21T16:45:09+00:00",
+      "seconds": 600.0
+    },
+    {
+      "instance": "A",
+      "family": "ppo",
+      "device": "cpu",
+      "started_at": "2026-11-21T16:35:09+00:00",
+      "ended_at": "2026-11-21T16:46:27+00:00",
+      "seconds": 678.0
+    },
+    {
+      "instance": "B",
+      "family": "dqn",
+      "device": "cpu",
+      "started_at": "2026-11-21T16:45:15+00:00",
+      "ended_at": "2026-11-21T16:50:54+00:00",
+      "seconds": 339.0
+    },
+    {
+      "instance": "B",
+      "family": "ppo",
+      "device": "cpu",
+      "started_at": "2026-11-21T16:45:54+00:00",
+      "ended_at": "2026-11-21T16:51:03+00:00",
+      "seconds": 309.0
+    },
+    {
+      "instance": "C",
+      "family": "dqn",
+      "device": "cpu",
+      "started_at": "2026-11-21T16:35:09+00:00",
+      "ended_at": "2026-11-21T16:47:30+00:00",
+      "seconds": 741.0
+    },
+    {
+      "instance": "C",
+      "family": "ppo",
+      "device": "cpu",
+      "started_at": "2026-11-21T16:35:09+00:00",
+      "ended_at": "2026-11-21T16:45:48+00:00",
+      "seconds": 639.0
+    },
+    {
+      "instance": "D",
+      "family": "dqn",
+      "device": "cuda",
+      "started_at": "2026-11-21T16:35:09+00:00",
+      "ended_at": "2026-11-21T16:48:18+00:00",
+      "seconds": 789.0
+    },
+    {
+      "instance": "D",
+      "family": "ppo",
+      "device": "cpu",
+      "started_at": "2026-11-21T16:35:09+00:00",
+      "ended_at": "2026-11-21T16:47:54+00:00",
+      "seconds": 765.0
+    }
+  ],
+  "computation": "Ran 96 fits of 12,288 decisions each using three training seeds per configuration. Recorded 8,277 complete training shifts and evaluated 1,152 learned-policy shifts. The comparison reused 96 matched Random and ACO shifts.",
+  "fits": 96,
+  "training_episodes": 8277,
+  "learned_evaluations": 1152,
+  "fixed_evaluations": 96,
+  "steps_per_fit": 12288,
+  "training_seeds": [
+    11,
+    12,
+    13
+  ],
+  "test_seeds": [
+    101,
+    102,
+    103,
+    104,
+    105,
+    106,
+    107,
+    108,
+    109,
+    110,
+    111,
+    112
+  ],
+  "demo_seeds": [
+    201,
+    202,
+    203,
+    204
+  ],
+  "comparison_protocol": "Within Round 9, each return setting was crossed with both guides on each layout. Final checkpoints used greedy assignment. The 0.30 and 0.05 scores each apply a common waiting cost to every policy. The comparison with Round 8 uses a common 0.30 score and reflects the combined observation, training reward and return changes.",
+  "waiting_cost": 0.3,
+  "dqn_returns": [
+    32,
+    64
+  ],
+  "ppo_discounts": [
+    0.998,
+    0.9995
+  ],
+  "model_provenance": "No subagents were delegated. The available local thread record identifies gpt-6.2-sol with high reasoning effort earlier in the thread on 21 Nov. A turn-specific model record for Round 9 was unavailable.",
+  "delegation": [],
+  "results": [
+    {
+      "instance": "A",
+      "method": "random",
+      "family": "baseline",
+      "label": "Random",
+      "evaluations": 12,
+      "jobs_completed": 56.916666666666664,
+      "jobs_unserved": 3.0833333333333335,
+      "travel_minutes": 183.15616666666668,
+      "waiting_minutes": 1091.9388333333334,
+      "total_reward": 484.40836666666667,
+      "raw_variant_reward": 211.42365833333332,
+      "round9_reward_seed_sd": null
+    },
+    {
+      "instance": "A",
+      "method": "aco",
+      "family": "baseline",
+      "label": "Ant colony",
+      "evaluations": 12,
+      "jobs_completed": 60,
+      "jobs_unserved": 0,
+      "travel_minutes": 191.95091666666667,
+      "waiting_minutes": 998.2981666666667,
+      "total_reward": 544.326575,
+      "raw_variant_reward": 294.7520416666667,
+      "round9_reward_seed_sd": null
+    },
+    {
+      "instance": "A",
+      "method": "dqn_short_wait_n32",
+      "family": "dqn",
+      "label": "DQN short-wait guide · 32-step",
+      "evaluations": 36,
+      "jobs_completed": 53.916666666666664,
+      "jobs_unserved": 6.083333333333333,
+      "travel_minutes": 173.32486111111112,
+      "waiting_minutes": 504.72647222222224,
+      "total_reward": 460.06393055555554,
+      "raw_variant_reward": 333.8823111111111,
+      "round9_reward_seed_sd": 46.038587549269586
+    },
+    {
+      "instance": "A",
+      "method": "dqn_aco_n32",
+      "family": "dqn",
+      "label": "DQN ACO mix · 32-step",
+      "evaluations": 36,
+      "jobs_completed": 49.25,
+      "jobs_unserved": 10.75,
+      "travel_minutes": 157.10563888888888,
+      "waiting_minutes": 357.88005555555554,
+      "total_reward": 383.8928305555556,
+      "raw_variant_reward": 294.42281388888887,
+      "round9_reward_seed_sd": 135.13174401225044
+    },
+    {
+      "instance": "A",
+      "method": "dqn_short_wait_n64",
+      "family": "dqn",
+      "label": "DQN short-wait guide · 64-step",
+      "evaluations": 36,
+      "jobs_completed": 51.69444444444444,
+      "jobs_unserved": 8.305555555555555,
+      "travel_minutes": 160.70527777777778,
+      "waiting_minutes": 427.40627777777775,
+      "total_reward": 424.3085361111111,
+      "raw_variant_reward": 317.4569611111111,
+      "round9_reward_seed_sd": 44.155188789227445
+    },
+    {
+      "instance": "A",
+      "method": "dqn_aco_n64",
+      "family": "dqn",
+      "label": "DQN ACO mix · 64-step",
+      "evaluations": 36,
+      "jobs_completed": 55.583333333333336,
+      "jobs_unserved": 4.416666666666667,
+      "travel_minutes": 177.12255555555555,
+      "waiting_minutes": 581.4882222222222,
+      "total_reward": 486.1119,
+      "raw_variant_reward": 340.73984722222224,
+      "round9_reward_seed_sd": 41.65514966830862
+    },
+    {
+      "instance": "A",
+      "method": "ppo_short_wait_g998",
+      "family": "ppo",
+      "label": "PPO short-wait warm start · γ=0.998",
+      "evaluations": 36,
+      "jobs_completed": 54.72222222222222,
+      "jobs_unserved": 5.277777777777778,
+      "travel_minutes": 179.68775,
+      "waiting_minutes": 1116.287388888889,
+      "total_reward": 443.7949972222222,
+      "raw_variant_reward": 164.72314722222222,
+      "round9_reward_seed_sd": 64.60862534202806
+    },
+    {
+      "instance": "A",
+      "method": "ppo_aco_g998",
+      "family": "ppo",
+      "label": "PPO ACO warm start · γ=0.998",
+      "evaluations": 36,
+      "jobs_completed": 56.27777777777778,
+      "jobs_unserved": 3.7222222222222223,
+      "travel_minutes": 182.557,
+      "waiting_minutes": 1093.2181944444444,
+      "total_reward": 472.8623777777778,
+      "raw_variant_reward": 199.55783333333332,
+      "round9_reward_seed_sd": 25.01369736144717
+    },
+    {
+      "instance": "A",
+      "method": "ppo_short_wait_g9995",
+      "family": "ppo",
+      "label": "PPO short-wait warm start · γ=0.9995",
+      "evaluations": 36,
+      "jobs_completed": 56.44444444444444,
+      "jobs_unserved": 3.5555555555555554,
+      "travel_minutes": 180.56227777777778,
+      "waiting_minutes": 1098.5848055555555,
+      "total_reward": 475.6538972222222,
+      "raw_variant_reward": 201.00769722222222,
+      "round9_reward_seed_sd": 25.398182553189947
+    },
+    {
+      "instance": "A",
+      "method": "ppo_aco_g9995",
+      "family": "ppo",
+      "label": "PPO ACO warm start · γ=0.9995",
+      "evaluations": 36,
+      "jobs_completed": 54.888888888888886,
+      "jobs_unserved": 5.111111111111111,
+      "travel_minutes": 173.5011388888889,
+      "waiting_minutes": 1099.0357222222221,
+      "total_reward": 447.84318333333334,
+      "raw_variant_reward": 173.08425833333334,
+      "round9_reward_seed_sd": 42.89989435116166
+    },
+    {
+      "instance": "B",
+      "method": "random",
+      "family": "baseline",
+      "label": "Random",
+      "evaluations": 12,
+      "jobs_completed": 55.916666666666664,
+      "jobs_unserved": 4.083333333333333,
+      "travel_minutes": 193.55475,
+      "waiting_minutes": 1118.7443333333333,
+      "total_reward": 464.7561333333333,
+      "raw_variant_reward": 185.07005,
+      "round9_reward_seed_sd": null
+    },
+    {
+      "instance": "B",
+      "method": "aco",
+      "family": "baseline",
+      "label": "Ant colony",
+      "evaluations": 12,
+      "jobs_completed": 60,
+      "jobs_unserved": 0,
+      "travel_minutes": 202.88016666666667,
+      "waiting_minutes": 991.1114166666667,
+      "total_reward": 544.3580333333333,
+      "raw_variant_reward": 296.580175,
+      "round9_reward_seed_sd": null
+    },
+    {
+      "instance": "B",
+      "method": "dqn_short_wait_n32",
+      "family": "dqn",
+      "label": "DQN short-wait guide · 32-step",
+      "evaluations": 36,
+      "jobs_completed": 58.05555555555556,
+      "jobs_unserved": 1.9444444444444444,
+      "travel_minutes": 196.2686111111111,
+      "waiting_minutes": 972.41225,
+      "total_reward": 510.49133611111114,
+      "raw_variant_reward": 267.3882722222222,
+      "round9_reward_seed_sd": 19.293105950263143
+    },
+    {
+      "instance": "B",
+      "method": "dqn_aco_n32",
+      "family": "dqn",
+      "label": "DQN ACO mix · 32-step",
+      "evaluations": 36,
+      "jobs_completed": 53.94444444444444,
+      "jobs_unserved": 6.055555555555555,
+      "travel_minutes": 182.20277777777778,
+      "waiting_minutes": 825.1353055555555,
+      "total_reward": 444.27715555555557,
+      "raw_variant_reward": 237.99332222222222,
+      "round9_reward_seed_sd": 76.78490551559044
+    },
+    {
+      "instance": "B",
+      "method": "dqn_short_wait_n64",
+      "family": "dqn",
+      "label": "DQN short-wait guide · 64-step",
+      "evaluations": 36,
+      "jobs_completed": 54.333333333333336,
+      "jobs_unserved": 5.666666666666667,
+      "travel_minutes": 188.93041666666667,
+      "waiting_minutes": 756.4696666666666,
+      "total_reward": 454.5086,
+      "raw_variant_reward": 265.3911861111111,
+      "round9_reward_seed_sd": 39.56763362324686
+    },
+    {
+      "instance": "B",
+      "method": "dqn_aco_n64",
+      "family": "dqn",
+      "label": "DQN ACO mix · 64-step",
+      "evaluations": 36,
+      "jobs_completed": 59.55555555555556,
+      "jobs_unserved": 0.4444444444444444,
+      "travel_minutes": 207.72016666666667,
+      "waiting_minutes": 883.1666666666666,
+      "total_reward": 541.6100666666666,
+      "raw_variant_reward": 320.8183888888889,
+      "round9_reward_seed_sd": 14.16642158523382
+    },
+    {
+      "instance": "B",
+      "method": "ppo_short_wait_g998",
+      "family": "ppo",
+      "label": "PPO short-wait warm start · γ=0.998",
+      "evaluations": 36,
+      "jobs_completed": 47.75,
+      "jobs_unserved": 12.25,
+      "travel_minutes": 162.23708333333335,
+      "waiting_minutes": 1086.0540833333334,
+      "total_reward": 320.3301833333333,
+      "raw_variant_reward": 48.81666944444444,
+      "round9_reward_seed_sd": 70.43688693993207
+    },
+    {
+      "instance": "B",
+      "method": "ppo_aco_g998",
+      "family": "ppo",
+      "label": "PPO ACO warm start · γ=0.998",
+      "evaluations": 36,
+      "jobs_completed": 51.361111111111114,
+      "jobs_unserved": 8.63888888888889,
+      "travel_minutes": 177.8248888888889,
+      "waiting_minutes": 1120.5399444444445,
+      "total_reward": 383.1382527777778,
+      "raw_variant_reward": 103.00326666666666,
+      "round9_reward_seed_sd": 45.466088470992894
+    },
+    {
+      "instance": "B",
+      "method": "ppo_short_wait_g9995",
+      "family": "ppo",
+      "label": "PPO short-wait warm start · γ=0.9995",
+      "evaluations": 36,
+      "jobs_completed": 43.27777777777778,
+      "jobs_unserved": 16.72222222222222,
+      "travel_minutes": 151.16683333333333,
+      "waiting_minutes": 929.7580555555555,
+      "total_reward": 247.97709722222223,
+      "raw_variant_reward": 15.537575000000002,
+      "round9_reward_seed_sd": 158.7336896623794
+    },
+    {
+      "instance": "B",
+      "method": "ppo_aco_g9995",
+      "family": "ppo",
+      "label": "PPO ACO warm start · γ=0.9995",
+      "evaluations": 36,
+      "jobs_completed": 47.666666666666664,
+      "jobs_unserved": 12.333333333333334,
+      "travel_minutes": 164.77366666666666,
+      "waiting_minutes": 1030.6159166666666,
+      "total_reward": 321.5259972222222,
+      "raw_variant_reward": 63.872027777777774,
+      "round9_reward_seed_sd": 55.57579520965186
+    },
+    {
+      "instance": "C",
+      "method": "random",
+      "family": "baseline",
+      "label": "Random",
+      "evaluations": 12,
+      "jobs_completed": 84,
+      "jobs_unserved": 75,
+      "travel_minutes": 253.28766666666667,
+      "waiting_minutes": 888.6347499999999,
+      "total_reward": 187.96965,
+      "raw_variant_reward": -34.18905,
+      "round9_reward_seed_sd": null
+    },
+    {
+      "instance": "C",
+      "method": "aco",
+      "family": "baseline",
+      "label": "Ant colony",
+      "evaluations": 12,
+      "jobs_completed": 118.66666666666667,
+      "jobs_unserved": 40.333333333333336,
+      "travel_minutes": 243.6445,
+      "waiting_minutes": 110.56433333333334,
+      "total_reward": 851.1624416666666,
+      "raw_variant_reward": 823.5213666666666,
+      "round9_reward_seed_sd": null
+    },
+    {
+      "instance": "C",
+      "method": "dqn_short_wait_n32",
+      "family": "dqn",
+      "label": "DQN short-wait guide · 32-step",
+      "evaluations": 36,
+      "jobs_completed": 96.02777777777777,
+      "jobs_unserved": 62.97222222222222,
+      "travel_minutes": 279.5391666666667,
+      "waiting_minutes": 618.2250833333334,
+      "total_reward": 417.2025638888889,
+      "raw_variant_reward": 262.64629444444444,
+      "round9_reward_seed_sd": 48.80261779682958
+    },
+    {
+      "instance": "C",
+      "method": "dqn_aco_n32",
+      "family": "dqn",
+      "label": "DQN ACO mix · 32-step",
+      "evaluations": 36,
+      "jobs_completed": 97.91666666666667,
+      "jobs_unserved": 61.083333333333336,
+      "travel_minutes": 284.6177222222222,
+      "waiting_minutes": 553.8253055555556,
+      "total_reward": 454.2701916666667,
+      "raw_variant_reward": 315.8138611111111,
+      "round9_reward_seed_sd": 33.99940546609924
+    },
+    {
+      "instance": "C",
+      "method": "dqn_short_wait_n64",
+      "family": "dqn",
+      "label": "DQN short-wait guide · 64-step",
+      "evaluations": 36,
+      "jobs_completed": 99.69444444444444,
+      "jobs_unserved": 59.30555555555556,
+      "travel_minutes": 292.314,
+      "waiting_minutes": 497.94177777777776,
+      "total_reward": 488.8334888888889,
+      "raw_variant_reward": 364.3480416666667,
+      "round9_reward_seed_sd": 78.00044216320367
+    },
+    {
+      "instance": "C",
+      "method": "dqn_aco_n64",
+      "family": "dqn",
+      "label": "DQN ACO mix · 64-step",
+      "evaluations": 36,
+      "jobs_completed": 100.94444444444444,
+      "jobs_unserved": 58.05555555555556,
+      "travel_minutes": 297.1983611111111,
+      "waiting_minutes": 492.94258333333335,
+      "total_reward": 511.43691944444447,
+      "raw_variant_reward": 388.2012722222222,
+      "round9_reward_seed_sd": 52.14372956414848
+    },
+    {
+      "instance": "C",
+      "method": "ppo_short_wait_g998",
+      "family": "ppo",
+      "label": "PPO short-wait warm start · γ=0.998",
+      "evaluations": 36,
+      "jobs_completed": 80.25,
+      "jobs_unserved": 78.75,
+      "travel_minutes": 232.56319444444443,
+      "waiting_minutes": 969.4686111111112,
+      "total_reward": 117.04968055555555,
+      "raw_variant_reward": -125.31748611111111,
+      "round9_reward_seed_sd": 56.407744035066486
+    },
+    {
+      "instance": "C",
+      "method": "ppo_aco_g998",
+      "family": "ppo",
+      "label": "PPO ACO warm start · γ=0.998",
+      "evaluations": 36,
+      "jobs_completed": 74.27777777777777,
+      "jobs_unserved": 84.72222222222223,
+      "travel_minutes": 194.61455555555557,
+      "waiting_minutes": 1163.7395277777778,
+      "total_reward": 0.9745833333333332,
+      "raw_variant_reward": -289.9602888888889,
+      "round9_reward_seed_sd": 7.9046047453996895
+    },
+    {
+      "instance": "C",
+      "method": "ppo_short_wait_g9995",
+      "family": "ppo",
+      "label": "PPO short-wait warm start · γ=0.9995",
+      "evaluations": 36,
+      "jobs_completed": 77.36111111111111,
+      "jobs_unserved": 81.63888888888889,
+      "travel_minutes": 220.93588888888888,
+      "waiting_minutes": 1036.5164444444445,
+      "total_reward": 62.04609444444444,
+      "raw_variant_reward": -197.0830138888889,
+      "round9_reward_seed_sd": 102.86832448597424
+    },
+    {
+      "instance": "C",
+      "method": "ppo_aco_g9995",
+      "family": "ppo",
+      "label": "PPO ACO warm start · γ=0.9995",
+      "evaluations": 36,
+      "jobs_completed": 73.36111111111111,
+      "jobs_unserved": 85.63888888888889,
+      "travel_minutes": 184.34422222222221,
+      "waiting_minutes": 1180.3404444444445,
+      "total_reward": -16.04734722222222,
+      "raw_variant_reward": -311.13245,
+      "round9_reward_seed_sd": 26.93926449325794
+    },
+    {
+      "instance": "D",
+      "method": "random",
+      "family": "baseline",
+      "label": "Random",
+      "evaluations": 12,
+      "jobs_completed": 187.83333333333334,
+      "jobs_unserved": 115.16666666666667,
+      "travel_minutes": 583.1180833333333,
+      "waiting_minutes": 1904.6023333333333,
+      "total_reward": 844.27635,
+      "raw_variant_reward": 368.12576666666666,
+      "round9_reward_seed_sd": null
+    },
+    {
+      "instance": "D",
+      "method": "aco",
+      "family": "baseline",
+      "label": "Ant colony",
+      "evaluations": 12,
+      "jobs_completed": 272.4166666666667,
+      "jobs_unserved": 30.583333333333332,
+      "travel_minutes": 569.0035833333334,
+      "waiting_minutes": 119.59033333333333,
+      "total_reward": 2456.450375,
+      "raw_variant_reward": 2426.5528,
+      "round9_reward_seed_sd": null
+    },
+    {
+      "instance": "D",
+      "method": "dqn_short_wait_n32",
+      "family": "dqn",
+      "label": "DQN short-wait guide · 32-step",
+      "evaluations": 36,
+      "jobs_completed": 224.83333333333334,
+      "jobs_unserved": 78.16666666666667,
+      "travel_minutes": 668.7086111111112,
+      "waiting_minutes": 1170.4613333333334,
+      "total_reward": 1544.415675,
+      "raw_variant_reward": 1251.8003416666666,
+      "round9_reward_seed_sd": 306.6621916794433
+    },
+    {
+      "instance": "D",
+      "method": "dqn_aco_n32",
+      "family": "dqn",
+      "label": "DQN ACO mix · 32-step",
+      "evaluations": 36,
+      "jobs_completed": 232.05555555555554,
+      "jobs_unserved": 70.94444444444444,
+      "travel_minutes": 695.8922777777777,
+      "waiting_minutes": 988.6301388888888,
+      "total_reward": 1682.6917222222223,
+      "raw_variant_reward": 1435.5341916666666,
+      "round9_reward_seed_sd": 228.17194695383282
+    },
+    {
+      "instance": "D",
+      "method": "dqn_short_wait_n64",
+      "family": "dqn",
+      "label": "DQN short-wait guide · 64-step",
+      "evaluations": 36,
+      "jobs_completed": 233.75,
+      "jobs_unserved": 69.25,
+      "travel_minutes": 702.5016388888889,
+      "waiting_minutes": 951.6979444444445,
+      "total_reward": 1714.8400472222222,
+      "raw_variant_reward": 1476.9155583333334,
+      "round9_reward_seed_sd": 45.78947655375575
+    },
+    {
+      "instance": "D",
+      "method": "dqn_aco_n64",
+      "family": "dqn",
+      "label": "DQN ACO mix · 64-step",
+      "evaluations": 36,
+      "jobs_completed": 234.66666666666666,
+      "jobs_unserved": 68.33333333333333,
+      "travel_minutes": 696.3274444444445,
+      "waiting_minutes": 926.6380555555555,
+      "total_reward": 1732.7782750000001,
+      "raw_variant_reward": 1501.118763888889,
+      "round9_reward_seed_sd": 98.15177799724547
+    },
+    {
+      "instance": "D",
+      "method": "ppo_short_wait_g998",
+      "family": "ppo",
+      "label": "PPO short-wait warm start · γ=0.998",
+      "evaluations": 36,
+      "jobs_completed": 195.13888888888889,
+      "jobs_unserved": 107.86111111111111,
+      "travel_minutes": 584.6093055555556,
+      "waiting_minutes": 1754.866638888889,
+      "total_reward": 983.2183916666667,
+      "raw_variant_reward": 544.5017388888889,
+      "round9_reward_seed_sd": 99.90165768774061
+    },
+    {
+      "instance": "D",
+      "method": "ppo_aco_g998",
+      "family": "ppo",
+      "label": "PPO ACO warm start · γ=0.998",
+      "evaluations": 36,
+      "jobs_completed": 159.38888888888889,
+      "jobs_unserved": 143.61111111111111,
+      "travel_minutes": 446.4801111111111,
+      "waiting_minutes": 2607.9411944444446,
+      "total_reward": 301.20852777777776,
+      "raw_variant_reward": -350.7767666666667,
+      "round9_reward_seed_sd": 30.260526444428532
+    },
+    {
+      "instance": "D",
+      "method": "ppo_short_wait_g9995",
+      "family": "ppo",
+      "label": "PPO short-wait warm start · γ=0.9995",
+      "evaluations": 36,
+      "jobs_completed": 196.97222222222223,
+      "jobs_unserved": 106.02777777777777,
+      "travel_minutes": 592.5790555555556,
+      "waiting_minutes": 1630.1576944444444,
+      "total_reward": 1022.2147416666667,
+      "raw_variant_reward": 614.6753166666666,
+      "round9_reward_seed_sd": 176.6408263631418
+    },
+    {
+      "instance": "D",
+      "method": "ppo_aco_g9995",
+      "family": "ppo",
+      "label": "PPO ACO warm start · γ=0.9995",
+      "evaluations": 36,
+      "jobs_completed": 158.5,
+      "jobs_unserved": 144.5,
+      "travel_minutes": 434.0405,
+      "waiting_minutes": 2657.36625,
+      "total_reward": 283.110475,
+      "raw_variant_reward": -381.23109166666666,
+      "round9_reward_seed_sd": 31.718734371888882
+    }
+  ],
+  "paired_horizon_results": [
+    {
+      "instance": "A",
+      "family": "dqn",
+      "guide": "short_wait",
+      "lower": "dqn_short_wait_n32",
+      "higher": "dqn_short_wait_n64",
+      "reward_deltas_by_training_seed": [
+        -76.65821666666668,
+        78.06215,
+        -50.67998333333334
+      ],
+      "mean_reward_delta": -16.425350000000005,
+      "training_seeds_improved": 1,
+      "completed_delta": -2.2222222222222214,
+      "waiting_delta": -77.3201944444445
+    },
+    {
+      "instance": "A",
+      "family": "dqn",
+      "guide": "aco",
+      "lower": "dqn_aco_n32",
+      "higher": "dqn_aco_n64",
+      "reward_deltas_by_training_seed": [
+        -121.64848333333333,
+        223.89796666666666,
+        36.701616666666666
+      ],
+      "mean_reward_delta": 46.317033333333335,
+      "training_seeds_improved": 2,
+      "completed_delta": 6.333333333333336,
+      "waiting_delta": 223.6081666666667
+    },
+    {
+      "instance": "A",
+      "family": "ppo",
+      "guide": "short_wait",
+      "lower": "ppo_short_wait_g998",
+      "higher": "ppo_short_wait_g9995",
+      "reward_deltas_by_training_seed": [
+        56.29981666666667,
+        -32.11268333333333,
+        84.66651666666667
+      ],
+      "mean_reward_delta": 36.28455,
+      "training_seeds_improved": 2,
+      "completed_delta": 1.7222222222222214,
+      "waiting_delta": -17.70258333333345
+    },
+    {
+      "instance": "A",
+      "family": "ppo",
+      "guide": "aco",
+      "lower": "ppo_aco_g998",
+      "higher": "ppo_aco_g9995",
+      "reward_deltas_by_training_seed": [
+        -37.378600000000006,
+        -60.43889166666666,
+        18.396766666666668
+      ],
+      "mean_reward_delta": -26.473575,
+      "training_seeds_improved": 1,
+      "completed_delta": -1.3888888888888928,
+      "waiting_delta": 5.817527777777741
+    },
+    {
+      "instance": "B",
+      "family": "dqn",
+      "guide": "short_wait",
+      "lower": "dqn_short_wait_n32",
+      "higher": "dqn_short_wait_n64",
+      "reward_deltas_by_training_seed": [
+        31.157866666666667,
+        -3.566241666666665,
+        -33.582883333333335
+      ],
+      "mean_reward_delta": -1.9970861111111111,
+      "training_seeds_improved": 1,
+      "completed_delta": -3.7222222222222214,
+      "waiting_delta": -215.94258333333335
+    },
+    {
+      "instance": "B",
+      "family": "dqn",
+      "guide": "aco",
+      "lower": "dqn_aco_n32",
+      "higher": "dqn_aco_n64",
+      "reward_deltas_by_training_seed": [
+        168.390875,
+        92.122175,
+        -12.037850000000011
+      ],
+      "mean_reward_delta": 82.82506666666666,
+      "training_seeds_improved": 2,
+      "completed_delta": 5.611111111111114,
+      "waiting_delta": 58.031361111111096
+    },
+    {
+      "instance": "B",
+      "family": "ppo",
+      "guide": "short_wait",
+      "lower": "ppo_short_wait_g998",
+      "higher": "ppo_short_wait_g9995",
+      "reward_deltas_by_training_seed": [
+        78.37736666666666,
+        -41.250625,
+        -136.964025
+      ],
+      "mean_reward_delta": -33.279094444444446,
+      "training_seeds_improved": 1,
+      "completed_delta": -4.472222222222221,
+      "waiting_delta": -156.2960277777779
+    },
+    {
+      "instance": "B",
+      "family": "ppo",
+      "guide": "aco",
+      "lower": "ppo_aco_g998",
+      "higher": "ppo_aco_g9995",
+      "reward_deltas_by_training_seed": [
+        -15.815850000000005,
+        -51.01663333333333,
+        -50.561233333333334
+      ],
+      "mean_reward_delta": -39.13123888888889,
+      "training_seeds_improved": 0,
+      "completed_delta": -3.69444444444445,
+      "waiting_delta": -89.92402777777784
+    },
+    {
+      "instance": "C",
+      "family": "dqn",
+      "guide": "short_wait",
+      "lower": "dqn_short_wait_n32",
+      "higher": "dqn_short_wait_n64",
+      "reward_deltas_by_training_seed": [
+        159.853225,
+        44.34425833333333,
+        100.90775833333333
+      ],
+      "mean_reward_delta": 101.70174722222222,
+      "training_seeds_improved": 3,
+      "completed_delta": 3.6666666666666714,
+      "waiting_delta": -120.28330555555561
+    },
+    {
+      "instance": "C",
+      "family": "dqn",
+      "guide": "aco",
+      "lower": "dqn_aco_n32",
+      "higher": "dqn_aco_n64",
+      "reward_deltas_by_training_seed": [
+        44.192066666666676,
+        42.82241666666667,
+        130.14775
+      ],
+      "mean_reward_delta": 72.38741111111112,
+      "training_seeds_improved": 3,
+      "completed_delta": 3.0277777777777715,
+      "waiting_delta": -60.88272222222224
+    },
+    {
+      "instance": "C",
+      "family": "ppo",
+      "guide": "short_wait",
+      "lower": "ppo_short_wait_g998",
+      "higher": "ppo_short_wait_g9995",
+      "reward_deltas_by_training_seed": [
+        -105.98845,
+        86.00053333333334,
+        -195.30866666666665
+      ],
+      "mean_reward_delta": -71.76552777777778,
+      "training_seeds_improved": 1,
+      "completed_delta": -2.8888888888888857,
+      "waiting_delta": 67.0478333333333
+    },
+    {
+      "instance": "C",
+      "family": "ppo",
+      "guide": "aco",
+      "lower": "ppo_aco_g998",
+      "higher": "ppo_aco_g9995",
+      "reward_deltas_by_training_seed": [
+        -1.6953583333333266,
+        -59.52568333333334,
+        -2.2954416666666595
+      ],
+      "mean_reward_delta": -21.17216111111111,
+      "training_seeds_improved": 0,
+      "completed_delta": -0.9166666666666572,
+      "waiting_delta": 16.600916666666762
+    },
+    {
+      "instance": "D",
+      "family": "dqn",
+      "guide": "short_wait",
+      "lower": "dqn_short_wait_n32",
+      "higher": "dqn_short_wait_n64",
+      "reward_deltas_by_training_seed": [
+        528.338475,
+        -116.84174166666666,
+        263.8489166666667
+      ],
+      "mean_reward_delta": 225.1152166666667,
+      "training_seeds_improved": 2,
+      "completed_delta": 8.916666666666657,
+      "waiting_delta": -218.76338888888893
+    },
+    {
+      "instance": "D",
+      "family": "dqn",
+      "guide": "aco",
+      "lower": "dqn_aco_n32",
+      "higher": "dqn_aco_n64",
+      "reward_deltas_by_training_seed": [
+        440.717675,
+        -114.771125,
+        -129.19283333333337
+      ],
+      "mean_reward_delta": 65.5845722222222,
+      "training_seeds_improved": 1,
+      "completed_delta": 2.6111111111111143,
+      "waiting_delta": -61.99208333333331
+    },
+    {
+      "instance": "D",
+      "family": "ppo",
+      "guide": "short_wait",
+      "lower": "ppo_short_wait_g998",
+      "higher": "ppo_short_wait_g9995",
+      "reward_deltas_by_training_seed": [
+        5.960625000000003,
+        33.875008333333334,
+        170.6851
+      ],
+      "mean_reward_delta": 70.17357777777778,
+      "training_seeds_improved": 3,
+      "completed_delta": 1.8333333333333428,
+      "waiting_delta": -124.70894444444457
+    },
+    {
+      "instance": "D",
+      "family": "ppo",
+      "guide": "aco",
+      "lower": "ppo_aco_g998",
+      "higher": "ppo_aco_g9995",
+      "reward_deltas_by_training_seed": [
+        -49.60938333333333,
+        21.228099999999998,
+        -62.98169166666667
+      ],
+      "mean_reward_delta": -30.454325,
+      "training_seeds_improved": 1,
+      "completed_delta": -0.8888888888888857,
+      "waiting_delta": 49.425055555555446
+    }
+  ],
+  "round8_common_weight": [
+    {
+      "instance": "A",
+      "family": "dqn",
+      "round8_label": "DQN uniform",
+      "round8_score_at_030": 253.90037083333334,
+      "round9_label": "DQN ACO mix · 64-step",
+      "round9_score_at_030": 340.73984722222224,
+      "difference": 86.8394763888889
+    },
+    {
+      "instance": "A",
+      "family": "ppo",
+      "round8_label": "PPO short-wait warm start",
+      "round8_score_at_030": 177.54068055555555,
+      "round9_label": "PPO short-wait warm start · γ=0.9995",
+      "round9_score_at_030": 201.00769722222222,
+      "difference": 23.467016666666666
+    },
+    {
+      "instance": "B",
+      "family": "dqn",
+      "round8_label": "DQN short-wait guide",
+      "round8_score_at_030": 228.55774583333334,
+      "round9_label": "DQN ACO mix · 64-step",
+      "round9_score_at_030": 320.8183888888889,
+      "difference": 92.26064305555553
+    },
+    {
+      "instance": "B",
+      "family": "ppo",
+      "round8_label": "PPO ACO warm start",
+      "round8_score_at_030": 142.62498333333335,
+      "round9_label": "PPO ACO warm start · γ=0.998",
+      "round9_score_at_030": 103.00326666666666,
+      "difference": -39.621716666666686
+    },
+    {
+      "instance": "C",
+      "family": "dqn",
+      "round8_label": "DQN short-wait guide",
+      "round8_score_at_030": 415.56483333333335,
+      "round9_label": "DQN ACO mix · 64-step",
+      "round9_score_at_030": 388.2012722222222,
+      "difference": -27.363561111111153
+    },
+    {
+      "instance": "C",
+      "family": "ppo",
+      "round8_label": "PPO short-wait warm start",
+      "round8_score_at_030": -211.78535555555555,
+      "round9_label": "PPO short-wait warm start · γ=0.998",
+      "round9_score_at_030": -125.31748611111111,
+      "difference": 86.46786944444445
+    },
+    {
+      "instance": "D",
+      "family": "dqn",
+      "round8_label": "DQN ACO mix",
+      "round8_score_at_030": 361.18110972222223,
+      "round9_label": "DQN ACO mix · 64-step",
+      "round9_score_at_030": 1501.118763888889,
+      "difference": 1139.9376541666666
+    },
+    {
+      "instance": "D",
+      "family": "ppo",
+      "round8_label": "PPO short-wait warm start",
+      "round8_score_at_030": 896.6875805555555,
+      "round9_label": "PPO short-wait warm start · γ=0.9995",
+      "round9_score_at_030": 614.6753166666666,
+      "difference": -282.0122638888889
+    }
+  ],
+  "training_trends": [
+    {
+      "instance": "A",
+      "family": "dqn",
+      "label": "DQN ACO mix · 64-step",
+      "early_loss": {
+        "steps": 512,
+        "mean": 117.4410333832105,
+        "n": 3,
+        "std": 3.4164930374056306
+      },
+      "final_loss": {
+        "steps": 12288,
+        "mean": 16.713206994036835,
+        "n": 3,
+        "std": 1.3871352236288752
+      },
+      "early_reward": {
+        "steps": 3072,
+        "mean": 329.403972,
+        "n": 3,
+        "std": 1.9177096194593204
+      },
+      "final_reward": {
+        "steps": 12288,
+        "mean": 345.20526,
+        "n": 3,
+        "std": 6.961494004566258
+      }
+    },
+    {
+      "instance": "A",
+      "family": "ppo",
+      "label": "PPO short-wait warm start · γ=0.9995",
+      "early_loss": {
+        "steps": 512,
+        "mean": 17476.664426676434,
+        "n": 3,
+        "std": 2630.2831212342035
+      },
+      "final_loss": {
+        "steps": 12288,
+        "mean": 6996.283497111002,
+        "n": 3,
+        "std": 963.141353283979
+      },
+      "early_reward": {
+        "steps": 3072,
+        "mean": 231.28837650000003,
+        "n": 3,
+        "std": 5.8265698559941965
+      },
+      "final_reward": {
+        "steps": 12288,
+        "mean": 228.09605900000003,
+        "n": 3,
+        "std": 2.5278335549785913
+      }
+    },
+    {
+      "instance": "B",
+      "family": "dqn",
+      "label": "DQN ACO mix · 64-step",
+      "early_loss": {
+        "steps": 512,
+        "mean": 31.081666770080727,
+        "n": 3,
+        "std": 0.35911127505792245
+      },
+      "final_loss": {
+        "steps": 12288,
+        "mean": 5.226249820242326,
+        "n": 3,
+        "std": 0.5726394319881611
+      },
+      "early_reward": {
+        "steps": 3072,
+        "mean": 296.195749,
+        "n": 3,
+        "std": 6.873817797088637
+      },
+      "final_reward": {
+        "steps": 12288,
+        "mean": 283.67497050000003,
+        "n": 3,
+        "std": 13.254664957689402
+      }
+    },
+    {
+      "instance": "B",
+      "family": "ppo",
+      "label": "PPO ACO warm start · γ=0.998",
+      "early_loss": {
+        "steps": 512,
+        "mean": 13756.12763671875,
+        "n": 3,
+        "std": 1162.3935009057084
+      },
+      "final_loss": {
+        "steps": 12288,
+        "mean": 5562.977982584635,
+        "n": 3,
+        "std": 1538.943750705931
+      },
+      "early_reward": {
+        "steps": 3072,
+        "mean": 203.4330165,
+        "n": 3,
+        "std": 3.1169747277762845
+      },
+      "final_reward": {
+        "steps": 12288,
+        "mean": 194.625175,
+        "n": 3,
+        "std": 11.757399388735719
+      }
+    },
+    {
+      "instance": "C",
+      "family": "dqn",
+      "label": "DQN ACO mix · 64-step",
+      "early_loss": {
+        "steps": 512,
+        "mean": 215.1567808787028,
+        "n": 3,
+        "std": 1.1913644736726783
+      },
+      "final_loss": {
+        "steps": 12288,
+        "mean": 47.954087714354195,
+        "n": 3,
+        "std": 0.9518453849274985
+      },
+      "early_reward": {
+        "steps": 3072,
+        "mean": 466.389471,
+        "n": 3,
+        "std": 14.437996876498582
+      },
+      "final_reward": {
+        "steps": 12288,
+        "mean": 405.7373455,
+        "n": 3,
+        "std": 12.25581224894366
+      }
+    },
+    {
+      "instance": "C",
+      "family": "ppo",
+      "label": "PPO short-wait warm start · γ=0.998",
+      "early_loss": {
+        "steps": 512,
+        "mean": 87293.32565104167,
+        "n": 3,
+        "std": 3625.7288975320666
+      },
+      "final_loss": {
+        "steps": 12288,
+        "mean": 79530.00989583334,
+        "n": 3,
+        "std": 10658.895241575581
+      },
+      "early_reward": {
+        "steps": 3072,
+        "mean": 82.20182950000002,
+        "n": 3,
+        "std": 10.014526640532374
+      },
+      "final_reward": {
+        "steps": 12288,
+        "mean": 57.197916000000006,
+        "n": 3,
+        "std": 17.519431311915728
+      }
+    },
+    {
+      "instance": "D",
+      "family": "dqn",
+      "label": "DQN ACO mix · 64-step",
+      "early_loss": {
+        "steps": 512,
+        "mean": 200.99808915456137,
+        "n": 3,
+        "std": 3.6434165142215917
+      },
+      "final_loss": {
+        "steps": 12288,
+        "mean": 25.827343945701916,
+        "n": 3,
+        "std": 0.045952117078839554
+      },
+      "early_reward": {
+        "steps": 3072,
+        "mean": 1317.37131875,
+        "n": 3,
+        "std": 46.099636623691616
+      },
+      "final_reward": {
+        "steps": 12288,
+        "mean": 592.5335645,
+        "n": 3,
+        "std": 169.25343638412332
+      }
+    },
+    {
+      "instance": "D",
+      "family": "ppo",
+      "label": "PPO short-wait warm start · γ=0.9995",
+      "early_loss": {
+        "steps": 512,
+        "mean": 391043.59010416665,
+        "n": 3,
+        "std": 25075.54814931452
+      },
+      "final_loss": {
+        "steps": 12288,
+        "mean": 362062.3479166667,
+        "n": 3,
+        "std": 76629.43266312676
+      },
+      "early_reward": {
+        "steps": 3072,
+        "mean": 616.6105422222223,
+        "n": 3,
+        "std": 10.002985055374639
+      },
+      "final_reward": {
+        "steps": 12288,
+        "mean": 629.2488545,
+        "n": 3,
+        "std": 18.691892217873207
+      }
+    }
+  ],
+  "dqn_direct_coverage": [
+    {
+      "instance": "A",
+      "method": "dqn_short_wait_n32",
+      "return_steps": 32,
+      "median_clock_minutes": 61.80704,
+      "decisions": 2487,
+      "eventually_completed": 649,
+      "completed_in_direct_return": 649,
+      "decisions_with_terminal": 384
+    },
+    {
+      "instance": "A",
+      "method": "dqn_aco_n32",
+      "return_steps": 32,
+      "median_clock_minutes": 58.94330000000002,
+      "decisions": 2696,
+      "eventually_completed": 653,
+      "completed_in_direct_return": 649,
+      "decisions_with_terminal": 384
+    },
+    {
+      "instance": "A",
+      "method": "dqn_short_wait_n64",
+      "return_steps": 64,
+      "median_clock_minutes": 123.48078999999998,
+      "decisions": 2187,
+      "eventually_completed": 620,
+      "completed_in_direct_return": 620,
+      "decisions_with_terminal": 768
+    },
+    {
+      "instance": "A",
+      "method": "dqn_aco_n64",
+      "return_steps": 64,
+      "median_clock_minutes": 147.873015,
+      "decisions": 1910,
+      "eventually_completed": 659,
+      "completed_in_direct_return": 659,
+      "decisions_with_terminal": 768
+    },
+    {
+      "instance": "B",
+      "method": "dqn_short_wait_n32",
+      "return_steps": 32,
+      "median_clock_minutes": 114.07686,
+      "decisions": 1375,
+      "eventually_completed": 686,
+      "completed_in_direct_return": 686,
+      "decisions_with_terminal": 384
+    },
+    {
+      "instance": "B",
+      "method": "dqn_aco_n32",
+      "return_steps": 32,
+      "median_clock_minutes": 110.45782,
+      "decisions": 1584,
+      "eventually_completed": 564,
+      "completed_in_direct_return": 564,
+      "decisions_with_terminal": 384
+    },
+    {
+      "instance": "B",
+      "method": "dqn_short_wait_n64",
+      "return_steps": 64,
+      "median_clock_minutes": 197.50439,
+      "decisions": 1344,
+      "eventually_completed": 698,
+      "completed_in_direct_return": 698,
+      "decisions_with_terminal": 768
+    },
+    {
+      "instance": "B",
+      "method": "dqn_aco_n64",
+      "return_steps": 64,
+      "median_clock_minutes": 189.89866000000004,
+      "decisions": 1715,
+      "eventually_completed": 705,
+      "completed_in_direct_return": 705,
+      "decisions_with_terminal": 768
+    },
+    {
+      "instance": "C",
+      "method": "dqn_short_wait_n32",
+      "return_steps": 32,
+      "median_clock_minutes": 121.04537999999997,
+      "decisions": 1549,
+      "eventually_completed": 1141,
+      "completed_in_direct_return": 1141,
+      "decisions_with_terminal": 384
+    },
+    {
+      "instance": "C",
+      "method": "dqn_aco_n32",
+      "return_steps": 32,
+      "median_clock_minutes": 122.9418,
+      "decisions": 1555,
+      "eventually_completed": 1164,
+      "completed_in_direct_return": 1164,
+      "decisions_with_terminal": 384
+    },
+    {
+      "instance": "C",
+      "method": "dqn_short_wait_n64",
+      "return_steps": 64,
+      "median_clock_minutes": 187.22815000000003,
+      "decisions": 1671,
+      "eventually_completed": 1213,
+      "completed_in_direct_return": 1213,
+      "decisions_with_terminal": 768
+    },
+    {
+      "instance": "C",
+      "method": "dqn_aco_n64",
+      "return_steps": 64,
+      "median_clock_minutes": 176.95159,
+      "decisions": 1679,
+      "eventually_completed": 1183,
+      "completed_in_direct_return": 1183,
+      "decisions_with_terminal": 768
+    },
+    {
+      "instance": "D",
+      "method": "dqn_short_wait_n32",
+      "return_steps": 32,
+      "median_clock_minutes": 58.22206000000001,
+      "decisions": 4050,
+      "eventually_completed": 2575,
+      "completed_in_direct_return": 2441,
+      "decisions_with_terminal": 384
+    },
+    {
+      "instance": "D",
+      "method": "dqn_aco_n32",
+      "return_steps": 32,
+      "median_clock_minutes": 54.993070000000046,
+      "decisions": 4247,
+      "eventually_completed": 2659,
+      "completed_in_direct_return": 2507,
+      "decisions_with_terminal": 384
+    },
+    {
+      "instance": "D",
+      "method": "dqn_short_wait_n64",
+      "return_steps": 64,
+      "median_clock_minutes": 96.94711999999998,
+      "decisions": 4348,
+      "eventually_completed": 2823,
+      "completed_in_direct_return": 2769,
+      "decisions_with_terminal": 768
+    },
+    {
+      "instance": "D",
+      "method": "dqn_aco_n64",
+      "return_steps": 64,
+      "median_clock_minutes": 90.956875,
+      "decisions": 4508,
+      "eventually_completed": 2865,
+      "completed_in_direct_return": 2802,
+      "decisions_with_terminal": 768
+    }
+  ],
+  "local_artifacts": "output/rounds/09-full-roster-returns",
+  "pi_feedback_after_results": "ny asked to put DQN and PPO return lengths on a common nominal scale and to test whether attention could help the agents focus on relevant jobs and nurses. The 0.30 waiting cost carries forward."
+}

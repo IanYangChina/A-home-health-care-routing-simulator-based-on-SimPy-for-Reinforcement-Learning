@@ -1,10 +1,11 @@
 "use strict";
 
-const panels = JSON.parse(document.querySelector("#latest-data").textContent);
+const data = document.querySelector("#latest-data");
+const panels = JSON.parse(data.textContent);
 const selectLayout = document.querySelector("#layout");
 const selectMetric = document.querySelector("#metric");
 const metricNames = {
-  raw_variant_reward: "Reward at 0.15",
+  raw_variant_reward: `Reward at ${data.dataset.waitingCost ?? "0.15"}`,
   total_reward: "Reward at 0.05",
   jobs_completed: "Visits completed",
   jobs_unserved: "Visits unserved",
@@ -27,7 +28,7 @@ function render() {
   const panel = panels.find(item => item.instance === selectLayout.value);
   const key = selectMetric.value;
   document.querySelector("#layout-note").textContent = `${panel.jobs} appointments · ${panel.nurses} nurses`;
-  document.querySelector("#routes-link").href = `guided-returns/${panel.routes}`;
+  document.querySelector("#routes-link").href = data.dataset.waitingCost ? panel.routes : `guided-returns/${panel.routes}`;
   const lead = Math.max(...panel.rows.filter(row => row.family !== "baseline").map(row => row.raw_variant_reward));
   const values = panel.rows.map(row => row[key]);
   const min = Math.min(0, ...values);

@@ -109,6 +109,39 @@ def test_wait_penalty_and_shift_end_change_learning_signals_only():
     assert modified[0] - baseline[0] == pytest.approx(-2.)
 
 
+def test_full_roster_shows_assigned_and_deferred_nurses():
+    preferences = np.ones((3, 4))
+    preferences[1, 1] = .65
+    scenario = Scenario('roster', (
+        Job(0, 1, 1, (185., 125., 0.), 18., 90.),
+        Job(1, 2, 1, DEPOT, 0., 90.),
+        Job(2, 3, 1, DEPOT, 100., 120.),
+    ), (1, 3, 1, 2), preferences)
+    env = SHHCSRPGymEnv(scenario=scenario, nurse_roster=True, duration_cv=0.)
+    initial, _ = env.reset(seed=1)
+    assert env.observation_space.contains(initial)
+    assert initial['nurses'][:, 4].tolist() == [1., 1., 1., 1.]
+    assert initial['nurses'][:, 13].tolist() == [.25, .5, .75, 1.]
+
+    obs, _, _, _, _ = env.step(0)
+    assert obs['nurses'][0, 6] == 1.
+    assert obs['nurses'][0, 10:13] == pytest.approx([1/3, 43/480, 437/480])
+    obs, _, _, _, _ = env.step(1)
+    assert obs['nurses'][1, 8] == 1.
+    obs, _, _, _, _ = env.step(3)
+    assert obs['nurses'][2, 4:6].tolist() == [0., 1.]
+    assert obs['nurses'][2, 11] == pytest.approx(11.7/480)
+
+    obs, _, terminated, truncated, info = env.step(3)
+    assert env.observation_space.contains(obs) and not (terminated or truncated)
+    assert info['sim_time'] == pytest.approx(11.7)
+    assert obs['nurses'][0, 7] == 1.
+    assert obs['nurses'][0, 11] == pytest.approx((43-11.7)/480)
+    assert obs['nurses'][1:, 4].tolist() == [1., 1., 1.]
+    assert obs['nurses'][1, 10] == 0.
+    env.close()
+
+
 def test_html_has_charts_and_trace(tmp_path):
     s,m,events=run_episode(instance='A',job_limit=12,policy='greedy',seed=3)
     path=export_html(s,events,m,tmp_path/'report.html',policy='greedy')

@@ -124,9 +124,9 @@ def make_env(scenario: Scenario, method: str, **env_options):
     return env
 
 
-def evaluate(scenario, method, seed, *, model=None, trace=False):
+def evaluate(scenario, method, seed, *, model=None, trace=False, nurse_roster=False):
     start = perf_counter()
-    env = make_env(scenario, method)
+    env = make_env(scenario, method, nurse_roster=nurse_roster)
     if model is None:
         agent = {
             'random': lambda: RandomPolicy(seed=seed),
@@ -137,8 +137,9 @@ def evaluate(scenario, method, seed, *, model=None, trace=False):
     obs, info = env.reset(seed=seed)
     total_reward = 0.
     decisions = 0
+    decision_limit = max(5000, (2 * len(scenario.jobs) + 1) * len(scenario.nurse_skills))
     try:
-        for decisions in range(1, 5001):
+        for decisions in range(1, decision_limit + 1):
             if model is None:
                 action = agent.act(obs, info)
             elif method == 'ppo':
@@ -150,7 +151,7 @@ def evaluate(scenario, method, seed, *, model=None, trace=False):
             if terminated or truncated:
                 break
         else:
-            raise RuntimeError(f'{method} exceeded 5000 decisions on seed {seed}')
+            raise RuntimeError(f'{method} exceeded {decision_limit} decisions on seed {seed}')
         metrics = {**info['metrics'], 'total_reward': round(total_reward, 4),
                    'decisions': decisions, 'wall_seconds': round(perf_counter() - start, 5)}
         result = {'method': method, 'seed': seed, 'metrics': metrics}

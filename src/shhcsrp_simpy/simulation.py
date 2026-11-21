@@ -8,6 +8,7 @@ from __future__ import annotations
 
 from collections import deque
 from dataclasses import dataclass, field
+from math import erfc, exp, pi, sqrt
 from typing import Any
 import numpy as np
 import simpy
@@ -26,6 +27,11 @@ class Worker:
     total_service: float = 0.
     completed: int = 0
     visits: dict[int, int] = field(default_factory=dict)
+    job_id: int | None = None
+    arrival_at: float = 0.
+    service_at: float = 0.
+    expected_service: float = 0.
+    return_at: float | None = None
 
 
 class CareSimulation:
@@ -118,6 +124,24 @@ class CareSimulation:
         return {'travel': travel, 'arrival': arrival, 'wait': wait,
                 'start': start, 'end': end, 'return': back, 'service': service}
 
+    def minutes_until_free(self, worker: Worker) -> float:
+        """Forecast release using service still in progress and the public duration model."""
+        now = float(self.env.now)
+        if worker.return_at is not None:
+            return max(0., worker.return_at - now)
+        if worker.job_id is None:
+            return 0.
+        elapsed = now - worker.service_at
+        mean = worker.expected_service
+        spread = mean * self.duration_cv
+        if elapsed < 1. or spread == 0.:
+            return max(0., max(1., mean) - elapsed)
+        # Condition the normal service model on the visit still running at this time.
+        z = (elapsed - mean) / spread
+        if z >= 35.:
+            return spread / z
+        return spread * (exp(-.5 * z * z) / (sqrt(pi / 2.) * erfc(z / sqrt(2.))) - z)
+
     def action_masks(self) -> np.ndarray:
         n = len(self.jobs)
         valid = np.zeros(n + 1, dtype=np.bool_)
@@ -148,7 +172,13 @@ class CareSimulation:
             return False
         self.ready.popleft()
         self.status[job_id] = 1
-        self.workers[wid].busy = True
+        worker = self.workers[wid]
+        forecast = self.predict(wid, job_id)
+        worker.job_id = job_id
+        worker.arrival_at = forecast['arrival']
+        worker.service_at = forecast['start']
+        worker.expected_service = forecast['service']
+        worker.busy = True
         self.active += 1
         self._log('dispatch', nurse=wid, job=job_id)
         self.inboxes[wid].put(job_id)
@@ -204,6 +234,7 @@ class CareSimulation:
                 self.reward_buffer += 10.
                 self._log('service_end', nurse=worker.id, job=job_id)
             worker.busy = False
+            worker.job_id = None
             self.active -= 1
             self.ready.append(worker.id)
             if not self._wake.triggered:
@@ -211,12 +242,14 @@ class CareSimulation:
         # End-of-day return is executed by the worker process, not assumed.
         back = travel_minutes(worker.position, self.scenario.depot, self.scenario.speed)
         if back:
+            worker.return_at = float(self.env.now) + back
             self._log('return_start', nurse=worker.id, x0=worker.position[0],
                       y0=worker.position[1], x1=self.scenario.depot[0], y1=self.scenario.depot[1])
             yield self.env.timeout(back)
             worker.total_travel += back
             self.reward_buffer -= .03 * back
             worker.position = self.scenario.depot
+            worker.return_at = None
         self._log('return_end', nurse=worker.id)
         self._returned += 1
         if self._returned == len(self.workers) and not self._all_returned.triggered:
