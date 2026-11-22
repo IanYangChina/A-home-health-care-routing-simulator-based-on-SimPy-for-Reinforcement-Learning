@@ -1,8 +1,7 @@
 {
   "round": 9,
   "title": "Full nurse roster and longer returns",
-  "pi": "ny",
-  "pi_input": "ny requested the full roster to show every nurse in every phase, DQN return lengths of 32 and 64, two higher PPO discounts, short-wait and ACO guidance for both agents, and a stronger waiting penalty on all four layouts.",
+  "pi_input": "The PI requested the full roster to show every nurse in every phase, DQN return lengths of 32 and 64, two higher PPO discounts, short-wait and ACO guidance for both agents, and a stronger waiting penalty on all four layouts.",
   "pi_input_date": "2026-11-21",
   "prior_diagnostics": "../08-guided-long-returns/manifest.json",
   "agent_work": "Added an optional normalized roster with one row per nurse. It includes their last confirmed location, skill, phase, assignment, ready-queue position, estimated minutes to availability, post-release shift time, and completed count. For an ongoing visit, the estimate conditions on service still being in progress and uses the duration model. It does not use the simulator’s hidden duration draw. Kept the 512-decision PPO rollout and λ = 1. Chose γ = 0.998 and 0.9995 and doubled the waiting cost from 0.15 to 0.30 points per nurse-minute. Carried forward the other tuned settings.",
@@ -1407,5 +1406,7 @@
     }
   ],
   "local_artifacts": "output/rounds/09-full-roster-returns",
-  "pi_feedback_after_results": "ny asked to put DQN and PPO return lengths on a common nominal scale and to test whether attention could help the agents focus on relevant jobs and nurses. The 0.30 waiting cost carries forward."
+  "pi_feedback_after_results": "The PI asked to put DQN and PPO return lengths on a common nominal scale and to test whether attention could help the agents focus on relevant jobs and nurses. The 0.30 waiting cost carries forward.",
+  "pi_input_time": "2026-11-21T16:32:03+00:00",
+  "pi_timing_basis": "Codex submission history, cross-checked against user-message events in the session rollout."
 }

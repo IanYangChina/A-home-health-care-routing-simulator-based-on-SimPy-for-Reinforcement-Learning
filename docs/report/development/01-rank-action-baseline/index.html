@@ -16,10 +16,10 @@
 </div>
 </header>
 <main class="wrap detail">
-<p class="timing">Compute timing unavailable for the initial comparison.</p>
+<p class="timing">20 Nov 2026 · estimated compute interval 09:01:24–09:06:47 UTC</p>
 <p class="caption">The results above were recorded in the conversation. Per-seed traces, training losses, and checkpoints from this run are unavailable in the current workspace.</p>
 <div class="card">
-<section><h2>PI input</h2><p class="timing"><time datetime="2026-11-20T08:55:52+00:00">08:55:52 UTC</time></p><p>ny asked to train reinforcement learning agents and compare them with fixed dispatch policies.</p></section>
+<section><h2>PI input</h2><p class="timing"><time datetime="2026-11-20T08:55:52+00:00">08:55:52 UTC</time></p><p>The PI asked to train reinforcement learning agents and compare them with fixed dispatch policies.</p></section>
 <section><h2>Agent work</h2><p>Compared the fixed dispatch policies with the learned agents on instance A. Each RL action selected a rank in the current list of eligible appointments.</p></section>
 <section><h2>Computation</h2><p>Instance A contained 60 appointments. GPU training used four Optuna trials and 16,384 final steps per algorithm. The comparison averaged 12 held-out seeds.</p></section>
 <section><h2>Findings</h2><p>DQN led RL validation. On the held-out seeds it averaged 54.50 visits and 438.08 reward. Random averaged 56.92 visits and 484.41 reward. Earliest deadline and ant colony completed all 60 visits on every seed.</p><div class="scroll"><table class="results" aria-label="Results recorded in the conversation"><thead><tr><th scope="col">Policy</th><th scope="col">Visits completed</th><th scope="col">Mean reward</th><th scope="col">Travel minutes</th><th scope="col">Waiting minutes</th></tr></thead><tbody><tr><th scope="row">Random</th><td>56.92</td><td>484.41</td><td>183.2</td><td>1,091.9</td></tr><tr><th scope="row">Greedy</th><td>57.17</td><td>487.46</td><td>115.7</td><td>1,161.4</td></tr><tr><th scope="row">Earliest deadline</th><td>60.00</td><td>542.21</td><td>185.7</td><td>1,044.4</td></tr><tr><th scope="row">Ant colony</th><td>60.00</td><td>544.33</td><td>192.0</td><td>998.3</td></tr><tr><th scope="row">DQN</th><td>54.50</td><td>438.08</td><td>179.0</td><td>1,151.0</td></tr><tr><th scope="row">PPO</th><td>54.42</td><td>437.91</td><td>169.4</td><td>1,130.1</td></tr></tbody></table></div></section>

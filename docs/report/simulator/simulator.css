@@ -19,10 +19,26 @@
 .sim-table th { position: sticky; top: 0; background: #eaf2f0; z-index: 1; white-space: nowrap; }
 .sim-table button { background: #e1f4ef; color: #12413a; border: 1px solid #589587; border-radius: .35rem; padding: .3rem .6rem; font: inherit; font-weight: 650; }
 .sim-table tr.current { background: #f1eafa; }
-.sim-operations { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 1rem; margin-bottom: 1rem; }
-.sim-operations .sim-table { min-width: 27rem; }
-.sim-map canvas { width: 100%; height: auto; display: block; background: #f2f7f7; border: 1px solid #c6d8d6; border-radius: .4rem; }
-.sim-map p { font-size: .875rem; }
+.sim-play { display: grid; grid-template-columns: minmax(0, 1.16fr) minmax(0, 1fr); align-items: start; gap: 1rem; margin-top: .75rem; }
+.sim-choices, .sim-map { min-width: 0; }
+.sim-choices .sim-filters { margin-top: 0; }
+.sim-choices .sim-table-wrap { max-height: 28rem; border: 1px solid #d6e4e1; border-radius: .5rem; }
+.sim-map { border: 1px solid #cadbd7; border-radius: .55rem; overflow: hidden; background: #fff; }
+.sim-map-header { display: flex; justify-content: space-between; align-items: start; gap: .5rem; padding: .7rem .85rem; }
+.sim-map-header h3 { margin: 0 0 .15rem; font-size: 1.1rem; }
+.sim-map-header p, #map-note { margin: 0; color: #405c5e; font-size: .87rem; }
+.sim-map-header button { padding: .35rem .5rem; cursor: pointer; white-space: nowrap; }
+.sim-map-view { position: relative; background: #eaf4f2; overflow: hidden; }
+.sim-map canvas { width: 100%; height: clamp(300px, 36vw, 455px); display: block; cursor: grab; touch-action: none; }
+.sim-map canvas:active { cursor: grabbing; }
+.sim-map canvas:focus-visible { outline: 2px solid #124d97; outline-offset: -2px; }
+.sim-map-clock { position: absolute; left: .55rem; bottom: .55rem; background: #fff; color: #26474a; border-radius: .35rem; padding: .18rem .45rem; font-size: .78rem; font-variant-numeric: tabular-nums; pointer-events: none; }
+.sim-map [hidden] { display: none; }
+#map-fallback { margin: 0; padding: 1rem; }
+#map-note { padding: .6rem .85rem; }
+.sim-location { display: block; color: #496364; font-size: .82rem; white-space: nowrap; }
+.sim-nurses { margin-block: .75rem 1rem; }
+.sim-nurses .sim-table { min-width: 27rem; }
 .simulation-section details summary { cursor: pointer; font-weight: 650; }
 .simulation-section details table { margin-top: .55rem; }
-@media (max-width: 760px) { .sim-operations { grid-template-columns: 1fr; } }
+@media (max-width: 820px) { .sim-play { grid-template-columns: 1fr; } }

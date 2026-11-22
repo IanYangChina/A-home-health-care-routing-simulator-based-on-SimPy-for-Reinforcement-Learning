@@ -9,6 +9,8 @@
   <link rel="stylesheet" href="simulator.css">
   <script src="scenarios.js" defer></script>
   <script src="engine.js" defer></script>
+  <script src="vendor/three.min.js" defer></script>
+  <script src="map3d.js" defer></script>
   <script src="simulator.js" defer></script>
 </head>
 <body>
@@ -39,30 +41,40 @@
           <button type="button" id="skip" class="sim-secondary">Skip until a visit is eligible</button>
         </div>
       </div>
-      <div class="sim-controls sim-filters">
-        <label>Show <select id="visibility"><option value="eligible">Eligible visits</option><option value="pending">All pending visits</option><option value="all">All visits</option></select></label>
-        <label>Sort by <select id="sort"><option value="wait">Shortest wait</option><option value="deadline">Earliest closing</option><option value="travel">Shortest travel</option><option value="id">Visit ID</option></select></label>
-      </div>
-      <div class="project-scroll sim-table-wrap">
-        <table class="project-table sim-table" aria-label="Appointments and eligibility">
-          <thead><tr><th scope="col">Visit ID</th><th scope="col">Required skill</th><th scope="col">Time window</th><th scope="col">Travel</th><th scope="col">Wait</th><th scope="col">Service</th><th scope="col">Action or status</th></tr></thead>
-          <tbody id="jobs"></tbody>
-        </table>
+      <div class="sim-play">
+        <div class="sim-map">
+          <div class="sim-map-header">
+            <div><h3>3D neighborhood</h3><p id="map-status" aria-live="polite"></p></div>
+            <button type="button" id="map-reset" class="sim-secondary">Reset view</button>
+          </div>
+          <div class="sim-map-view">
+            <canvas id="map" tabindex="0" aria-label="3D map of nurse routes, buildings and visit levels" aria-describedby="map-note"></canvas>
+            <span id="map-clock" class="sim-map-clock" aria-hidden="true"></span>
+            <p id="map-fallback" hidden>The 3D map needs WebGL 2. The visit and nurse tables are available on this device.</p>
+          </div>
+          <p id="map-note">Drag to orbit, scroll or pinch to zoom, and select a floor marker to inspect it. Teal markers indicate eligible visits. Purple marks the latest assignment’s route and destination. The moving preview traces that route while the dispatch clock is paused. Building shapes and floor heights are schematic.</p>
+        </div>
+        <div class="sim-choices">
+          <div class="sim-controls sim-filters">
+            <label>Show <select id="visibility"><option value="eligible">Eligible visits</option><option value="pending">All pending visits</option><option value="all">All visits</option></select></label>
+            <label>Sort by <select id="sort"><option value="wait">Shortest wait</option><option value="deadline">Earliest closing</option><option value="travel">Shortest travel</option><option value="id">Visit ID</option></select></label>
+          </div>
+          <div class="project-scroll sim-table-wrap">
+            <table class="project-table sim-table" aria-label="Appointments and eligibility">
+              <thead><tr><th scope="col">Visit and location</th><th scope="col">Action or status</th><th scope="col">Required skill</th><th scope="col">Time window</th><th scope="col">Travel</th><th scope="col">Wait</th><th scope="col">Service</th></tr></thead>
+              <tbody id="jobs"></tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </section>
     <section class="project-section simulation-section" aria-labelledby="operations-title">
-      <h2 id="operations-title">Nurse workload and routes</h2>
-      <div class="sim-operations">
-        <div class="project-scroll sim-table-wrap">
-          <table class="project-table sim-table" aria-label="Nurse workload">
-            <thead><tr><th scope="col">Nurse</th><th scope="col">Skill</th><th scope="col">Status</th><th scope="col">Visit</th><th scope="col">Completed</th></tr></thead>
-            <tbody id="nurses"></tbody>
-          </table>
-        </div>
-        <div class="sim-map">
-          <canvas id="map" width="720" height="460" aria-label="Appointment locations and current nurse’s route. The tables show appointment and nurse details.">Appointment locations and current nurse’s route.</canvas>
-          <p id="map-note">Teal dots mark eligible visits. The purple line follows the current nurse. The square marks the depot.</p>
-        </div>
+      <h2 id="operations-title">Nurse workload</h2>
+      <div class="project-scroll sim-table-wrap sim-nurses">
+        <table class="project-table sim-table" aria-label="Nurse workload">
+          <thead><tr><th scope="col">Nurse</th><th scope="col">Skill</th><th scope="col">Status</th><th scope="col">Visit</th><th scope="col">Completed</th></tr></thead>
+          <tbody id="nurses"></tbody>
+        </table>
       </div>
       <details><summary>Recent simulation events</summary><div class="project-scroll sim-table-wrap"><table class="project-table sim-table" aria-label="Recent simulation events"><thead><tr><th scope="col">Time</th><th scope="col">Event</th><th scope="col">Nurse</th><th scope="col">Visit</th></tr></thead><tbody id="events"></tbody></table></div></details>
     </section>

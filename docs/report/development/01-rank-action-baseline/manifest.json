@@ -1,10 +1,9 @@
 {
   "round": 1,
   "title": "First comparison on instance A",
-  "pi": "ny",
   "provenance": "Summary from the retained conversation",
-  "timing": "Compute timing unavailable for the initial comparison.",
-  "timing_basis": "Computation ordered by the retained conversation.",
+  "timing": "20 Nov 2026 · estimated compute interval 09:01:24–09:06:47 UTC",
+  "timing_basis": "First Optuna study timestamp and first confirmed benchmark completion in the retained Codex session log. The completion timestamp is an observation bound.",
   "pi_timing_basis": "Timestamps from local Codex turn-context records.",
   "pi_input_events": [
     {
@@ -17,7 +16,7 @@
   ],
   "pi_quote": null,
   "model_provenance": "Local Codex turn-context records identify the parent model and reasoning effort. The listed delegates inherited this configuration without overrides.",
-  "pi_input": "ny asked to train reinforcement learning agents and compare them with fixed dispatch policies.",
+  "pi_input": "The PI asked to train reinforcement learning agents and compare them with fixed dispatch policies.",
   "pi_feedback": "“Try increasing the network size and also experiment on the other 3 instances.”",
   "agent_work": "Compared the fixed dispatch policies with the learned agents on instance A. Each RL action selected a rank in the current list of eligible appointments.",
   "computation": "Instance A contained 60 appointments. GPU training used four Optuna trials and 16,384 final steps per algorithm. The comparison averaged 12 held-out seeds.",
@@ -91,5 +90,10 @@
         "1,130.1"
       ]
     ]
+  },
+  "compute_interval": {
+    "started_at": "2026-11-20T09:01:24+00:00",
+    "ended_at": "2026-11-20T09:06:47+00:00",
+    "estimated": true
   }
 }

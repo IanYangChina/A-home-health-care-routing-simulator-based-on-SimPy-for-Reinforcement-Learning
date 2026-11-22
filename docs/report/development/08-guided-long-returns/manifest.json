@@ -1,7 +1,6 @@
 {
   "round": 8,
   "title": "Guided exploration with longer returns",
-  "pi": "ny",
   "provenance": "PI direction and measured experiment report",
   "timing": "20 Nov 2026 · family runner logs 16:06:17–16:17:15 UTC",
   "timing_basis": "Family-runner start and end timestamps in UTC",
@@ -12,12 +11,12 @@
     },
     {
       "time": "2026-11-20T16:05:00+00:00",
-      "summary": "ny requested training both agents on all four instances with longer return estimates, a higher waiting penalty, short-wait guidance, and ACO guidance."
+      "summary": "The PI requested training both agents on all four instances with longer return estimates, a higher waiting penalty, short-wait guidance, and ACO guidance."
     }
   ],
-  "pi_input": "ny requested training both agents on all four instances with longer return estimates, a higher waiting penalty, short-wait guidance, and ACO guidance.",
-  "pi_feedback_on_round_7": "ny asked whether Round 7 had used the strongest guidance strategies. Round 7 had kept exploration fixed to compare the waiting costs and return horizons.",
-  "pi_feedback_after_results": "On 21 Nov, ny requested two post-round diagnostics, then directed the full-roster and longer-returns experiment in Round 9.",
+  "pi_input": "The PI requested training both agents on all four instances with longer return estimates, a higher waiting penalty, short-wait guidance, and ACO guidance.",
+  "pi_feedback_on_round_7": "The PI asked whether Round 7 had used the strongest guidance strategies. Round 7 had kept exploration fixed to compare the waiting costs and return horizons.",
+  "pi_feedback_after_results": "On 21 Nov, the PI requested two post-round diagnostics, then directed the full-roster and longer-returns experiment in Round 9.",
   "agent_work": "Kept waiting and return settings fixed within each layout and agent family and compared the exploration control with short-wait and ACO guidance. All arms charged 0.15 points per appointment waiting minute. Masked DQN used 32-decision targets on C and 16-decision targets on A, B, and D, based on Round 7 results for C and D. All PPO arms used 512-decision rollouts with λ=1 and the tuned discount. PPO bootstrapped at rollout boundaries within a shift. The simulator treated the modeled shift end as terminal in training. DQN mixed guidance into epsilon exploration. PPO used imitation warm starts in its guided arms, then collected on-policy rollouts.",
   "exact_parent_variant": "gpt-6.2-sol",
   "parent_reasoning_effort": "high",
@@ -1211,14 +1210,17 @@
     {
       "date": "2026-11-21",
       "title": "Training and baseline diagnostic",
-      "pi_input": "ny asked for loss and reward trends and for the dimensions where DQN and PPO underperformed Random or ACO.",
-      "agent_findings": "ACO led on all four layouts, with the largest coverage and waiting gaps on C and D. DQN loss fell even where reward declined, particularly on D. PPO value loss fell while training rewards mostly plateaued. On the 12 matched test shifts, sampling instead of choosing PPO’s most probable action recovered the collapsed scratch checkpoint from 1 to 83 served visits on C and from 8 to 185 on D."
+      "pi_input": "The PI asked for loss and reward trends and for the dimensions where DQN and PPO underperformed Random or ACO.",
+      "agent_findings": "ACO led on all four layouts, with the largest coverage and waiting gaps on C and D. DQN loss fell even where reward declined, particularly on D. PPO value loss fell while training rewards mostly plateaued. On the 12 matched test shifts, sampling instead of choosing PPO’s most probable action recovered the collapsed scratch checkpoint from 1 to 83 served visits on C and from 8 to 185 on D.",
+      "time": "2026-11-21T16:09:27+00:00"
     },
     {
       "date": "2026-11-21",
       "title": "Observation and return diagnostic",
-      "pi_input": "ny asked whether agents could see elapsed and remaining shift time, the full unserved pool, the nurse roster and individual release times, and whether the return targets reached far enough ahead.",
-      "agent_findings": "The agents saw the clock and every job’s status, plus details of the current nurse and the aggregate busy fraction. Other nurses’ assignments, queue positions and release forecasts were absent. Across the three DQN variants on D, seed 11’s 16-decision targets covered a median of 17–27 simulated minutes and only 55–59% of eventually completed visits finished within their assignment’s direct target. PPO included shift end in about 70% of decisions in completed training shifts on D and 89–90% on A–C."
+      "pi_input": "The PI asked whether agents could see elapsed and remaining shift time, the full unserved pool, the nurse roster and individual release times, and whether the return targets reached far enough ahead.",
+      "agent_findings": "The agents saw the clock and every job’s status, plus details of the current nurse and the aggregate busy fraction. Other nurses’ assignments, queue positions and release forecasts were absent. Across the three DQN variants on D, seed 11’s 16-decision targets covered a median of 17–27 simulated minutes and only 55–59% of eventually completed visits finished within their assignment’s direct target. PPO included shift end in about 70% of decisions in completed training shifts on D and 89–90% on A–C.",
+      "time": "2026-11-21T16:21:59+00:00"
     }
-  ]
+  ],
+  "post_round_diagnostic_timing_basis": "Codex submission history, cross-checked against user-message events in the session rollout."
 }

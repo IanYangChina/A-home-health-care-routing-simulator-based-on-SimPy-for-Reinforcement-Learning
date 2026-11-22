@@ -1,7 +1,6 @@
 {
   "round": 6,
   "title": "Guided exploration and reward decomposition",
-  "pi": "ny",
   "provenance": "PI direction and experiment report",
   "timing": "20 Nov 2026 · family runner logs 14:46:32–14:53:46 UTC",
   "timing_basis": "Run-family started_at and ended_at records from the measured exploration JSON, UTC.",
@@ -17,8 +16,8 @@
   ],
   "pi_quote": "“I'd like you to monitor the changes of the four terms in the reward function over training as well as the weighted sum value”",
   "model_provenance": "Local Codex turn-context records identify the parent model and reasoning effort. The listed delegates inherited this configuration without overrides.",
-  "pi_input": "ny asked for exploration strategies using rules and sometimes ACO solutions, and asked to track four reward components and the weighted sum throughout training.",
-  "pi_feedback": "After comparing the waits and unserved visits on C and D, ny concluded that the waiting penalty was too weak and asked to test longer return estimates.",
+  "pi_input": "The PI asked for exploration strategies using rules and sometimes ACO solutions, and asked to track four reward components and the weighted sum throughout training.",
+  "pi_feedback": "After comparing the waits and unserved visits on C and D, the PI concluded that the waiting penalty was too weak and asked to test longer return estimates.",
   "agent_work": "Mixed short-wait or bounded ACO choices into DQN’s epsilon exploration. For PPO, used the same teachers to warm-start the policy by imitation, then collected ordinary on-policy rollouts. Logged completed and unserved visits, travel, waiting, and weighted reward during training with the original reward weights.",
   "computation": "Ran 36 fits across A and D at 12,288 steps each. Used three training seeds and 12 held-out seeds per variant, yielding 432 learned-policy evaluations. Reused 48 matching Random and ACO baseline evaluations. The route pages show training seed 11, selected before evaluation.",
   "finding": "On D, the ACO mix raised DQN held-out reward from 296.78 to 486.93. The short-wait warm start raised PPO from −104.58 to 58.71. On A, both DQN guides lowered held-out reward and both PPO warm starts yielded small gains. All learned variants scored below Random and ACO on both layouts. For the DQN ACO mix on D, weighted training reward fell from 1,895.35 to 534.31 as waiting rose from 693 to 2,447 nurse-minutes across the plotted windows.",
@@ -390,7 +389,7 @@
     }
   ],
   "guided_summary": "output/rounds/06-guided-exploration/summary.json",
-  "pi_feedback_after_results": "After comparing the waits and unserved visits on C and D, ny concluded that the waiting penalty was too weak and asked to test longer return estimates.",
+  "pi_feedback_after_results": "After comparing the waits and unserved visits on C and D, the PI concluded that the waiting penalty was too weak and asked to test longer return estimates.",
   "verification": {
     "tests_passed": 13,
     "training_episodes": 2747,

@@ -1,8 +1,7 @@
 {
   "round": 10,
   "title": "Matched return horizons and attention",
-  "pi": "ny",
-  "pi_input": "ny requested keeping the waiting cost at 0.30, comparing 64-, 128-, and 256-decision DQN returns, choosing PPO GAE values on the same horizon scale, and testing both networks with and without small attention over the job and nurse pools.",
+  "pi_input": "The PI requested keeping the waiting cost at 0.30, comparing 64-, 128-, and 256-decision DQN returns, choosing PPO GAE values on the same horizon scale, and testing both networks with and without small attention over the job and nurse pools.",
   "pi_input_date": "2026-11-21",
   "agent_work": "Verified the installed SB3 defaults and reconciled them with the Round 9 configuration. Used the same full nurse roster, guided exploration and waiting cost. DQN kept the tuned discount on each layout. PPO used fixed 512-decision rollouts and γ = 0.9995 while λ varied. The attention variant appends two 16-dimensional summaries to the same flattened inputs. The job summary pools pending visits using their attributes, eligibility, forecast waiting and start-window slack. The nurse summary pools the full roster. Both summaries depend on the current nurse and shift state.",
   "timing": "21 Nov 2026 · family runner logs 19:55:48–20:56:55 UTC",
@@ -4267,5 +4266,7 @@
     }
   ],
   "local_artifacts": "output/rounds/10-attention-returns",
-  "reused_artifacts": "output/rounds/09-full-roster-returns"
+  "reused_artifacts": "output/rounds/09-full-roster-returns",
+  "pi_input_time": "2026-11-21T19:46:04+00:00",
+  "pi_timing_basis": "Codex submission history, cross-checked against user-message events in the session rollout."
 }

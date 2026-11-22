@@ -1,10 +1,9 @@
 {
   "round": 5,
   "title": "Diagnose the learned schedules",
-  "pi": "ny",
   "provenance": "Transcript summary and links to the input runs",
-  "timing": "Compute timing unavailable for the diagnostic replays.",
-  "timing_basis": "Computation ordered by the retained conversation.",
+  "timing": "20 Nov 2026 · estimated compute interval 14:21:08–14:23:01 UTC",
+  "timing_basis": "First main replay tool call and tool response confirming the paired intervention results in the retained Codex session log. The end timestamp is an observation bound.",
   "pi_timing_basis": "Timestamps from local Codex turn-context records.",
   "pi_input_events": [
     {
@@ -17,8 +16,8 @@
   ],
   "pi_quote": null,
   "model_provenance": "Local Codex turn-context records identify the parent model and reasoning effort. The listed delegates inherited this configuration without overrides.",
-  "pi_input": "ny asked how the two learned policies differed from Random and ACO, why training rewards changed, and what the reward incentivized.",
-  "pi_feedback": "ny interpreted the schedules as evidence of a possible exploration problem and a possible reward-design problem, and asked to test guided exploration and monitor all four reward terms.",
+  "pi_input": "The PI asked how the two learned policies differed from Random and ACO, why training rewards changed, and what the reward incentivized.",
+  "pi_feedback": "The PI interpreted the schedules as evidence of a possible exploration problem and a possible reward-design problem, and asked to test guided exploration and monitor all four reward terms.",
   "agent_work": "Separated voluntary deferrals from forced ones, examined wait and deadline choices, reconciled the observed reward to four terms, and replayed paired interventions with weights frozen.",
   "computation": "Replayed 192 saved episodes across Random, ACO, DQN, and PPO. Matching held-out seeds controlled the comparisons of no voluntary deferral, shorter waits, and changed action sampling.",
   "finding": "DQN deferred on 62% and 49% of eligible decisions on A and B. On D, mean forecast waiting above the shortest feasible choice was 14.91 minutes for DQN, 21.23 for PPO, 10.22 for Random, and 0.17 for ACO. When an alternative was available, overriding decisions that would wait more than 15 minutes improved reward on all paired seeds for both agents on all four layouts.",
@@ -71,5 +70,10 @@
         "201.67"
       ]
     ]
+  },
+  "compute_interval": {
+    "started_at": "2026-11-20T14:21:08+00:00",
+    "ended_at": "2026-11-20T14:23:01+00:00",
+    "estimated": true
   }
 }

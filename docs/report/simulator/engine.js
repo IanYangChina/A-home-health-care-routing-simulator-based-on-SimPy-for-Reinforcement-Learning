@@ -20,7 +20,7 @@
       this.noise = draws ?? serviceNoise(seed, scenario.jobs.length);
       this.jobs = scenario.jobs.map(job => ({...job, status: "Pending", nurse: null}));
       this.nurses = scenario.nurses.map((skill, id) => ({id, skill, position: scenario.depot,
-        status: "Ready", job: null, completed: 0, visits: new Map(), trail: [scenario.depot],
+        status: "Ready", job: null, completed: 0, visits: new Map(), legs: [],
         travel: 0, wait: 0, service: 0}));
       this.ready = this.nurses.slice();
       this.queue = [];
@@ -72,7 +72,12 @@
 
     book(nurse, phase, minutes, job = null) {
       nurse.status = phase;
-      this.queue.push({time: this.time + minutes, nurse, phase, minutes, job});
+      const end = this.time + minutes;
+      if (phase === "Travelling" || phase === "Returning") {
+        nurse.legs.push({start: this.time, end, from: nurse.position,
+          to: job ? job.position : this.scenario.depot});
+      }
+      this.queue.push({time: end, nurse, phase, minutes, job});
     }
 
     assign(id) {
@@ -121,7 +126,6 @@
     process({nurse, phase, minutes, job}) {
       if (phase === "Travelling") {
         nurse.position = job.position;
-        nurse.trail.push(job.position);
         nurse.travel += minutes;
         this.score -= 0.03 * minutes;
         this.log("Arrived", nurse, job);
@@ -145,7 +149,6 @@
       } else {
         nurse.travel += minutes;
         nurse.position = this.scenario.depot;
-        nurse.trail.push(this.scenario.depot);
         nurse.status = "At depot";
         this.score -= 0.03 * minutes;
         this.log("Returned to depot", nurse);

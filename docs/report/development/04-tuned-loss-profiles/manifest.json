@@ -1,7 +1,6 @@
 {
   "round": 4,
   "title": "Expanded Optuna search and longer training",
-  "pi": "ny",
   "provenance": "Saved interactive reports and raw outputs",
   "timing": "20 Nov 2026 · first logged Optuna study 13:57:03, last results file 14:11:15 UTC",
   "timing_basis": "First timestamped Optuna record per configuration when available and original benchmark.json file modification time. UTC from the development machine.",
@@ -17,8 +16,8 @@
   ],
   "pi_quote": null,
   "model_provenance": "Local Codex turn-context records identify the parent model and reasoning effort. The listed delegates inherited this configuration without overrides.",
-  "pi_input": "ny requested configurable network width, batch size, target-update interval, and rollout length, plus longer training and loss profiles with mean and standard deviation.",
-  "pi_feedback": "“Even random outperforms them.” ny asked to diagnose the schedules, explain DQN’s declining training reward and PPO’s flatter profile, and identify the reward incentives.",
+  "pi_input": "The PI requested configurable network width, batch size, target-update interval, and rollout length, plus longer training and loss profiles with mean and standard deviation.",
+  "pi_feedback": "“Even random outperforms them.” The PI asked to diagnose the schedules, explain DQN’s declining training reward and PPO’s flatter profile, and identify the reward incentives.",
   "agent_work": "Expanded Optuna search, timed CPU and GPU throughput, and plotted a mean and ±1 sample standard deviation across three independent training seeds in 512-step windows.",
   "computation": "Eight 4,096-step trials per agent per layout. Each selected model trained for 24,576 steps per seed and completed 77–241 training episodes per run. DQN on D used CUDA; the other training ran on CPU. The held-out comparison includes 288 episodes.",
   "finding": "The tuned agents trailed Random on held-out reward on all four instances. DQN led RL on C and D, PPO on A and B. On D, DQN completed 168.08 visits and PPO 142.67, compared with 187.83 for Random and 272.42 for ACO.",

@@ -1,7 +1,6 @@
 {
   "round": 7,
   "title": "Waiting costs and longer returns",
-  "pi": "ny",
   "provenance": "PI direction and measured experiment report",
   "timing": "20 Nov 2026 · family runner logs 15:43:11–15:55:28 UTC",
   "timing_basis": "Family-runner start and end timestamps in UTC.",
@@ -15,9 +14,9 @@
       "summary": "Approved proceeding with the matched tests."
     }
   ],
-  "pi_input": "ny highlighted similar travel times but large numbers of unserved visits and much longer waits, particularly in C and D. ny asked about multi-step or Monte Carlo rewards and approved the proposed tests.",
+  "pi_input": "The PI highlighted similar travel times but large numbers of unserved visits and much longer waits, particularly in C and D. The PI asked about multi-step or Monte Carlo rewards and approved the proposed tests.",
   "pi_quote": "“the reward function weighting is not punishing the waiting time harshly enough”",
-  "pi_feedback": "ny asked which exploration strategies the matched controls used, then requested combining guidance, longer returns, and a higher waiting penalty across all four layouts.",
+  "pi_feedback": "The PI asked which exploration strategies the matched controls used, then requested combining guidance, longer returns, and a higher waiting penalty across all four layouts.",
   "model_family": "Codex, GPT-6-based agent",
   "exact_parent_variant": "gpt-6.2-sol",
   "parent_reasoning_effort": "high",
