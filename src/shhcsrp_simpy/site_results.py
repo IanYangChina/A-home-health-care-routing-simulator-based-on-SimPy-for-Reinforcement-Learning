@@ -1,4 +1,4 @@
-"""Generate the project homepage from the latest measured experiment."""
+"""Generate the latest results page from the latest measured experiment."""
 from __future__ import annotations
 
 import argparse
@@ -68,14 +68,14 @@ _HTML = '''<!doctype html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Latest results and a playable simulator for home care routing and dispatch.">
+<meta name="description" content="Latest benchmark results for home health care routing and dispatch.">
 <title>Latest results · Home care dispatch</title>
 <link rel="stylesheet" href="site.css">
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
 <header class="project-hero">
-  <nav class="project-nav" aria-label="Project"><a href="index.html" aria-current="page">Latest results</a><a href="setup/index.html">Algorithm setup</a><a href="development/index.html">Development history</a><a href="simulator/index.html">Simulator</a></nav>
+  <nav class="project-nav" aria-label="Project"><a href="index.html">Home</a><a href="results.html" aria-current="page">Latest results</a><a href="setup/index.html">Algorithm setup</a><a href="development/index.html">Development history</a><a href="simulator/index.html">Simulator</a></nav>
   <div class="project-container">
     <p class="project-kicker">Home care dispatch research</p>
     <h1>__TITLE__</h1>
@@ -123,7 +123,7 @@ _HTML = '''<!doctype html>
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--summary', type=Path, default=Path('output/rounds/10-attention-returns/summary.json'))
-    parser.add_argument('--output', type=Path, default=Path('docs/report/index.html'))
+    parser.add_argument('--output', type=Path, default=Path('docs/report/results.html'))
     args = parser.parse_args(argv)
     data = json.loads(args.summary.read_text(encoding='utf-8'))
     print(render_latest(data, args.output))

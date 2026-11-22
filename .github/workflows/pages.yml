@@ -30,6 +30,7 @@ jobs:
       - name: Check site entry points
         run: |
           test -s docs/report/index.html
+          test -s docs/report/results.html
           test -s docs/report/setup/index.html
           test -s docs/report/development/index.html
           test -s docs/report/simulator/index.html

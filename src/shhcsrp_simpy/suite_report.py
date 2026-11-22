@@ -88,7 +88,7 @@ footer{border-top:1px solid var(--line);padding:1rem 0 2rem;color:var(--muted)}
 <header><div class="wrap">
 <h1>Home care dispatch benchmark</h1>
 <p>Compare how fixed heuristics and reinforcement-learning agents assign nurses to home visits. Explore outcomes across appointment layouts or open a run to see its routes, schedules, and job assignments.</p>
-<nav aria-label="Report sections"><a href="__PROJECT__index.html">Latest results</a><a href="__PROJECT__setup/index.html">Algorithm setup</a><a href="__PROJECT__development/index.html">Development history</a><a href="__PROJECT__simulator/index.html">Simulator</a><a href="#policies">Policy results</a><a href="#width" id="width-link" hidden>Network width</a><a href="#reports">Detailed reports</a></nav>
+<nav aria-label="Report sections"><a href="__PROJECT__index.html">Home</a><a href="__PROJECT__results.html">Latest results</a><a href="__PROJECT__setup/index.html">Algorithm setup</a><a href="__PROJECT__development/index.html">Development history</a><a href="__PROJECT__simulator/index.html">Simulator</a><a href="#policies">Policy results</a><a href="#width" id="width-link" hidden>Network width</a><a href="#reports">Detailed reports</a></nav>
 </div></header>
 <main>
 <section id="policies">
